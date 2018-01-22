@@ -5,94 +5,555 @@ Scripts
 Dicom utilities
 ===============
 
-dcm_sort			sort dicom files by study series
+dcm_sort
+--------
+sort dicom files by study series
+
+Usage:	dcm_sort <dicom_directory>
+
+Examples::
+
+	dcm_sort /data/petsun52/data1/JHILL/04271737
+	dcm_sort /cdrom/botv/10251349 -p930589002 -c
+
+Options
+
+=======	==============================================================================
+-d		verbose debug mode
+-c		copy files (default symbolically link)
+-t		toggle use of -t in call to dcm_dump_file (default ON)
+-i		take files with integer filenames
+-e<ext>	take files with specified extension
+-r<str>	take files with filenames containing specified string (default is 7 digits)
+-p<str>	take files only with dicom field 'PAT Patient Name' matching specified string
+=======	==============================================================================
+
+N.B.:	dcm_sort removes existing single study subdirectories
+
+N.B.:	dcm_sort puts unclassifiable DICOMs into subdirectory study0
 
 
 fMRI oriented scripts
 =====================
 
-generic_cross_bold_pp_090115	
-	generic EPI (BOLD) pre-processing
-epi2mpr2atlv_4dfp		
-	EPI :math:`\rightarrow` T1W :math:`\rightarrow` atlas
-epi2t2w2mpr2atlv_4dfp	
-	EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas	(8 parameter cross-modal; for “low”  res fMRI)
-epi2t2w2mpr2atl1_4dfp	
-	EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas	(9 parameter cross-modal; for “high” res fMRI)
-epi2t2w2mpr2atl2_4dfp	
-	EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas	(6 parameter cross-modal; best for distorted fMRI)
-cross_day_imgreg_4dfp	
-	link first session atlas transform to subsequent sessions via EPI “anat_ave” 
-compute_run_sd1.csh		
-	run var_4dfp on all bold directories
-cross_day_imgreg_4dfp	
-	compute cross-session BOLD atlas transform
-chop_4dfp			
-	extract range of frames (paste_4dfp wrapper)
-extract_frame_4dfp		
-	extract one frame (paste_4dfp wrapper)
-run_dvar_4dfp			
-	compute format (identity frames with too much motion)
-conc_4dfp			
-	create conc file
-conc_mv			
-	update conc file 4dfp image pointers
-conc2format			
-	compute conc-specific format using a fixed number of pre-steady state frames
-RFX2.csh			
-	random effects analysis (1 or 2 groups)
+generic_cross_bold_pp_090115
+----------------------------
+generic EPI (BOLD) pre-processing
+
+Usage:	generic_cross_bold_pp_090115 param_sfile [instructions_file]
+
+epi2mpr2atlv_4dfp
+-----------------
+EPI :math:`\rightarrow` T1W :math:`\rightarrow` atlas
+
+Usage:	epi2mpr2atlv_4dfp <epi_anat> <mpr_anat> [useold] [atlas target [711-2? OR -T<target including path>] [-S<atlas space>] [noinit]
+
+Examples::
+
+	epi2mpr2atlv_4dfp stem9_anat_ave stem9_654-3 useold 711-2C
+	epi2mpr2atlv_4dfp stem9_anat_ave stem9_654-3 useold -T/data/cninds01/atlas/NP765 -S711-2B
+
+Options
+
+=======	============================================================================
+useold	inhibits re-computation of all t4 files
+noinit	inhibits reinitialization of epi->mpr t4 files
+-T<str>	atlas target (specified string should include path) (default is 711-2B)
+-S		specifies the atlas space (requires -T) (currently only 711-2B is supported)
+=======	============================================================================
+
+N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
+
+N.B.:	All named images must be in either ANALYZE or 4dfp format. ANALYZE will be converted to 4dfp
+
+epi2t2w2mpr2atlv_4dfp
+---------------------
+EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas (8 parameter cross-modal; for “low”  res fMRI)
+
+Usage:	epi2t2w2mpr2atlv_4dfp <epi_anat> <t2w_anat> <mpr_anat> [useold] [atlas_target]
+
+Examples::
+
+	epi2t2w2mpr2atlv_4dfp stem9_anat_ave stem9_643-2 stem9_654-3 useold 711-2Y
+
+N.B.:	Any argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
+
+N.B.:	All named images must be in either ANALYZE or 4dfp format. ANALYZE will be converted to 4dfp
+
+N.B.:	'useold' instructs epi2t2w2mpr2atlv_4dfp to use existing t4 files
+
+N.B.:	The default atlas_target is 711-2B
+
+epi2t2w2mpr2atl1_4dfp
+---------------------
+EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas (9 parameter cross-modal; for “high” res fMRI)
+
+Usage:	epi2t2w2mpr2atl1_4dfp <epi_anat> <t2w_anat> <mpr_anat> [useold] [711-2? OR -T<Target including path>] [-S<atlas space>]
+
+Examples::
+
+	epi2t2w2mpr2atl1_4dfp stem9_anat_ave stem9_643-2 stem9_654-3 711-2B
+	epi2t2w2mpr2atl1_4dfp stem9_anat_ave stem9_654-3 useold -T/data/cninds01/atlas/NP765 -S711-2B
+
+N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
+
+N.B.:	All named images must be in 4dfp format
+
+N.B.:	-S specifies the atlas space. The only currently supported atlas space is 711-2B
+
+epi2t2w2mpr2atl2_4dfp
+---------------------
+EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas (6 parameter cross-modal; best for distorted fMRI)
+
+Usage:	epi2t2w2mpr2atl2_4dfp <epi_anat> <t2w_anat> <mpr_anat> [useold] [711-2? OR -T<Target including path>] [-S<atlas space>]
+
+Examples::
+
+	epi2t2w2mpr2atl2_4dfp stem9_anat_ave stem9_643-2 stem9_654-3 711-2B
+	epi2t2w2mpr2atl2_4dfp stem9_anat_ave stem9_654-3 useold -T/data/cninds01/atlas/NP765 -S711-2B
+
+N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
+
+N.B.:	All named images must be in 4dfp format
+
+N.B.:	-S specifies the atlas space. The only currently supported atlas space is 711-2B
+
+cross_day_imgreg_4dfp
+---------------------
+link first session atlas transform to subsequent sessions via EPI “anat_ave”
+
+Usage:	cross_day_imgreg_4dfp <curr_patid> <day1_atlas_path> <day1_patid> <atlas_representative_target> [options]
+
+Examples::
+	cross_day_imgreg_4dfp tpj0202 /data/petsun24/data1/tpj0201/atlas tpj0201 711-2Y
+	cross_day_imgreg_4dfp tpj0202 /data/petsun24/data1/tpj0201/atlas tpj0201 -T/data/cninds01/data2/ATLAS/ALLEGRA_Y_111
+
+Options
+
+==========	=====================================================
+-a<str>		specify image filename trailer (default = "anat_ave")
+-nostretch	disable stretch in transform
+-setecho	set echo
+-S<str>		specify atlas space (default=711-2B)
+==========	=====================================================
+
+N.B.:	cross_day_imgreg_4dfp must be run in the current atlas directory
+
+N.B.:	<atlas_representative_target> may be of form 711-2? OR -T/path/image
+
+compute_run_sd1.csh
+-------------------
+run var_4dfp -sn4 on all bold directories (\*xr3d_norm and \*xr3d_atl) and makes movies
+
+Usage:	compute_run_sd1.csh <patid>
+
+Examples::
+
+	compute_run_sd1.csh VB15792
+
+cross_day_imgreg_4dfp
+---------------------
+compute cross-session BOLD atlas transform
+
+Usage:	cross_day_imgreg_4dfp <curr_patid> <day1_atlas_path> <day1_patid> <atlas_representative_target> [options]
+
+Examples::
+
+	cross_day_imgreg_4dfp tpj0202 /data/petsun24/data1/tpj0201/atlas tpj0201 711-2Y
+	cross_day_imgreg_4dfp tpj0202 /data/petsun24/data1/tpj0201/atlas tpj0201 -T/data/cninds01/data2/ATLAS/ALLEGRA_Y_111
+
+Options
+
+==========	=====================================================
+-a<str>		specify image filename trailer (default = "anat_ave")
+-nostretch	disable stretch in transform
+-setecho	set echo
+-S<str>		specify atlas space (default=711-2B)
+==========	=====================================================
+
+N.B.:	cross_day_imgreg_4dfp must be run in the current atlas directory
+
+N.B.:	<atlas_representative_target> may be of form 711-2? OR -T/path/image
+
+run_dvar_4dfp
+-------------
+compute format (identify frames with too much motion) (dvar_4dfp wrapper)
+
+Usage:	run_dvar_4dfp <(conc) concfile> [options]
+
+Options
+=======	=========================================================================================
+-d 		debug mode
+-v 		verbose mode
+-p<str> specify printer on which to plot generated .dat.ps file
+-P<str>	print previously generated results on specified printer (run on SunOS)
+-x<flt>	set frame rejection threshold (default = mode + 2.5*(left s.d.) over non-skipped frames)
+=======	=========================================================================================
+
+N.B.:	run_dvar_4dfp is a wrapper for dvar_4dfp
+
+N.B.:	options -b -m -n -t are passed to dvar_4dfp
+
+N.B.:	option  -s is always passed to dvar_4dfp
+
+conc_4dfp
+---------
+create conc file
+
+Usage:	conc_4dfp <(conc) outroot> <(4dfp) 1> <(4dfp) 2> ...
+
+Examples::
+
+	conc_4dfp vb13157_faln_dbnd_xr3d_atl vb13157_b?_faln_dbnd_xr3d_atl.4dfp.img
+
+Options
+
+=======	==================================================================
+-w		supress inclusion of current working directory in listed file path
+-l<str>	read input 4dfp list
+=======	==================================================================
+
+N.B.:	output conc file always has extension "conc"
+
+N.B.:	only files in or below the current working directory can be correctly addressed
+
+conc_mv
+-------
+update conc file 4dfp image pointers
+
+Usage:	conc_mv <conc file> <from> <to>
+
+Examples::
+
+	conc_mv TC26851_rmsp_faln_dbnd_xr3d_atl.conc /data/nil-bluearc/raichle/gusnard/np751 auto_evolve/AVI_TEST
+
+Options
+
+==	=======================================
+-v 	verbose mode
+-t	practice mode (<conc file> not changed)
+==	=======================================
+
+conc2format
+-----------
+compute conc-specific format using a fixed number of pre-steady state frames
+
+Examples::
+
+	conc2format vb13157_faln_dbnd_xr3d_atl.conc 4
+
+Options
+
+==	=================================
+-v	verbose mode
+-X	label first frame of each run 'X'
+==	=================================
+
+RFX2.csh
+--------
+random effects analysis (1 or 2 groups)
+
+Usage:	RFX2.csh <list_group1> <Nimage_group1> [<list_group2> <Nimage_group2>]
+
+Options
+
+==	=====================================================
+-d	debug mode
+-R	suppress creation of large rec files (bootstrap mode)
+==	=====================================================
+
+N.B.:	<list_group[12]> name 4dfp images on which to run the t-test
+
+N.B.:	<Nimage_group[12]> are 4dfp 'n' images (number of subjects for which each voxel is defined)
+
+N.B.:	If one group is entered a t-test will be run on this group against the null hypothesis of 0
+
+N.B.:	If two groups are entered a t-test will be run comparing the two groups and the computed statistic is Welch's approximate t' (Eqn. 8.11, p. 129 in Zar.)
 
 
 fcMRI oriented scripts
 ======================
 
-fcMRI_preproc_090115.csh	
-	fcMRI preprocessing including nuisance variable regression
-seed_correl_090115.csh	
-	compute multi-volume correlation maps
+fcMRI_preproc_<date>.csh
+------------------------
+fcMRI preprocessing including nuisance variable regression
+
+Usage:	fcMRI_preproc_<date>.csh <parameters file> [instructions]
+
+Examples::
+
+	fcMRI_preproc_161012.csh VB16168.params
+
+seed_correl_<yymmdd>.csh
+------------------------
+compute multi-volume correlation maps
+
+Usage:	seed_correl_161012.csh <parameters file> [instructions] [options]
+
+Examples::
+
+	seed_correl_161012.csh VB16168.params
+
+Options
+
+=======	===========================================================
+-noblur	analyze unblurred version of preprocessed data
+-A		use format in atlas subdirectory (default FCmaps directory)
+=======	===========================================================
 
 
 DTI
 ===
 
-generic_DWI_script_090219	
-	generic DTI processing
-cross_DWI_imgreg_4dfp	
-	atlas transform new data based on previous session results
+generic_DWI_script_090219
+-------------------------
+generic DTI processing
+
+Usage:	generic_DWI_script_090219 params_file [instructions_file]
+
+cross_DWI_imgreg_4dfp
+---------------------
+atlas transform new data based on previous session results
+
+Usage:	cross_DWI_imgreg_4dfp <curr_dwi> <day1_dwi_path> <day1_dwi> <atlas_representative_target> [options]
+
+Examples::
+
+	cross_DWI_imgreg_4dfp 6770_dwi /data/petsun24/data1/5575 5575_dwi [abspath/]711-2Y
+
+N.B.:	cross_DWI_imgreg_4dfp must be run in the current DWI directory
 
 
 Anatomical registration scripts
 ===============================
 
-mpr2atl_4dfp			
-	single T1W :math:`\rightarrow` atlas
-avgmpr_4dfp			
-	multiple T1W :math:`\rightarrow` atlas
-t2w2mpr_4dfp\ :sup:`*`			
-	T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas
-epi2t1w_4dfp\ :sup:`*`	
-	EPI :math:`\rightarrow` T1W
+mpr2atl_4df
+-----------
+single T1W :math:`\rightarrow` atlas
+
+Usage:	mpr2atl_4dfp <mpr_anat> [options]
+
+Examples::
+
+	mpr2atl_4dfp vc1234_654-3[.4dfp.img]
+	mpr2atl_4dfp vc1234_654-3[.4dfp.img] -T/data/petsun23/data1/atlas/NP345_111[.4dfp.img] -S711-2B
+
+Options
+
+===========================		=======================================================
+711-2<C|O|Y|K|L|G|H|V|F> 		specify 711-2? series atlas representative target image
+-T<target including path>		specify arbitrary atlas representative target image
+-S<atlas space>*				specify atlas space (default=711-2B space)
+crossmodal						use cross-modal mpr->target registration
+useold							suppress recomputation  of existing t4 file
+redo							suppress initialization of existing t4 file
+setecho							set echo
+===========================		=======================================================
+
+N.B.:	<mpr_anat> may include a path, e.g., /data/petmr1/data7/stem9/scout/654-3
+
+N.B.:	<mpr_anat> must be in either ANALYZE short int or 4dfp format; ANALYZE will be converted to 4dfp
+
+avgmpr_4dfp
+-----------
+multiple T1W :math:`\rightarrow` atlas
+
+Usage:	avgmpr_4dfp <img1> <img2> ... <avgout> [useold] [711-2<B-Z> OR -T<Target including path>]
+
+Examples::
+
+	avgmpr_4dfp va2345_mpr1 va2345_mpr2 va2345_mpr3 va2345_mpr4 va2345_mpr_n4
+	avgmpr_4dfp va2345_mpr1 va2345_mpr2 va2345_mpr3 va2345_mpr4 none
+
+Options
+
+======	=======================================================================================
+useold	suppresses unnecessary recomputation of atlas transformation, e.g., <img1>_to_711-2B_t4
+======	=======================================================================================
+
+N.B.:	Each named image must be in 4dfp format and acquired in the same subject. Mixed orientations are allowed. Any component image filename may include a unix path.
+
+N.B.:	If <avgout> = "none", t4 and lst files will be generated but averaged images will not.
+
+t2w2mpr_4dfp\ :sup:`*`
+----------------------
+T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas
+
+Usage:	t2w2mpr_4dfp <4dfp mprage> <4dfp t2w> [options]
+
+Examples::
+
+	t2w2mpr_4dfp vc6383_130-4 vc6383_130-5
+
+Options
+
+==========	=========================================================
+-T<target>	specify atlas target (<target> may include absolute path)
+nostretch	disable stretch
+setecho		set echo
+debug		debug mode
+==========	=========================================================
+
+N.B.:	t2w2mpr_4dfp assumes that <4dfp mprage> is in the current working directory
+and that its atlas transform, e.g., vc6383_130-4_to_711-2V_t4 exists and is in the current working directory
+
+epi2t1w_4dfp\ :sup:`*`
+----------------------
+EPI :math:`\rightarrow` T1W
+
+Usage:	epi2t1w_4dfp <4dfp epi> <4dfp t1w> <tarstr>
+
+Examples::
+
+	epi2t1w_4dfp 070630_4TT00280_t1w 070630_4TT00280_anat_ave -T/data/cninds01/data2/atlas/TRIO_Y_NDC
+
+N.B.:	epi2t1w_4dfp assumes that the <4dfp t1w> atlas transform, e.g.,070630_4TT00280_t1w_to_TRIO_Y_NDC_t4
+exists and is in the current working directory
+
+N.B.:	<tarstr> is either '711-2?' or '-T/targetpath/target'
+
 make_mprage_avg_4dfp\ :sup:`*`
-	compute T1W anatomical average for group (list directed)
+------------------------------
+compute T1W anatomical average for group (list directed)
+
+Usage:	make_mprage_avg_4dfp <study_id> <t4file_list>
+
+Examples::
+
+	make_mprage_avg_4dfp NP659_all NP659_mpr_t4.lst
+
+N.B.:	the output average will be named <study_id>_mpr_avg
+
+N.B.:	make_mprage_avg_4dfp assumes that the MP-RAGE 4dfp image files are in the same directories together their atlas transform t4files
+
+N.B.:	<t4file_list> should list the t4files including path (e.g.:
+vc12605c/PROCESSED/vc12605c_949-3_to_711-2Y_t4)
+
+Inputs
+
+t4file_list
+	ls vc?????c/PROCESSED/*t4 | awk '$1 !~/anat/' >! <t4file_list>
+
+
 msktgen_4dfp\ :sup:`*`
-	create tailored mask (by inversion of atlas transform)
+----------------------
+create tailored mask (by inversion of atlas transform)
+
+Usage:	msktgen_4dfp <(4dfp) image> [threshold] -T<target including path>  -S<atlas space>
+
+Examples::
+
+	msktgen_4dfp 4859-5_mpr
+	msktgen_4dfp 4859-5_mpr -T/data/petsun29/data1/atlas/NP345_111[.4dfp.img] -S711-2B
+
+Options
+
+===============	======================================================================================================
+threshold		specify threshold for mask (default is 200) - use a higher threshold for a tighter mask and vice versa
+-S<atlas space>	specify atlas space (default=711-2B space)
+-T<target>		specify atlas target
+===============	======================================================================================================
+
+N.B.:	msktgen_4dfp uses the first legitimate atlas transform t4 file it sees in
+	the current working directory, i.e., one of <image>_to_711-2*_t4 or  one of <image>_to_<target>_t4
+
 cross_mpr_imgreg_4dfp\ :sup:`*`
-	compute cross-session T1W atlas transform
-new_atl_init_4dfp\ :sup:`*`
-	initialize creation of a cohort-specific atlas-representative target image
+-------------------------------
+compute cross-session T1W atlas transform
+
+Usage:	cross_mpr_imgreg_4dfp <session1_abspath> <session2_abspath> <target>
+
+Examples::
+	cross_mpr_imgreg_4dfp /data/disk1/P44W_16800_L1 /data/disk2/P44W_16800_L2 711-2L
+	cross_mpr_imgreg_4dfp /data/disk1/P44W_16800_L1 /data/disk2/P44W_16800_L2 /bmr01/01/nmrgrp/avi/P44W_C_111
+
+N.B.:	<target> may be of the form '711-2[B-Z]' OR '-T[mypath/]mytarget'
+
+N.B.:	cross_mpr_imgreg_4dfp assumes that each session patid is <sessionpath>:t
+
+newatl_init_4dfp\ :sup:`*`
+--------------------------
+initialize creation of a cohort-specific atlas-representative target image
+
+.. Attention:: After successful execution, execute newatl_refine_4dfp
+
+Usage:	newatl_init_4dfp <t4list> <newatl>
+
+Examples::
+
+	newatl_init_4dfp symph-mpr_to_711-2B_t4.lst 711-2S
+
+Options
+
+==	=================================================================================================
+-m	mask all input images (each input image must be paired with a 4dfp mask named <input_image>_mask)
+==	=================================================================================================
+
+N.B.:	<t4list> is a text file listing the absolute addresses of extant atlas transform
+	t4files corresponding to a set of structural images
+
+N.B.:	<newatl> specifies the name of the new atlas representative target image
+
+N.B.:	<t4list> itself and the t4files named in it may exist in other directories
+
+N.B.:	all images (\*.4dfp.img and \*.4dfp.ifh) referred to in <t4list> must exist
+	either in their original directory or in the current working directory -
+	newatl_init_4dfp will copy these images into the cwd as necessary
+
 newatl_refine_4dfp\ :sup:`*`
-	refine cohort-specific atlas-representative target image
+----------------------------
+refine cohort-specific atlas-representative target image
+
+.. Attention:: Execute after successful completion of newatl_init_4dfp
+
+Usage:	newatl_refine_4dfp	<newatl>
+
+Examples::
+
+	newatl_refine_4dfp 711-2S
+
+Options
+
+=======	==================================================================================================
+-b		suppress gauss 1.1 pre-blur of component images
+-m		mask all input images ((each input image must be paired with a 4dfp mask named <input_image>_mask)
+-T<str>	set reference target to specified image (default = /data/petsun43/data1/atlas/711-2B)
+=======	==================================================================================================
+
+N.B.:	<newatl> specifies the name of the new atlas representative target image
+
+N.B.:	all images (\*.4dfp.img and \*.4dfp.ifh) referred to in <newatl>.lst must exist in the working directory
 
 
 Miscellaneous scripts
 =====================
 
-t4img_4dfp			
-	single image wrapper for t4imgs_4dfp
-split_ROIs			
-	split peak_4dfp ROI image into multiple mask images
-brec				
-	parse rec file by procedure depth
+split_ROIs
+----------
+split peak_4dfp ROI image into multiple mask images
+
+Usage:	split_ROIs <4dfp ROI file> [start_ROI_number] [end_ROI_number] [options]
+
+Examples::
+
+	split_ROIs sum_condition_time_anova_ROI[.4dfp[.img]] 0 82
+
+Options
+
+========================	===================================================================
+[<start|end>_ROI_number]	ROI numbers count from 0 (fidl convention) (defaults are 0, nROI-1)
+-x							flip ROI to contralateral hemisphere
+-0							name output mask file by ROI number (default name as in ifh)
+-d<int>						specify difference between ROI number and voxel value (default 2)
+========================	===================================================================
+
+N.B.:	split_ROIs output files are put into the subdirectory ./single_ROIs
+
+brec
+----
+parse rec file by procedure depth
+
+Usage:	brec <my_file[.rec]> [-depth_limit]
 
 
 .. [*] assumes pre-existing atlas-transform t4 file
