@@ -126,7 +126,26 @@ compute transform (various modes)
 | or:		imgreg_4dfp target_imag        none source_imag        none t4file mode
 |
 
-N.B.: mode table can be found at <insert ref here>
+Mode options
+
+====	====================================================================================================================
+1		enable coordinate transform
+2		enable 3D alignment
+4		enable affine warp (12 parameters in 3D 6 parameters in 2D)
+8		enable voxel size adjust
+16		disable x voxel size adjust
+32		disable y voxel size adjust
+64		disable z voxel size adjust
+128		unassigned
+256		when set use difference image minimization (for similar contrast mechanisms)
+512		superfine mode (2 mm cubic grid metric sampling)
+1024	fast mode (12 mm cubic grid metric sampling)
+2048	fine mode (5 mm cubic grid metric sampling)
+4096	[T] restricted to translation explored at 7.5 mm intervals
+8192	enable parameter optimization by computation of the metric gradient in parameter space and inversion of the Hessian
+====	====================================================================================================================
+
+.. _t4imgs_4dfp:
 
 t4imgs_4dfp
 -----------
@@ -154,7 +173,7 @@ N.B.: t4file intensity scale ingnored with option -n
 
 t4img_4dfp
 ----------
-single image wrapper for t4imgs_4dfp
+single image wrapper for :ref:`t4imgs_4dfp`
 
 Usage:	t4img_4dfp <t4file> <imgfile> [outfile]
 
@@ -164,7 +183,7 @@ Examples::
 	t4img_4dfp  vce1_mprS_to_711-2B_t4 	vce1_mprS vce_mprS_711-2B -O222
 	t4img_4dfp  none			vce1_mprS vce1_mprS_222 -O222
 
-Options (for more options, see t4imgs_4dfp)
+Options (for more options, see :ref:`t4imgs_4dfp`)
 
 =======	====================================================
 outfile	specify name for output file (default is <imgfile>t)
@@ -818,6 +837,8 @@ Options
 -@<b|l>	output big or little endian (default CPU endian)
 =======	================================================
 
+.. _paste_4dfp:
+
 paste_4dfp
 ----------
 append or average selected frames from multiple files (list directed)
@@ -834,7 +855,7 @@ Options
 
 extract_frame_4dfp
 ------------------
-extract single frame from stack (paste_4dfp wrapper)
+extract single frame from stack (:ref:`paste_4dfp` wrapper)
 
 Usage:	extract_frame_4dfp <(4dfp) stack> <(int) frame>
 
@@ -850,7 +871,7 @@ Options
 
 chop_4dfp
 ---------
-extract contiguous frames from stack (paste_4dfp wrapper)
+extract contiguous frames from stack (:ref:`paste_4dfp` wrapper)
 
 usage:	chop_4dfp <(4dfp) stack> <(int) frame0> <(int) frame1>
 
