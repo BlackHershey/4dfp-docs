@@ -2,8 +2,12 @@
 Tools
 -----
 
+.. |br| raw:: html
+
 Filter in space
 ===============
+
+.. _gauss_4dfp:
 
 gauss_4dfp
 ----------
@@ -76,6 +80,8 @@ N.B.:	second argument specifies hard sphere radius in mm
 Filter in time
 ==============
 
+.. _bandpass_4dfp:
+
 bandpass_4dfp
 -------------
 Independent specification of low and high ends; remove linear trends; remove DC
@@ -120,11 +126,9 @@ imgreg_4dfp
 -----------
 compute transform (various modes)
 
-.. FIXME indents weird -- would ideally be 3 separate lines with same indentation as surrounding lines, but one group of text
-| Usage:	imgreg_4dfp target_imag target_mask source_imag source_mask t4file mode
-| or:		imgreg_4dfp target_imag        none source_imag source_mask t4file mode
-| or:		imgreg_4dfp target_imag        none source_imag        none t4file mode
-|
+Usage: 	imgreg_4dfp target_imag target_mask source_imag source_mask t4file mode |br|
+or:	 	imgreg_4dfp target_imag        none source_imag source_mask t4file mode |br|
+or:		imgreg_4dfp target_imag        none source_imag        none t4file mode |br|
 
 Mode options
 
@@ -403,6 +407,8 @@ Options
 N.B.:	default output 4dfp root is <(4dfp) image>"z"
 
 N.B.:	first field can't be used for options because lower range might be negative
+
+.. _maskimg_4dfp:
 
 maskimg_4dfp
 ------------
@@ -908,6 +914,7 @@ N.B.:	default (4dfp) output root is <(4dfp) inroot>"_crop"
 reindex_4dfp
 ------------
 .. FIXME: figure out what these symbols are supposed to be
+
 xy, slicevolume
 
 Usage:	reindex_4dfp <(4dfp> input> <index1> <index2> [options]
@@ -1134,6 +1141,8 @@ Options
 fMRI oriented programs
 ======================
 
+.. _compute_defined_4dfp:
+
 compute_defined_4dfp
 --------------------
 generate mask of voxels defined over all frames
@@ -1295,6 +1304,8 @@ Options
 
 N.B.:	default output format = 333.0
 
+.. _mat2dat:
+
 mat2dat
 -------
 convert cross_realign3d_4dfp mat files to spread sheet format
@@ -1393,6 +1404,8 @@ N.B:	first event is ALWAYS on frame skip; last  event is ALWAYS on frame skip + 
 
 GLM and related operations
 ==========================
+
+.. _glm_4dfp:
 
 glm_4dfp
 --------
@@ -1509,6 +1522,8 @@ Options
 -w		write residual after full AR modeling
 -P		format residual output suitable for plotting (xyy)
 =======	==================================================
+
+.. _covariance:
 
 covariance
 ----------
@@ -1639,6 +1654,8 @@ Options
 
 N.B.:	option -f causes selected volume to be reported in filename of -{hpx} created files
 
+.. _qnt_4dfp:
+
 qnt_4dfp
 --------
 report mean value within 3D ROI
@@ -1700,6 +1717,8 @@ N.B.:	<(4dfp) ROI> may either a value-coded single volume ROI image or a multi-v
 N.B.:	<(4dfp) ROI> coded values are integerized
 
 N.B.:	qntm_4dfp ignores <(4dfp) ROI> ifh center and mmppix fields
+
+.. _qntv_4dfp:
 
 qntv_4dfp
 ---------
@@ -1772,6 +1791,7 @@ N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are co
 
 N.B.:	qntw_4dfp ignores <(4dfp) ROI> ifh center and mmppix fields
 
+.. _var_4dfp:
 
 var_4dfp
 --------
@@ -1811,6 +1831,8 @@ N.B.:	options {-v -s -m -z} are mutually exclusive
 N.B.:	absent -G voxelwise mean is individually computed over each run in conc
 
 N.B.:	-f option overrides -n
+
+.. _dvar_4dfp:
 
 dvar_4dfp
 ---------
@@ -2049,7 +2071,7 @@ Options
 -s				enable cross DWI voxel size adjust (principal axis stretch)
 -n				zero negative values in output image
 -z<x|y|z><flt>	zoom output x y or z dimension by specified factor
--g				use group geometric mean (*_geom) volumes for cross-run registration
+-g				use group geometric mean (\*_geom) volumes for cross-run registration
 -a				append successive runs in output (default average)
 -m<(4dfp) mask>	specify first volume mask
 -I<int>			specify volume number of I0 counting from 1 (default 1)
@@ -2161,7 +2183,7 @@ dwi :math:`\rightarrow` whiskers (visualized in Matlab)
 
 Usage:	whisker_4dfp <prm_file> <file_4dfp>
 
-	Examples::
+Examples::
 
 	whisker_4dfp tp7_params.dat -dz3 /data/emotion/data3/track_sub3/track_sub3_DTI_avg
 

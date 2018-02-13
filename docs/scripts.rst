@@ -1,3 +1,5 @@
+.. include:: global.rst
+
 -------
 Scripts
 -------
@@ -175,13 +177,16 @@ N.B.:	cross_day_imgreg_4dfp must be run in the current atlas directory
 
 N.B.:	<atlas_representative_target> may be of form 711-2? OR -T/path/image
 
+.. _run_dvar_4dfp:
+
 run_dvar_4dfp
 -------------
-compute format (identify frames with too much motion) (dvar_4dfp wrapper)
+compute format (identify frames with too much motion) (:ref:`dvar_4dfp` wrapper)
 
 Usage:	run_dvar_4dfp <(conc) concfile> [options]
 
 Options
+
 =======	=========================================================================================
 -d 		debug mode
 -v 		verbose mode
@@ -195,6 +200,8 @@ N.B.:	run_dvar_4dfp is a wrapper for dvar_4dfp
 N.B.:	options -b -m -n -t are passed to dvar_4dfp
 
 N.B.:	option  -s is always passed to dvar_4dfp
+
+.. _conc_4dfp:
 
 conc_4dfp
 ---------
@@ -251,7 +258,7 @@ Options
 
 RFX2.csh
 --------
-random effects analysis (1 or 2 groups)
+random effects lysis (1 or 2 groups)
 
 Usage:	RFX2.csh <list_group1> <Nimage_group1> [<list_group2> <Nimage_group2>]
 
@@ -274,8 +281,8 @@ N.B.:	If two groups are entered a t-test will be run comparing the two groups an
 fcMRI oriented scripts
 ======================
 
-fcMRI_preproc_<date>.csh
-------------------------
+fcMRI_preproc
+-------------
 fcMRI preprocessing including nuisance variable regression
 
 Usage:	fcMRI_preproc_<date>.csh <parameters file> [instructions]
@@ -283,23 +290,297 @@ Usage:	fcMRI_preproc_<date>.csh <parameters file> [instructions]
 Examples::
 
 	fcMRI_preproc_161012.csh VB16168.params
+	fcMRI_preproc_090115.csh VB16168.params
 
-seed_correl_<yymmdd>.csh
-------------------------
+
+fcMRI_preproc_161012.csh
+++++++++++++++++++++++++
+
+Revised version of :ref:`fcMRI_preproc_130715`
+
+|var_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- FCdir
+	  	- |FCdir_vals|
+	  	- |FCdir_desc|
+  	* 	- MB
+	  	- |MB_vals|
+	  	- |MB_desc|
+	* 	- conc
+	  	- |conc_vals|
+	  	- |conc_desc|
+  	* 	- task_regressor
+	  	- |task_regressor_vals|
+	  	- |task_regressor_desc|
+  	* 	- noGSR
+		- |noGSR_vals|
+		- |noGSR_desc|
+	* 	- anat_aveb
+		- |anat_aveb_vals|
+		- |anat_aveb_desc|
+	* 	- anat_avet
+		- |anat_avet_vals|
+		- |anat_avet_desc|
+	*	- FDthresh
+		- |FDthresh_vals|
+		- |FDthresh_desc|
+	* 	- FDtype
+		- |FDtype_vals|
+		- |FDtype_desc|
+	*	- CSF_excl_lim
+		- |CSF_excl_lim_vals|
+		- |CSF_excl_lim_desc|
+	* 	- fmtfile
+		- |fmtfile_vals|
+		- |fmtfile_desc|
+	*	- blur
+		- |blur_vals|
+		- |blur_desc|
+
+Processing steps
+
+* Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
+* Create conc file (:ref:`conc_4dfp`) and move it to FCdir
+* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- this step is skipped if $fmtfile is specified or **if no $FDthresh is specified**
+* Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
+* Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
+* Make timeseries zero mean (:ref:`var_4dfp`)
+* Make movement regressors for each bold run (:ref:`mat2dat`)
+* Temporal bandpass filter using bpss_params (:ref:`bandpass_4dfp`)
+* Make whole brain regressors including the 1st derivative (:ref:`qnt_4dfp`)
+* Make extra-axial CSF regressors with mask threshold = $CSF_excl_lim (:ref:`maskimg_4dfp`)
+* Make venticle movement_regressors (:ref:`qntv_4dfp`)
+* Make white matter regressors (:ref:`qntv_4dfp`)
+* Paste nuisance regressors together (including task_regressor if supplied)
+* Pass final set of nuisance regressors (omitting WB and WB derivative) through :ref:`covariance` -D250
+* Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
+* Spatial blur with f_half = $blur if specified (:ref:`gauss_4dfp`)
+
+
+fcMRI_preproc_140413.csh
+++++++++++++++++++++++++
+
+|var_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- FCdir
+	  	- |FCdir_vals|
+	  	- |FCdir_desc|
+  	* 	- MB
+	  	- |MB_vals|
+	  	- |MB_desc|
+	* 	- conc
+	  	- |conc_vals|
+	  	- |conc_desc|
+  	* 	- task_regressor
+	  	- |task_regressor_vals|
+	  	- |task_regressor_desc|
+  	* 	- noGSR
+		- |noGSR_vals|
+		- |noGSR_desc|
+	* 	- anat_aveb
+		- |anat_aveb_vals|
+		- |anat_aveb_desc|
+	* 	- anat_avet
+		- |anat_avet_vals|
+		- |anat_avet_desc|
+	* 	- FWHM
+	  	- |FWHM_vals|
+	  	- |FWHM_desc|
+
+Processing steps
+
+* Create conc file (:ref:`conc_4dfp`) and move it to FCdir
+* Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
+* Compute frame censoring (DVARS) (:ref:`run_dvar_4dfp`)
+* Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
+* Make movement regressors for each bold run (:ref:`mat2dat`)
+* Make whole brain regressors including the 1st derivative (:ref:`qnt_4dfp`)
+* Make ventricle and bilateral white matter regressors and their derivatives (:ref:`qnt_4dfp`)
+* Paste nuisance regressors together (including task_regressor if supplied)
+* Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
+* Temporal bandpass filter with bh = .1 and oh = 2 (:ref:`bandpass_4dfp`)
+* Spatial blur with f_half = 4.413/$FWHM (:ref:`gauss_4dfp`)
+
+.. _fcMRI_preproc_130715:
+
+fcMRI_preproc_130715.csh
+++++++++++++++++++++++++
+
+|var_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- FCdir
+		- |FCdir_vals|
+		- |FCdir_desc|
+	* 	- MB
+		- |MB_vals|
+		- |MB_desc|
+	* 	- conc
+		- |conc_vals|
+		- |conc_desc|
+	* 	- task_regressor
+		- |task_regressor_vals|
+		- |task_regressor_desc|
+	* 	- noGSR
+		- |noGSR_vals|
+		- |noGSR_desc|
+	* 	- anat_aveb
+		- |anat_aveb_vals|
+		- |anat_aveb_desc|
+	* 	- anat_avet
+		- |anat_avet_vals|
+		- |anat_avet_desc|
+	* 	- fmtfile
+		- |fmtfile_vals|
+		- |fmtfile_desc|
+	*	- blur
+		- |blur_vals|
+		- |blur_desc|
+
+Processing steps
+
+* Generate FS masks (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
+* Create conc file (:ref:`conc_4dfp`) and move it to FCdir
+* Compute frame censoring (DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- only if no $fmtfile specified
+* Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
+* Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
+* Make timeseries zero mean (:ref:`var_4dfp`)
+* Make movement regressors for each bold run (:ref:`mat2dat`)
+* Temporal bandpass filter using bpss_params (:ref:`bandpass_4dfp`)
+* Make whole brain regressors including the 1st derivative (:ref:`qnt_4dfp`)
+* Make extra-axial CSF regressors (:ref:`maskimg_4dfp`)
+* Make venticle movement_regressors (:ref:`qntv_4dfp`)
+* Make white matter regressors (:ref:`qntv_4dfp`)
+* Paste nuisance regressors together (including task_regressor if supplied)
+* Pass final set of nuisance regressors (omitting WB and WB derivative) through :ref:`covariance` -D250
+* Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
+* Spatial blur with f_half = $blur if specified (:ref:`gauss_4dfp`)
+
+fcMRI_preproc_090115H.csh
++++++++++++++++++++++++++
+Hallquist compliant version of :ref:`fcMRI_preproc_090115`
+
+|var_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- FCdir
+		- |FCdir_vals|
+		- |FCdir_desc|
+	* 	- MB
+		- |MB_vals|
+		- |MB_desc|
+	* 	- conc
+		- |conc_vals|
+		- |conc_desc|
+	* 	- task_regressor
+		- |task_regressor_vals|
+		- |task_regressor_desc|
+	* 	- noGSR
+		- |noGSR_vals|
+		- |noGSR_desc|
+	* 	- noWM
+		- |noWM_vals|
+		- |noWM_desc|
+	*	- movement_regressors
+		- |movement_regressors_vals|
+		- |movement_regressors_desc|
+
+Processing steps
+
+* Create conc file (:ref:`conc_4dfp`) and move it to FCdir
+* Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
+* Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
+* Spatial blur with f_half = .735452 (:ref:`gauss_4dfp`)
+* Temporal bandpass filter with bh = .1 and oh = 2 (:ref:`bandpass_4dfp`)
+* Make movement regressors for each bold run (:ref:`mat2dat`) (if $movement_regressors is not "none")
+* Make whole brain, ventricle, and bilateral white matter regressors (:ref:`qnt_4dfp`)
+* Paste nuisance regressors together (including task_regressor if supplied)
+* Pass final set of nuisance regressors (omitting WB and WB derivative) through :ref:`covariance` -D500
+* Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
+
+.. _fcMRI_preproc_090115:
+
+fcMRI_preproc_090115.csh
+++++++++++++++++++++++++
+
+|var_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- FCdir
+		- |FCdir_vals|
+		- |FCdir_desc|
+	* 	- MB
+		- |MB_vals|
+		- |MB_desc|
+	* 	- conc
+		- |conc_vals|
+		- |conc_desc|
+	* 	- task_regressor
+		- |task_regressor_vals|
+		- |task_regressor_desc|
+	* 	- noGSR
+		- |noGSR_vals|
+		- |noGSR_desc|
+
+Processing steps
+
+* Create conc file (:ref:`conc_4dfp`) and move it to FCdir
+* Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
+* Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
+* Spatial blur with f_half = .735452 (:ref:`gauss_4dfp`)
+* Temporal bandpass filter with bh = .1 and oh = 2 (:ref:`bandpass_4dfp`)
+* Make movement regressors for each bold run (:ref:`mat2dat`)
+* Make whole brain, ventricle, and bilateral white matter regressors (:ref:`qnt_4dfp`)
+* Paste nuisance regressors together (including task_regressor if supplied)
+* Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
+
+
+seed_correl
+-----------
 compute multi-volume correlation maps
 
-Usage:	seed_correl_161012.csh <parameters file> [instructions] [options]
+Usage:	seed_correl_<date>.csh <parameters file> [instructions] [options]
 
 Examples::
 
 	seed_correl_161012.csh VB16168.params
 
+
+seed_correl_161012.csh
+++++++++++++++++++++++
+
 Options
 
 =======	===========================================================
--noblur	analyze unblurred version of preprocessed data
+-noblur	lyze unblurred version of preprocessed data
 -A		use format in atlas subdirectory (default FCmaps directory)
 =======	===========================================================
+
+seed_correl_140413.csh
+++++++++++++++++++++++
+
+seed_correl_130715.csh
+++++++++++++++++++++++
+
+seed_correl_090115.csh
+++++++++++++++++++++++
 
 
 DTI
@@ -327,8 +608,8 @@ N.B.:	cross_DWI_imgreg_4dfp must be run in the current DWI directory
 Anatomical registration scripts
 ===============================
 
-mpr2atl_4df
------------
+mpr2atl_4dfp
+------------
 single T1W :math:`\rightarrow` atlas
 
 Usage:	mpr2atl_4dfp <mpr_anat> [options]
@@ -432,7 +713,7 @@ vc12605c/PROCESSED/vc12605c_949-3_to_711-2Y_t4)
 Inputs
 
 t4file_list
-	ls vc?????c/PROCESSED/*t4 | awk '$1 !~/anat/' >! <t4file_list>
+	ls vc?????c/PROCESSED/\*t4 | awk '$1 !~/anat/' >! <t4file_list>
 
 
 msktgen_4dfp\ :sup:`*`
