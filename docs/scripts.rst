@@ -285,7 +285,7 @@ fcMRI_preproc
 -------------
 fcMRI preprocessing including nuisance variable regression
 
-Usage:	fcMRI_preproc_<date>.csh <parameters file> [instructions]
+Usage:	fcMRI_preproc_<version>.csh <params file> [instructions file]
 
 Examples::
 
@@ -298,7 +298,23 @@ fcMRI_preproc_161012.csh
 
 Revised version of :ref:`fcMRI_preproc_130715`
 
-|var_header|
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- srcdir
+		- |srcdir_vals|
+		- |srcdir_desc|
+	* 	- fcbolds
+		- |fcbolds_vals|
+		- |fcbolds_desc|
+
+|inst_header|
 
 .. list-table::
 	:widths: 15	5 65
@@ -337,11 +353,14 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
+	* 	- bpss_params
+		- |bpss_params_vals|
+		- |bpss_params_desc|
 	*	- blur
 		- |blur_vals|
 		- |blur_desc|
 
-Processing steps
+**Processing steps**
 
 * Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
@@ -350,7 +369,7 @@ Processing steps
 * Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
 * Make timeseries zero mean (:ref:`var_4dfp`)
 * Make movement regressors for each bold run (:ref:`mat2dat`)
-* Temporal bandpass filter using bpss_params (:ref:`bandpass_4dfp`)
+* Temporal bandpass filter using $bpss_params (:ref:`bandpass_4dfp`)
 * Make whole brain regressors including the 1st derivative (:ref:`qnt_4dfp`)
 * Make extra-axial CSF regressors with mask threshold = $CSF_excl_lim (:ref:`maskimg_4dfp`)
 * Make venticle movement_regressors (:ref:`qntv_4dfp`)
@@ -363,8 +382,23 @@ Processing steps
 
 fcMRI_preproc_140413.csh
 ++++++++++++++++++++++++
+|params_header|
 
-|var_header|
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- srcdir
+		- |srcdir_vals|
+		- |srcdir_desc|
+	* 	- fcbolds
+		- |fcbolds_vals|
+		- |fcbolds_desc|
+
+|inst_header|
 
 .. list-table::
 	:widths: 15	5 65
@@ -395,7 +429,7 @@ fcMRI_preproc_140413.csh
 	  	- |FWHM_vals|
 	  	- |FWHM_desc|
 
-Processing steps
+**Processing steps**
 
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
@@ -414,7 +448,23 @@ Processing steps
 fcMRI_preproc_130715.csh
 ++++++++++++++++++++++++
 
-|var_header|
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- srcdir
+		- |srcdir_vals|
+		- |srcdir_desc|
+	* 	- fcbolds
+		- |fcbolds_vals|
+		- |fcbolds_desc|
+
+|inst_header|
 
 .. list-table::
 	:widths: 15	5 65
@@ -444,11 +494,14 @@ fcMRI_preproc_130715.csh
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
+	* 	- bpss_params
+		- |bpss_params_vals|
+		- |bpss_params_desc|
 	*	- blur
 		- |blur_vals|
 		- |blur_desc|
 
-Processing steps
+**Processing steps**
 
 * Generate FS masks (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
@@ -457,7 +510,7 @@ Processing steps
 * Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
 * Make timeseries zero mean (:ref:`var_4dfp`)
 * Make movement regressors for each bold run (:ref:`mat2dat`)
-* Temporal bandpass filter using bpss_params (:ref:`bandpass_4dfp`)
+* Temporal bandpass filter using $bpss_params (:ref:`bandpass_4dfp`)
 * Make whole brain regressors including the 1st derivative (:ref:`qnt_4dfp`)
 * Make extra-axial CSF regressors (:ref:`maskimg_4dfp`)
 * Make venticle movement_regressors (:ref:`qntv_4dfp`)
@@ -471,7 +524,26 @@ fcMRI_preproc_090115H.csh
 +++++++++++++++++++++++++
 Hallquist compliant version of :ref:`fcMRI_preproc_090115`
 
-|var_header|
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- srcdir
+		- |srcdir_vals|
+		- |srcdir_desc|
+	*	- workdir
+		- |workdir_vals|
+		- |workdir_desc|
+	* 	- fcbolds
+		- |fcbolds_vals|
+		- |fcbolds_desc|
+
+|inst_header|
 
 .. list-table::
 	:widths: 15	5 65
@@ -499,7 +571,7 @@ Hallquist compliant version of :ref:`fcMRI_preproc_090115`
 		- |movement_regressors_vals|
 		- |movement_regressors_desc|
 
-Processing steps
+**Processing steps**
 
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
@@ -516,8 +588,26 @@ Processing steps
 
 fcMRI_preproc_090115.csh
 ++++++++++++++++++++++++
+|params_header|
 
-|var_header|
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- srcdir
+		- |srcdir_vals|
+		- |srcdir_desc|
+	*	- workdir
+		- |workdir_vals|
+		- |workdir_desc|
+	* 	- fcbolds
+		- |fcbolds_vals|
+		- |fcbolds_desc|
+
+|inst_header|
 
 .. list-table::
 	:widths: 15	5 65
@@ -539,7 +629,7 @@ fcMRI_preproc_090115.csh
 		- |noGSR_vals|
 		- |noGSR_desc|
 
-Processing steps
+**Processing steps**
 
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)

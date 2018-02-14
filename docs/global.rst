@@ -1,5 +1,20 @@
+.. csh script params file data dictionary
+.. |params_header| replace:: **Required variables** (:ref:`params`)
+
+.. |fcbolds_vals| replace:: <array>
+.. |fcbolds_desc| replace:: list of bold run folders
+
+.. |patid_vals| replace:: <str>
+.. |patid_desc| replace:: participant folder
+
+.. |srcdir_vals| replace:: <str>
+.. |srcdir_desc| replace:: source directory path (contains run directories)
+
+.. |workdir_vals| replace:: <str>
+.. |workdir_desc| replace:: working directory path
+
 .. csh script instruction file data dictionary
-.. |var_header| replace:: Script variables (to be included in :ref:`instructions`)
+.. |inst_header| replace:: **Optional variables** (:ref:`instructions`)
 
 .. |anat_aveb_vals| replace:: <flt>
 .. |anat_aveb_desc| replace:: run_dvar_4dfp preblur in mm
@@ -10,11 +25,14 @@
 .. |blur_vals| replace:: <flt>
 .. |blur_desc| replace:: f_half for spatial blur (no blurring if unspecified)
 
+.. |bpss_params_vals| replace:: <str>
+.. |bpss_params_desc| replace:: additional options to use for bandpass filtering (-E,M,F already specified)
+
 .. |conc_vals| replace:: <str>
 .. |conc_desc| replace:: pre-existing conc file to use
 
 .. |CSF_excl_lim_vals| replace:: <flt>
-.. |CSF_excl_lim_desc| replace:: (default = .126)
+.. |CSF_excl_lim_desc| replace:: mask threshold for CSF (default = .126)
 
 .. |delta_vals| replace:: <flt>
 .. |delta_desc| replace:: difference between field map echo times (ms)
@@ -32,13 +50,13 @@
 .. |epidir_desc| replace:: direction of EPI slices (0 = inferior to superior, 1 = superior to inferior)
 
 .. |FCdir_vals| replace:: <str>
-.. |FCdir_desc| replace:: (default=FCmaps, will be made if doesn't already exist)
+.. |FCdir_desc| replace:: output directory name (default = FCmaps)
 
 .. |FDthresh_vals| replace:: <flt>
 .. |FDthresh_desc| replace:: frame displacement thresholds
 
 .. |FDtype_vals| replace:: 1,2
-.. |FDtype_desc| replace:: ??
+.. |FDtype_desc| replace:: frame displacement calculation (1 = absolute value, 2 = squares)
 
 .. |fmtfile_vals| replace:: <str>
 .. |fmtfile_desc| replace:: format file (if unspecified, frame censoring will be calculated)
@@ -92,7 +110,7 @@
 .. |target_desc| replace:: atlas to be used for alignment
 
 .. |task_regressor_vals| replace:: <str>
-.. |task_regressor_desc| replace:: ??
+.. |task_regressor_desc| replace:: optional externally supplied task regressor
 
 .. |TE_vol_vals| replace:: <int>
 .. |TE_vol_desc| replace:: echo time (ms)
