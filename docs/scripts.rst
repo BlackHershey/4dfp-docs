@@ -38,11 +38,603 @@ N.B.:	dcm_sort puts unclassifiable DICOMs into subdirectory study0
 fMRI oriented scripts
 =====================
 
-generic_cross_bold_pp_090115
-----------------------------
+cross_bold_pp
+-------------
 generic EPI (BOLD) pre-processing
 
-Usage:	generic_cross_bold_pp_090115 param_sfile [instructions_file]
+Usage:	cross_bold_pp_<version>.csh <params file> [instructions_file]
+
+Examples::
+
+	cross_bold_pp_161012.csh VB16168.params
+	generic_cross_bold_pp_090115.csh VB16168.params
+
+
+cross_bold_pp_161012.csh
+++++++++++++++++++++++++
+
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- irun
+		- |irun_vals|
+		- |irun_desc|
+	* 	- fstd
+		- |fstd_vals|
+		- |fstd_desc|
+	*	- mprs
+		- |mprs_vals|
+		- |mprs_desc|
+	*	- pdt2
+		- |pdt2_vals|
+		- |pdt2_desc|
+	* 	- day1_patid
+		- |day1_patid_vals|
+		- |day1_patid_desc|
+	* 	- sefm
+		- |sefm_vals|
+		- |sefm_desc|
+	*	- gre
+		- |gre_vals|
+		- |gre_desc|
+	*	- FMmean
+		- |FMmean_vals|
+		- |FMmean_desc|
+	*	- FMbases
+		- |FMbases_vals|
+		- |FMbases_desc|
+
+|inst_header|
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- target
+		- |target_vals|
+		- |target_desc|
+	*	- scrdir
+		- |scrdir_vals|
+		- |scrdir_desc|
+	* 	- sorted
+		- |sorted_vals|
+		- |sorted_desc|
+	* 	- MB
+		- |MB_skip_vals|
+		- |MB_skip_desc|
+	*	- sx
+		- |sx_vals|
+		- |sx_desc|
+	* 	- sy
+		- |sy_vals|
+		- |sy_desc|
+	* 	- E4dfp
+		- |E4dfp_vals|
+		- |E4dfp_desc|
+	*	- use_anat_ave
+		- |use_anat_ave_vals|
+		- |use_anat_ave_desc|
+	*	- goto_UNWARP
+		- |goto_UNWARP_vals|
+		- |goto_UNWARP_desc|
+	*	- min_frames
+		- |min_frames_vals|
+		- |min_frames_desc|
+	*	- epi_zflip
+		- |epi_zflip_vals|
+		- |epi_zflip_desc|
+	*	- interleave
+		- |interleave_vals|
+		- |interleave_desc|
+	*	- Siemens_interleave
+		- |Siemens_interleave_vals|
+		- |Siemens_interleave_desc|
+	* 	- MBfac
+		- |MBfac_vals|
+		- |MBfac_desc|
+	*	- go
+		- |go_vals|
+		- |go_desc|
+	*	- nounpack
+		- |nounpack_vals|
+		- |nounpack_desc|
+	* 	- lomotil
+		- |lomotil_vals|
+		- |lomotil_desc|
+	*	- BiasField
+		- |BiasField_vals|
+		- |BiasField_desc|
+	*	- epidir
+		- |epidir_vals|
+		- |epidir_desc|
+	* 	- economy
+		- |economy_vals|
+		- |economy_desc|
+	*	- epi2atl
+		- |epi2atl_vals|
+		- |epi2atl_desc|
+	*	- FDthresh
+		- |FDthresh_vals|
+		- |FDtype_desc|
+	*	- FDtype
+		- |FDtype_vals|
+		- |FDtype_desc|
+	*	- anat_aveb
+		- |anat_aveb_vals|
+		- |anat_aveb_desc|
+	*	- anat_avet
+		- |anat_avet_vals|
+		- |anat_avet_desc| (set excessively high to skip DVARS censoring)
+	*	- normode
+		- |normode_vals|
+		- |normode_desc|
+	*	- cross_day_nostretch
+		- |cross_day_nostretch_vals|
+		- |cross_day_nostretch_desc|
+	*	- Gad
+		- |Gad_vals|
+		- |Gad_desc|
+	*	- delta
+		- |delta_vals|
+		- |delta_desc|
+	* 	- TE_vol
+		- |TE_vol_vals|
+		- |TE_vols_desc|
+	*	- dwell
+		- |dwell_vals|
+		- |dwell_desc|
+	*	- ped
+		- |ped_vals|
+		- |ped_desc|
+	* 	- rsam_cmnd
+		- |rsam_cmnd_vals|
+		- |rsam_cmnd_desc|
+
+=============	===========================================================================================
+Economy value	Files to be removed
+=============	===========================================================================================
+> 2				original bold run images
+> 3				frame-aligned images (_faln)
+> 4				cross-realigned avg images (_r3d_avg or xr3d_BC_avg if $BiasField) (only if $epi2atl == 0)
+=============	===========================================================================================
+
+**Processing steps**
+
+* Convert bold run dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Covert mosiac format to volume -- if not $nounpack (:ref:`unpack_4dfp`)
+* Correct slice timing and odd/even slice intensities -- if not $MB (:ref:`frame_align_4dfp`, :ref:`deband_4dfp`)
+* Motion correction via rigid body transform of each volume to reference frame (:ref:`cross_realign3d_4dfp`)
+* Bias field correction -- if $BiasField
+* Compute and apply mode 1000 normalization (:ref:`normalize_4dfp`, :ref:`scale_4dfp`)
+* Extract/format movement data from on cross_realign3d_4dfp output (:ref:`mat2dat`)
+* Extract EPI first frame (anatomy) image (:ref:`paste_4dfp`)
+* Make func_vols_ave image with high movement frames removed (FD if $FDthresh and DVARS) (:ref:`actmapf_4dfp`)
+* Compute cross-session BOLD atlas transform -- if $day1_patid specified for current patid (:ref:`cross_day_imgreg_4dfp`)
+* Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Compute MPRAGE atlas transforms (:ref:`mpr2atl1_4dfp` with first mpr if $Gad, otherwise :ref:`avgmpr_4dfp`)
+* Compute EPI atlas transform
+* Make atlas transformed EPI anat_ave and t2w in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
+* Compute field mapping correction (:ref:`fmri_unwarp_170616.tcsh`)
+* Compute and apply unwarped epi to atlas transform (:ref:`imgreg_4dfp`, :ref:`t4_mul`, :ref:`t4img_4dfp`)
+* Resample unwarped images ($rsam_cmnd)
+
+cross_bold_pp_130702.csh
+++++++++++++++++++++++++
+
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- irun
+		- |irun_vals|
+		- |irun_desc|
+	* 	- fstd
+		- |fstd_vals|
+		- |fstd_desc|
+	*	- mprs
+		- |mprs_vals|
+		- |mprs_desc|
+	*	- pdt2
+		- |pdt2_vals|
+		- |pdt2_desc|
+	* 	- day1_patid
+		- |day1_patid_vals|
+		- |day1_patid_desc|
+	*	- gre
+		- |gre_vals|
+		- |gre_desc|
+	*	- FMmean
+		- |FMmean_vals|
+		- |FMmean_desc|
+	*	- FMbases
+		- |FMbases_vals|
+		- |FMbases_desc|
+	*	- FMmag
+		- |FMmag_vals|
+		- |FMmag_desc|
+	* 	- FMphase
+		- |FMphase_vals|
+		- |FMphase_desc|
+
+|inst_header|
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- target
+		- |target_vals|
+		- |target_desc|
+	*	- scrdir
+		- |scrdir_vals|
+		- |scrdir_desc|
+	* 	- sorted
+		- |sorted_vals|
+		- |sorted_desc|
+	* 	- MB
+		- |MB_skip_vals|
+		- |MB_skip_desc|
+	*	- sx
+		- |sx_vals|
+		- |sx_desc|
+	* 	- sy
+		- |sy_vals|
+		- |sy_desc|
+	* 	- E4dfp
+		- |E4dfp_vals|
+		- |E4dfp_desc|
+	*	- use_anat_ave
+		- |use_anat_ave_vals|
+		- |use_anat_ave_desc|
+	*	- goto_UNWARP
+		- |goto_UNWARP_vals|
+		- |goto_UNWARP_desc|
+	*	- min_frames
+		- |min_frames_vals|
+		- |min_frames_desc|
+	*	- epi_zflip
+		- |epi_zflip_vals|
+		- |epi_zflip_desc|
+	*	- interleave
+		- |interleave_vals|
+		- |interleave_desc|
+	*	- Siemens_interleave
+		- |Siemens_interleave_vals|
+		- |Siemens_interleave_desc|
+	* 	- MBfac
+		- |MBfac_vals|
+		- |MBfac_desc|
+	*	- go
+		- |go_vals|
+		- |go_desc|
+	*	- nounpack
+		- |nounpack_vals|
+		- |nounpack_desc|
+	*	- epidir
+		- |epidir_vals|
+		- |epidir_desc|
+	* 	- economy
+		- |economy_vals|
+		- |economy_desc|
+	*	- epi2atl
+		- |epi2atl_vals|
+		- |epi2atl_desc|
+	*	- FDthresh
+		- |FDthresh_vals|
+		- |FDtype_desc|
+	*	- anat_aveb
+		- |anat_aveb_vals|
+		- |anat_aveb_desc|
+	*	- anat_avet
+		- |anat_avet_vals|
+		- |anat_avet_desc| (set excessively high to skip DVARS censoring)
+	*	- normode
+		- |normode_vals|
+		- |normode_desc|
+	*	- cross_day_nostretch
+		- |cross_day_nostretch_vals|
+		- |cross_day_nostretch_desc|
+	*	- Gad
+		- |Gad_vals|
+		- |Gad_desc|
+	*	- delta
+		- |delta_vals|
+		- |delta_desc|
+	* 	- TE_vol
+		- |TE_vol_vals|
+		- |TE_vols_desc|
+	*	- dwell
+		- |dwell_vals|
+		- |dwell_desc|
+	*	- ped
+		- |ped_vals|
+		- |ped_desc|
+	*	- uwrp_cmnd
+		- |uwrp_cmnd_vals|
+		- |uwrp_cmnd_desc|
+	* 	- rsam_cmnd
+		- |rsam_cmnd_vals|
+		- |rsam_cmnd_desc|
+
+=============	===========================================================================================
+Economy value	Files to be removed
+=============	===========================================================================================
+> 2				original bold run images
+> 3				frame-aligned images (_faln)
+> 4				cross-realigned avg images (_r3d_avg or xr3d_BC_avg if $BiasField) (only if $epi2atl == 0)
+=============	===========================================================================================
+
+**Processing steps**
+
+* Convert bold run dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Covert mosiac format to volume -- if not $nounpack (:ref:`unpack_4dfp`)
+* Correct slice timing and odd/even slice intensities -- if not $MB (:ref:`frame_align_4dfp`, :ref:`deband_4dfp`)
+* Motion correction via rigid body transform of each volume to reference frame (:ref:`cross_realign3d_4dfp`)
+* Compute and apply mode 1000 normalization (:ref:`normalize_4dfp`, :ref:`scale_4dfp`)
+* Extract/format movement data from on cross_realign3d_4dfp output (:ref:`mat2dat`)
+* Extract EPI first frame (anatomy) image (:ref:`paste_4dfp`)
+* Make func_vols_ave image with high movement frames removed (DVARS) (:ref:`actmapf_4dfp`)
+* Compute cross-session BOLD atlas transform -- if $day1_patid specified for current patid (:ref:`cross_day_imgreg_4dfp`)
+* Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Compute MPRAGE atlas transforms (:ref:`mpr2atl1_4dfp` with first mpr if $Gad, otherwise :ref:`avgmpr_4dfp`)
+* Compute EPI atlas transform
+* Make atlas transformed EPI anat_ave and t2w in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
+* Compute field mapping correction ($uwrp_cmnd)
+* Compute and apply unwarped epi to atlas transform (:ref:`imgreg_4dfp`, :ref:`t4_mul`, :ref:`t4img_4dfp`)
+* Resample unwarped images ($rsam_cmnd)
+* Make average atlas-aligned, unwarped image (:ref:`actmapf_4dfp`)
+
+cross_bold_pp_121215.csh
+++++++++++++++++++++++++
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- irun
+		- |irun_vals|
+		- |irun_desc|
+	* 	- fstd
+		- |fstd_vals|
+		- |fstd_desc|
+	*	- mprs
+		- |mprs_vals|
+		- |mprs_desc|
+	*	- pdt2
+		- |pdt2_vals|
+		- |pdt2_desc|
+	* 	- day1_patid
+		- |day1_patid_vals|
+		- |day1_patid_desc|
+	*	- day1_path
+		- |day1_path_vals|
+		- |day1_path_desc|
+
+|inst_header|
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- target
+		- |target_vals|
+		- |target_desc|
+	*	- scrdir
+		- |scrdir_vals|
+		- |scrdir_desc|
+	* 	- sorted
+		- |sorted_vals|
+		- |sorted_desc|
+	*	- Siemens_interleave
+		- |Siemens_interleave_vals|
+		- |Siemens_interleave_desc|
+	*	- go
+		- |go_vals|
+		- |go_desc|
+	*	- epidir
+		- |epidir_vals|
+		- |epidir_desc|
+	* 	- economy
+		- |economy_vals|
+		- |economy_desc|
+	*	- epi2atl
+		- |epi2atl_vals|
+		- |epi2atl_desc|
+	*	- normode
+		- |normode_vals|
+		- |normode_desc|
+	*	- to_MNI152
+		- |to_MNI152_vals|
+		- |to_MNI152_desc|
+
+=============	=======================================================
+Economy value	Files to be removed
+=============	=======================================================
+> 2				original bold images
+> 3				frame-aligned images (_faln)
+> 4				debanded images (_faln_dbnd) (only if $epi2atl == 0)
+> 6				normalized images (_norm)
+=============	=======================================================
+
+**Processing steps**
+
+* Convert bold run dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Covert mosiac format to volume (:ref:`unpack_4dfp`)
+* Correct slice timing and odd/even slice intensities (:ref:`frame_align_4dfp`, :ref:`deband_4dfp`)
+* Motion correction via rigid body transform of each volume to reference frame (:ref:`cross_realign3d_4dfp`)
+* Compute and apply mode 1000 normalization (:ref:`normalize_4dfp`, :ref:`scale_4dfp`)
+* Extract/format movement data from on cross_realign3d_4dfp output (:ref:`mat2dat`)
+* Extract EPI first frame (anatomy) image (:ref:`paste_4dfp`)
+* Move anatomy image (anat_ave) to atlas directory
+* Compute cross-session BOLD atlas transform if $day1_patid specified for current patid (:ref:`cross_day_imgreg_4dfp`)
+* Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Compute MPRAGE atlas transforms (:ref:`avgmpr_4dfp`)
+* Compute EPI atlas transform
+* Make atlas transformed EPI anat_ave in 111, 222, and 333 (711-2B or MNI152 if $to_MNI152) atlas space (:ref:`t4img_4dfp`)
+* Make cross-realigned atlas-transformed resampled BOLD 4dfp stacks (:ref:`t4_xr3d_4dfp`)
+
+generic_cross_bold_pp_090115
+++++++++++++++++++++++++++++
+
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- irun
+		- |irun_vals|
+		- |irun_desc|
+	* 	- fstd
+		- |fstd_vals|
+		- |fstd_desc|
+	*	- mprs
+		- |mprs_vals|
+		- |mprs_desc|
+	*	- pdt2
+		- |pdt2_vals|
+		- |pdt2_desc|
+	* 	- day1_patid
+		- |day1_patid_vals|
+		- |day1_patid_desc|
+	*	- day1_path
+		- |day1_path_vals|
+		- |day1_path_desc|
+
+|inst_header|
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- target
+		- |target_vals|
+		- |target_desc|
+	*	- scrdir
+		- |scrdir_vals|
+		- |scrdir_desc|
+	* 	- sorted
+		- |sorted_vals|
+		- |sorted_desc|
+	* 	- MB
+		- |MB_skip_vals|
+		- |MB_skip_desc|
+	*	- sx
+		- |sx_vals|
+		- |sx_desc|
+	* 	- sy
+		- |sy_vals|
+		- |sy_desc|
+	* 	- E4dfp
+		- |E4dfp_vals|
+		- |E4dfp_desc|
+	*	- epi_zflip
+		- |epi_zflip_vals|
+		- |epi_zflip_desc|
+	*	- interleave
+		- |interleave_vals|
+		- |interleave_desc|
+	*	- Siemens_interleave
+		- |Siemens_interleave_vals|
+		- |Siemens_interleave_desc|
+	* 	- MBfac
+		- |MBfac_vals|
+		- |MBfac_desc|
+	*	- go
+		- |go_vals|
+		- |go_desc|
+	*	- nounpack
+		- |nounpack_vals|
+		- |nounpack_desc|
+	*	- epidir
+		- |epidir_vals|
+		- |epidir_desc|
+	* 	- economy
+		- |economy_vals|
+		- |economy_desc|
+	*	- epi2atl
+		- |epi2atl_vals|
+		- |epi2atl_desc|
+	*	- normode
+		- |normode_vals|
+		- |normode_desc|
+	*	- cross_day_nostretch
+		- |cross_day_nostretch_vals|
+		- |cross_day_nostretch_desc|
+	*	- Gad
+		- |Gad_vals|
+		- |Gad_desc|
+
+=============	=======================================================
+Economy value	Files to be removed
+=============	=======================================================
+> 2				original bold images
+> 3				frame-aligned images (_faln)
+> 4				debanded images (_faln_dbnd) (only if $epi2atl == 0)
+> 6				normalized images (_norm)
+=============	=======================================================
+
+**Processing steps**
+
+* Convert bold run dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Covert mosiac format to volume -- if not $nounpack (:ref:`unpack_4dfp`)
+* Correct slice timing and odd/even slice intensities -- if not $MB (:ref:`frame_align_4dfp`, :ref:`deband_4dfp`)
+* Motion correction via rigid body transform of each volume to reference frame (:ref:`cross_realign3d_4dfp`)
+* Compute and apply mode 1000 normalization (:ref:`normalize_4dfp`, :ref:`scale_4dfp`)
+* Extract/format movement data from on cross_realign3d_4dfp output (:ref:`mat2dat`)
+* Extract EPI first frame (anatomy) image (:ref:`paste_4dfp`)
+* Move anatomy image (anat_ave) to atlas directory
+* Compute cross-session BOLD atlas transform if $day1_patid specified for current patid (:ref:`cross_day_imgreg_4dfp`)
+* Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
+* Compute MPRAGE atlas transforms (:ref:`mpr2atl1_4dfp` with first mpr if $Gad, otherwise :ref:`avgmpr_4dfp`)
+* Compute EPI to atlas transform
+* Make atlas transformed EPI anat_ave in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
+* Make cross-realigned atlas-transformed resampled BOLD 4dfp stacks (:ref:`t4_xr3d_4dfp`)
 
 epi2mpr2atlv_4dfp
 -----------------
@@ -86,6 +678,8 @@ N.B.:	'useold' instructs epi2t2w2mpr2atlv_4dfp to use existing t4 files
 
 N.B.:	The default atlas_target is 711-2B
 
+.. _epi2t2w2mpr2atl1_4dfp:
+
 epi2t2w2mpr2atl1_4dfp
 ---------------------
 EPI :math:`\rightarrow` T2W :math:`\rightarrow` T1W :math:`\rightarrow` atlas (9 parameter cross-modal; for “high” res fMRI)
@@ -102,6 +696,8 @@ N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06
 N.B.:	All named images must be in 4dfp format
 
 N.B.:	-S specifies the atlas space. The only currently supported atlas space is 711-2B
+
+.. _epi2t2w2mpr2atl2_4dfp:
 
 epi2t2w2mpr2atl2_4dfp
 ---------------------
@@ -120,6 +716,8 @@ N.B.:	All named images must be in 4dfp format
 
 N.B.:	-S specifies the atlas space. The only currently supported atlas space is 711-2B
 
+.. _cross_day_imgreg_4dfp:
+
 cross_day_imgreg_4dfp
 ---------------------
 link first session atlas transform to subsequent sessions via EPI “anat_ave”
@@ -127,6 +725,7 @@ link first session atlas transform to subsequent sessions via EPI “anat_ave”
 Usage:	cross_day_imgreg_4dfp <curr_patid> <day1_atlas_path> <day1_patid> <atlas_representative_target> [options]
 
 Examples::
+
 	cross_day_imgreg_4dfp tpj0202 /data/petsun24/data1/tpj0201/atlas tpj0201 711-2Y
 	cross_day_imgreg_4dfp tpj0202 /data/petsun24/data1/tpj0201/atlas tpj0201 -T/data/cninds01/data2/ATLAS/ALLEGRA_Y_111
 
@@ -258,7 +857,7 @@ Options
 
 RFX2.csh
 --------
-random effects lysis (1 or 2 groups)
+random effects analysis (1 or 2 groups)
 
 Usage:	RFX2.csh <list_group1> <Nimage_group1> [<list_group2> <Nimage_group2>]
 
@@ -303,7 +902,11 @@ Revised version of :ref:`fcMRI_preproc_130715`
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- patid
 		- |patid_vals|
 		- |patid_desc|
@@ -319,13 +922,17 @@ Revised version of :ref:`fcMRI_preproc_130715`
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- FCdir
 	  	- |FCdir_vals|
 	  	- |FCdir_desc|
   	* 	- MB
-	  	- |MB_vals|
-	  	- |MB_desc|
+	  	- |MB_enable_vals|
+	  	- |MB_enable_desc|
 	* 	- conc
 	  	- |conc_vals|
 	  	- |conc_desc|
@@ -387,7 +994,11 @@ fcMRI_preproc_140413.csh
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- patid
 		- |patid_vals|
 		- |patid_desc|
@@ -403,13 +1014,17 @@ fcMRI_preproc_140413.csh
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- FCdir
 	  	- |FCdir_vals|
 	  	- |FCdir_desc|
   	* 	- MB
-	  	- |MB_vals|
-	  	- |MB_desc|
+	  	- |MB_enable_vals|
+	  	- |MB_enable_desc|
 	* 	- conc
 	  	- |conc_vals|
 	  	- |conc_desc|
@@ -453,7 +1068,11 @@ fcMRI_preproc_130715.csh
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- patid
 		- |patid_vals|
 		- |patid_desc|
@@ -469,13 +1088,17 @@ fcMRI_preproc_130715.csh
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- FCdir
 		- |FCdir_vals|
 		- |FCdir_desc|
 	* 	- MB
-		- |MB_vals|
-		- |MB_desc|
+		- |MB_enable_vals|
+		- |MB_enable_desc|
 	* 	- conc
 		- |conc_vals|
 		- |conc_desc|
@@ -529,7 +1152,11 @@ Hallquist compliant version of :ref:`fcMRI_preproc_090115`
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- patid
 		- |patid_vals|
 		- |patid_desc|
@@ -548,13 +1175,17 @@ Hallquist compliant version of :ref:`fcMRI_preproc_090115`
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- FCdir
 		- |FCdir_vals|
 		- |FCdir_desc|
 	* 	- MB
-		- |MB_vals|
-		- |MB_desc|
+		- |MB_enable_vals|
+		- |MB_enable_desc|
 	* 	- conc
 		- |conc_vals|
 		- |conc_desc|
@@ -593,7 +1224,11 @@ fcMRI_preproc_090115.csh
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- patid
 		- |patid_vals|
 		- |patid_desc|
@@ -612,13 +1247,17 @@ fcMRI_preproc_090115.csh
 .. list-table::
 	:widths: 15	5 65
 	:class: wrap-row
+	:header-rows: 1
 
+	*	- Variable
+		- Values
+		- Description
 	* 	- FCdir
 		- |FCdir_vals|
 		- |FCdir_desc|
 	* 	- MB
-		- |MB_vals|
-		- |MB_desc|
+		- |MB_enable_vals|
+		- |MB_enable_desc|
 	* 	- conc
 		- |conc_vals|
 		- |conc_desc|
@@ -646,7 +1285,7 @@ seed_correl
 -----------
 compute multi-volume correlation maps
 
-Usage:	seed_correl_<date>.csh <parameters file> [instructions] [options]
+Usage:	seed_correl_<version>.csh <parameters file> [instructions] [options]
 
 Examples::
 
@@ -659,7 +1298,7 @@ seed_correl_161012.csh
 Options
 
 =======	===========================================================
--noblur	lyze unblurred version of preprocessed data
+-noblur	analyze unblurred version of preprocessed data
 -A		use format in atlas subdirectory (default FCmaps directory)
 =======	===========================================================
 
@@ -724,6 +1363,8 @@ setecho							set echo
 N.B.:	<mpr_anat> may include a path, e.g., /data/petmr1/data7/stem9/scout/654-3
 
 N.B.:	<mpr_anat> must be in either ANALYZE short int or 4dfp format; ANALYZE will be converted to 4dfp
+
+.. _avgmpr_4dfp:
 
 avgmpr_4dfp
 -----------

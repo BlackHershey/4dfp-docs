@@ -1,8 +1,8 @@
+.. include:: global.rst
+
 -----
 Tools
 -----
-
-.. |br| raw:: html
 
 Filter in space
 ===============
@@ -29,10 +29,8 @@ outroot	output file name (default = <inroot>_g<10*f_half>) (only for 4dfp input)
 -d		differentiate
 =======	========================================================================
 
-N.B.:	f_half is half frequency in 1/cm
-
-N.B.:	FWHM*f_half = (2ln2/pi) = 0.4412712
-
+N.B.:	f_half is half frequency in 1/cm |br|
+N.B.:	FWHM*f_half = (2ln2/pi) = 0.4412712 |br|
 N.B.:	conc files must have extension "conc"
 
 butterworth_4dfp†
@@ -110,12 +108,9 @@ Options
 -@<b|l>			output big or little endian (default input endian)
 ============	=================================================================================
 
-N.B.:	undefined values are zero, NaN, or 1.e-37
-
-N.B.:	input conc files must have extension "conc"
-
-N.B.:	omitting low  end order specification disables high pass component
-
+N.B.:	undefined values are zero, NaN, or 1.e-37 |br|
+N.B.:	input conc files must have extension "conc" |br|
+N.B.:	omitting low  end order specification disables high pass component |br|
 N.B.:	omitting high end order specification disables low  pass component
 
 
@@ -126,9 +121,11 @@ imgreg_4dfp
 -----------
 compute transform (various modes)
 
-Usage: 	imgreg_4dfp target_imag target_mask source_imag source_mask t4file mode |br|
-or:	 	imgreg_4dfp target_imag        none source_imag source_mask t4file mode |br|
-or:		imgreg_4dfp target_imag        none source_imag        none t4file mode |br|
+Usage::
+
+	imgreg_4dfp target_imag target_mask source_imag source_mask t4file mode
+	imgreg_4dfp target_imag        none source_imag source_mask t4file mode
+	imgreg_4dfp target_imag        none source_imag        none t4file mode
 
 Mode options
 
@@ -175,6 +172,8 @@ Options
 
 N.B.: t4file intensity scale ingnored with option -n
 
+.. _t4img_4dfp:
+
 t4img_4dfp
 ----------
 single image wrapper for :ref:`t4imgs_4dfp`
@@ -193,8 +192,7 @@ Options (for more options, see :ref:`t4imgs_4dfp`)
 outfile	specify name for output file (default is <imgfile>t)
 =======	====================================================
 
-N.B.:	4dfp filename extensions are optional
-
+N.B.:	4dfp filename extensions are optional |br|
 N.B.:	option -n causes fidl ROI names to be copied to the output ifh
 
 wrpsmg_4dfp
@@ -287,7 +285,7 @@ Options
 -r<flt>	set VOI rms radius in mm (default=50)
 =======	=============================================================================
 
-N.B.:	t4_resolve looks for t4 files <image1>_to_<image2>_t4, <image1>_to_<image3>_t4, ...
+N.B.:	t4_resolve looks for t4 files <image1>_to_<image2>_t4, <image1>_to_<image3>_t4, ... |br|
 N.B.:	t4_resolve automatically strips filename extensions when constructing t4 filenames
 
 t4_pts
@@ -324,8 +322,7 @@ Options
 -@<b|l>					output big or little endian (default input endian)
 ====================	====================================================
 
-N.B.:	slices count from 1
-
+N.B.:	slices count from 1 |br|
 N.B.:	two usages are supported: 1 or 4 required arguments
 
 zero_lt_4dfp
@@ -364,8 +361,7 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================
 
-N.B.:	default output 4dfp root is <(4dfp) image>"z"
-
+N.B.:	default output 4dfp root is <(4dfp) image>"z" |br|
 N.B.:	first field can't be used for options because threshold might be negative
 
 zero_ltgt_4dfp
@@ -384,8 +380,7 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================
 
-N.B.:	default output 4dfp root is <(4dfp) image>"z"
-
+N.B.:	default output 4dfp root is <(4dfp) image>"z" |br|
 N.B.:	first field can't be used for options because lower range might be negative
 
 zero_gtlt_4dfp
@@ -404,8 +399,7 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 ======= ==================================================
 
-N.B.:	default output 4dfp root is <(4dfp) image>"z"
-
+N.B.:	default output 4dfp root is <(4dfp) image>"z" |br|
 N.B.:	first field can't be used for options because lower range might be negative
 
 .. _maskimg_4dfp:
@@ -507,6 +501,8 @@ Options
 
 N.B.:	default output filename = <image>_sqrt
 
+.. _scale_4dfp:
+
 scale_4dfp
 ----------
 m*A + b
@@ -527,7 +523,7 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================
 
-N.B.:	<image_4dfp> is overwritten unless the trailer option is used
+N.B.:	<image_4dfp> is overwritten unless the trailer option is used |br|
 N.B.:	<scale_factor> must be specified for proper operation
 
 ratio_4dfp†
@@ -588,6 +584,8 @@ imato4dfpC†
 -----------
 Siemens (pre-DICOM) :math:`\rightarrow` 4dfp for functional data
 
+.. _dcm_to_4dfp:
+
 dcm_to_4dfp
 -----------
 DICOM :math:`\rightarrow` 4dfp
@@ -628,8 +626,7 @@ Multivolume and BOLD images are ordered by REL Image Number (0020 0013).
 [-Z]	Transverse:	image positions will be high to low
 [-@ <b|l>]	output big or little endian (default CPU endian)
 
-N.B.: -t S is the default slice spacing
-
+N.B.: -t S is the default slice spacing |br|
 N.B.: Default slice position is transverse ordered by REL Image Number (0020 0013)
 
 endian_4dfp
@@ -645,8 +642,7 @@ Options
 -t			perform var(log(fabs(.))) test
 =========	=============================================
 
-N.B.:	<(4dfp) image> may be overwritten
-
+N.B.:	<(4dfp) image> may be overwritten |br|
 N.B.:	absent option -@ endian_4dfp only reports state of <(4dfp) image>
 
 4dfptoanalyze
@@ -741,10 +737,8 @@ Options
 -@<b|l> output big or little endian (default CPU endian)
 =======	================================================
 
-N.B.:	columns in <text file> map to voxels in <(4dfp) out>
-
-N.B.:	'#' in <text file> introduce comments
-
+N.B.:	columns in <text file> map to voxels in <(4dfp) out> |br|
+N.B.:	'#' in <text file> introduce comments |br|
 N.B.:	<text file> lines beginning with '#' are included in <(4dfp) out>.img.rec
 
 mpetto4dfp
@@ -818,12 +812,9 @@ Options
 -@<val>			specify endianness for output, b or B for big, l or L for little
 ============	================================================================
 
-N.B.:	exactly one of -4 or -n must be specified
-
-N.B.:	".4dfp.ifh" or ".nii" are appended to filenames specified without extension
-
-N.B.:	option -N has effect only on converting nii->4dfp
-
+N.B.:	exactly one of -4 or -n must be specified |br|
+N.B.:	".4dfp.ifh" or ".nii" are appended to filenames specified without extension |br|
+N.B.:	option -N has effect only on converting nii->4dfp |br|
 N.B.:	option -T has effect only on converting 4dfp->nii
 
 
@@ -907,8 +898,7 @@ Options
 -@<b|l>					output big or little endian (default input endian)
 =======================	==============================================================================
 
-N.B.:	if upper crop limit exceeds input dimension undefined voxels will be set to 1.e-37
-
+N.B.:	if upper crop limit exceeds input dimension undefined voxels will be set to 1.e-37 |br|
 N.B.:	default (4dfp) output root is <(4dfp) inroot>"_crop"
 
 reindex_4dfp
@@ -931,11 +921,12 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==============================================================
 
-N.B.:	reindex_4dfp swaps specified indices
+N.B.:	reindex_4dfp swaps specified indices |br|
+N.B.: <index1> and <index2> must be unequal integers in the range 1-4 except as follows:
+	* <index1> == 4 and <index2> == 0: right rotate indices (first index <-  last index)
+	* <index1> == 0 and <index2> == 4:  left rotate indices ( last index <- first index)
 
-N.B.:	<index1> and <index2> must be unequal integers in the range 1-4 except as follows
-	- <index1> == 4 and <index2> == 0: right rotate indices (first index <-  last index)
-	- <index1> == 0 and <index2> == 4:  left rotate indices ( last index <- first index)
+.. _unpack_4dfp:
 
 unpack_4dfp
 -----------
@@ -1171,6 +1162,8 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	============================================================
 
+.. _normalize_4dfp:
+
 normalize_4dfp
 --------------
 scale to achieve mode 1000
@@ -1196,6 +1189,8 @@ Options
 -m<str>	read specified 4dfp mask (default blur & threshold input image)
 -@<b|l>	output big or little endian (default input endian)
 =======	===============================================================
+
+.. _deband_4dfp:
 
 deband_4dfp
 -----------
@@ -1239,6 +1234,8 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================
 
+.. _cross_realign3d_4dfp:
+
 cross_realign3d_4dfp
 --------------------
 motion correct fMRI timeseries within and across runs
@@ -1273,6 +1270,8 @@ Options
 -Z		output undefined voxels as 0.0 (default 1.0e-37)
 -R		disable resampling
 =======	===================================================================
+
+.. _t4_xr3d_4dfp:
 
 t4_xr3d_4dfp
 ------------
@@ -1330,6 +1329,8 @@ Options
 =============	======================================================================
 
 N.B.:	-f option overrides -n
+
+.. _frame_align_4dfp:
 
 frame_align_4dfp
 ----------------
@@ -1397,9 +1398,8 @@ Options
 -F		use flat distribution of delay intervals (default Poisson process)
 =======	=============================================================================
 
-N.B:	nevent must be at least 3
-
-N.B:	first event is ALWAYS on frame skip; last  event is ALWAYS on frame skip + nframe, duration = Inf; fMRI run should include additional frames at end
+N.B:	nevent must be at least 3 |br|
+N.B:	first event is ALWAYS on frame skip; last  event is ALWAYS on frame skip + nframe, duration = Inf; fMRI run should include additional frames at end |br|
 
 
 GLM and related operations
@@ -1431,13 +1431,12 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	===========================================================================
 
-N.B.:	conc files must have extension "conc"
-
-N.B.:	<profile> lists temporal profiles (ASCII npts x ncol; '#' introduces comments)
-
-N.B.:	<profile> line limits are 81920 chars and 8192 fields
-
+N.B.:	conc files must have extension "conc"  |br|
+N.B.:	<profile> lists temporal profiles (ASCII npts x ncol; '#' introduces comments) |br|
+N.B.:	<profile> line limits are 81920 chars and 8192 fields |br|
 N.B.:	absent -C, options -o and -r require design matrix inversion; dimension limit 256
+
+.. _actmapf_4dfp:
 
 actmapf_4dfp
 ------------
@@ -1463,10 +1462,8 @@ Options
 -@<b|l>			output big or little endian (default input endian)
 ===============	=====================================================
 
-N.B.:	conc files must have extension "conc"
-
-N.B.:	when using weight files 'x' frames in format are not counted
-
+N.B.:	conc files must have extension "conc" |br|
+N.B.:	when using weight files 'x' frames in format are not counted |br|
 N.B.:	relative modulation images are zeroed where mean intensity < 0.5*whole_image_mode
 
 t4_actmapf_4dfp
@@ -1495,10 +1492,8 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	=================================================================
 
-N.B.:	conc files must have extension "conc"
-
-N.B.:	effective frame count is determined by <format>
-
+N.B.:	conc files must have extension "conc" |br|
+N.B.:	effective frame count is determined by <format> |br|
 N.B.:	'x' frames in format are not counted
 
 GC_dat
@@ -1554,8 +1549,7 @@ Options
 -g<str>	regress timeseries in named file out of <profile>
 =======	===============================================================================
 
-N.B.:	all input timeseries are made zero mean as a first step
-
+N.B.:	all input timeseries are made zero mean as a first step |br|
 N.B.:	region names can be specified on the first line of <profile> with '#' in the first column
 
 covariance_analysis
@@ -1595,8 +1589,7 @@ Options
 -@<b|l>				output big or little endian (default input endian)
 ================	===========================================================================================
 
-N.B.:	operations controlled by options -s, -n, -c, -v, -d, -o, -m, -N are applied serially in listed order
-
+N.B.:	operations controlled by options -s, -n, -c, -v, -d, -o, -m, -N are applied serially in listed order |br|
 N.B.:	all distances are in mm
 
 read_4dfp
@@ -1682,10 +1675,8 @@ Options
 -c<flt>				scale output mean values by specified constant (default = 1.0)
 ================	===============================================================================================
 
-N.B.:	only the first frame of <mask> is used
-
-N.B.:	<image> and <mask> may be the same
-
+N.B.:	only the first frame of <mask> is used  |br|
+N.B.:	<image> and <mask> may be the same |br|
 N.B.:	conc files must have extension "conc"
 
 qntm_4dfp
@@ -1708,14 +1699,10 @@ Options
 -h		suppress printing output header
 =======	=======================================================
 
-N.B.:	conc files must have extension "conc"
-
-N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are counted
-
-N.B.:	<(4dfp) ROI> may either a value-coded single volume ROI image or a multi-volume mask
-
-N.B.:	<(4dfp) ROI> coded values are integerized
-
+N.B.:	conc files must have extension "conc"  |br|
+N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are counted |br|
+N.B.:	<(4dfp) ROI> may either a value-coded single volume ROI image or a multi-volume mask |br|
+N.B.:	<(4dfp) ROI> coded values are integerized |br|
 N.B.:	qntm_4dfp ignores <(4dfp) ROI> ifh center and mmppix fields
 
 .. _qntv_4dfp:
@@ -1756,12 +1743,9 @@ Options
 4	die timeseries passed through svd (unit variance)
 =	==========================================================
 
-N.B.:	conc files must have extension "conc"
-
-N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are counted
-
-N.B.:	qntv_4dfp ignores <(4dfp) ROI> ifh center and mmppix fields
-
+N.B.:	conc files must have extension "conc" |br|
+N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are counted |br|
+N.B.:	qntv_4dfp ignores <(4dfp) ROI> ifh center and mmppix fields |br|
 N.B.:	to obtain a GLM condition number = X specificy sqrt(1/X) as tol with option -t
 
 qntw_4dfp
@@ -1783,12 +1767,9 @@ Options
 -H		include heaer info in output
 =======	====================================================
 
-N.B.:	conc files must have extension "conc"
-
-N.B.:	<(4dfp) ROI> is interpreted as a multi-volume voxel-wise set of weights
-
-N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are counted
-
+N.B.:	conc files must have extension "conc" |br|
+N.B.:	<(4dfp) ROI> is interpreted as a multi-volume voxel-wise set of weights |br|
+N.B.:	only defined voxels (not 0.0 and not NaN and not 1.e-37 and finite) are counted |br|
 N.B.:	qntw_4dfp ignores <(4dfp) ROI> ifh center and mmppix fields
 
 .. _var_4dfp:
@@ -1822,14 +1803,10 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================================
 
-N.B.:	input conc files must have extension "conc"
-
-N.B.:	identically zero input voxels are counted as defined
-
-N.B.:	options {-v -s -m -z} are mutually exclusive
-
-N.B.:	absent -G voxelwise mean is individually computed over each run in conc
-
+N.B.:	input conc files must have extension "conc" |br|
+N.B.:	identically zero input voxels are counted as defined |br|
+N.B.:	options {-v -s -m -z} are mutually exclusive |br|
+N.B.:	absent -G voxelwise mean is individually computed over each run in conc |br|
 N.B.:	-f option overrides -n
 
 .. _dvar_4dfp:
@@ -1877,10 +1854,8 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	====================================================================================
 
-N.B.:	without -a only the input ifh (or standard atlas string) is required
-
-N.B.:	specifying <4dfp imgroot> as "333[.n]" "222" or "111" generates standard atlas space output
-
+N.B.:	without -a only the input ifh (or standard atlas string) is required |br|
+N.B.:	specifying <4dfp imgroot> as "333[.n]" "222" or "111" generates standard atlas space output |br|
 N.B.:	if the 4dfp image does not exist the default output endianness is CPU endian
 
 ROI_resolve_4dfp
@@ -1920,8 +1895,7 @@ Options
 -c<flt>	scale output covariance matrix values by specified factor
 =======	=========================================================
 
-N.B.:	image dimensions must match
-
+N.B.:	image dimensions must match |br|
 N.B.:	spatial_corr_4dfp counts only defined (not NaN or 1.e-37 or 0.0) voxels
 
 spatial_cov_multivol_4dfp
@@ -1938,12 +1912,9 @@ Options
 -c<flt>	scale text output covariance matrix values by specified factor
 =======	================================================================
 
-N.B.:	spatial_cov_multivol_4dfp counts only defined (not NaN or 1.e-37) voxels
-
-N.B.:	zero voxels are counted as defined in <(4dfp) image> in cov computation
-
-N.B.:	zero voxels are counted as undefined in <(4dfp) image> in <(4dfp) mask>
-
+N.B.:	spatial_cov_multivol_4dfp counts only defined (not NaN or 1.e-37) voxels |br|
+N.B.:	zero voxels are counted as defined in <(4dfp) image> in cov computation |br|
+N.B.:	zero voxels are counted as undefined in <(4dfp) image> in <(4dfp) mask> |br|
 N.B.:	all zero or all undefined <(4dfp) image> volumes are ignored
 
 
@@ -1969,10 +1940,8 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================
 
-N.B.:	undefined (1.e-37, NaN) voxels in input are output as 1.e-37
-
-N.B.:	output values are assigned the same sign as the input t value
-
+N.B.:	undefined (1.e-37, NaN) voxels in input are output as 1.e-37 |br|
+N.B.:	output values are assigned the same sign as the input t value |br|
 N.B.:	the same n values apply to all volumes the input <t-image>
 
 z2logp_4dfp
@@ -1993,8 +1962,7 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================
 
-N.B.:	probability computed on assumption that voxel values are N(0,1)
-
+N.B.:	probability computed on assumption that voxel values are N(0,1) |br|
 N.B.:	undefined (1.e-37, NaN, Inf) voxels in input are output as 1.e-37
 
 rho2z_4dfp
@@ -2048,8 +2016,7 @@ Options
 -g<int>[-<int>][,<int>[-<int>]][,...]	program alignment group
 =====================================	==============================================================
 
-N.B.:	<(4dfp) mask> may be "none"
-
+N.B.:	<(4dfp) mask> may be "none" |br|
 N.B.:	I0 should not be named in any programmed alignent group
 
 dwi_cross_xalign3d_4dfp
@@ -2135,20 +2102,13 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	==================================================================================
 
-N.B.:	the first data volume must have high SNR from b=0 or low b value
-
-N.B.:	optional output volumes are appended to MD and RA
-
-N.B.:	output order: MD,RA,(Dxx,Dyy,Dzz,Dxy,Dxz,Dyz),(FA),(E123,RD),(CO),(Res),(Evecs),(Prol)
-
-N.B.:	-b and -B are independent but can both be applied
-
-N.B.:	-b requires -m and mask dimensions must match image dimensions
-
-N.B.:	-B, -b parameter useful range is 1.5 to 3
-
-N.B.:	eigenvalue ordering is = Eval1 < Eval2 < Eval3
-
+N.B.:	the first data volume must have high SNR from b=0 or low b value |br|
+N.B.:	optional output volumes are appended to MD and RA |br|
+N.B.:	output order: MD,RA,(Dxx,Dyy,Dzz,Dxy,Dxz,Dyz),(FA),(E123,RD),(CO),(Res),(Evecs),(Prol) |br|
+N.B.:	-b and -B are independent but can both be applied |br|
+N.B.:	-b requires -m and mask dimensions must match image dimensions |br|
+N.B.:	-B, -b parameter useful range is 1.5 to 3 |br|
+N.B.:	eigenvalue ordering is = Eval1 < Eval2 < Eval3 |br|
 N.B.:	-c produces an franctional constant output CO = C/(C+S0)
 
 diffRGB_4dfp
