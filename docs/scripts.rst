@@ -192,7 +192,7 @@ cross_bold_pp_161012.csh
 		- |delta_desc|
 	* 	- TE_vol
 		- |TE_vol_vals|
-		- |TE_vols_desc|
+		- |TE_vol_desc|
 	*	- dwell
 		- |dwell_vals|
 		- |dwell_desc|
@@ -367,7 +367,7 @@ cross_bold_pp_130702.csh
 		- |delta_desc|
 	* 	- TE_vol
 		- |TE_vol_vals|
-		- |TE_vols_desc|
+		- |TE_vol_desc|
 	*	- dwell
 		- |dwell_vals|
 		- |dwell_desc|
