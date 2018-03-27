@@ -9,7 +9,7 @@ Dicom utilities
 
 dcm_sort
 --------
-sort dicom files by study series
+sort dicom files by study series (used for flat directory structures)
 
 Usage:	dcm_sort <dicom_directory>
 
@@ -34,9 +34,35 @@ N.B.:	dcm_sort removes existing single study subdirectories
 
 N.B.:	dcm_sort puts unclassifiable DICOMs into subdirectory study0
 
+pseudo_dcm_sort.csh
+-------------------
+sort dicom files by study series (used for nested directory structures)
+
+Usage:	pseudo_dcm_sort.csh <dicom directory>
+
+Examples::
+
+	pseudo_dcm_sort.csh RAW
+
+Options
+
+==	==========================================================================================================
+-d	debug mode (set echo)
+-s	DICOM files are within a subdirectory of numeric subdirectories (default directly in numeric subdirectory)
+-e	identify DICOM files by specified extension (default extension = dcm)
+-r	identify DICOM files by specified root (default root = 'MR*')
+-i	take DICOM files with integer filenames
+-t	toggle off use of -t in call to dcm_dump_file (default ON)
+==	==========================================================================================================
+
+N.B.:	dicom subdirectories must be numeric |br|
+N.B.:	default subdirectory of numeric subdirectory is 'DICOM'
+
 
 fMRI oriented scripts
 =====================
+
+.. _cross_bold_pp:
 
 cross_bold_pp
 -------------
@@ -515,7 +541,6 @@ generic_cross_bold_pp_090115
 
 .. list-table::
 	:widths: 15	5 65
-	:class: wrap-row
 	:header-rows: 1
 
 	*	- Variable
@@ -880,9 +905,13 @@ N.B.:	If two groups are entered a t-test will be run comparing the two groups an
 fcMRI oriented scripts
 ======================
 
+.. _fcMRI_preproc:
+
 fcMRI_preproc
 -------------
-fcMRI preprocessing including nuisance variable regression
+fcMRI preprocessing including nuisance variable regression.
+
+.. attention:: :code:`fcMRI_preproc` assumes successful completion of BOLD preprocessing (:ref:`cross_bold_pp`).
 
 Usage:	fcMRI_preproc_<version>.csh <params file> [instructions file]
 
@@ -931,8 +960,8 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	  	- |FCdir_vals|
 	  	- |FCdir_desc|
   	* 	- MB
-	  	- |MB_enable_vals|
-	  	- |MB_enable_desc|
+	  	- |MB_skip_vals|
+	  	- |MB_skip_desc|
 	* 	- conc
 	  	- |conc_vals|
 	  	- |conc_desc|
@@ -971,7 +1000,7 @@ Revised version of :ref:`fcMRI_preproc_130715`
 
 * Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
-* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- this step is skipped if $fmtfile is specified or **if no $FDthresh is specified**
+* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified or if no $FDthresh is specified
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
 * Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
 * Make timeseries zero mean (:ref:`var_4dfp`)
@@ -1023,8 +1052,8 @@ fcMRI_preproc_140413.csh
 	  	- |FCdir_vals|
 	  	- |FCdir_desc|
   	* 	- MB
-	  	- |MB_enable_vals|
-	  	- |MB_enable_desc|
+	  	- |MB_skip_vals|
+	  	- |MB_skip_desc|
 	* 	- conc
 	  	- |conc_vals|
 	  	- |conc_desc|
@@ -1097,8 +1126,8 @@ fcMRI_preproc_130715.csh
 		- |FCdir_vals|
 		- |FCdir_desc|
 	* 	- MB
-		- |MB_enable_vals|
-		- |MB_enable_desc|
+		- |MB_skip_vals|
+		- |MB_skip_desc|
 	* 	- conc
 		- |conc_vals|
 		- |conc_desc|
@@ -1184,8 +1213,8 @@ Hallquist compliant version of :ref:`fcMRI_preproc_090115`
 		- |FCdir_vals|
 		- |FCdir_desc|
 	* 	- MB
-		- |MB_enable_vals|
-		- |MB_enable_desc|
+		- |MB_skip_vals|
+		- |MB_skip_desc|
 	* 	- conc
 		- |conc_vals|
 		- |conc_desc|
@@ -1256,8 +1285,8 @@ fcMRI_preproc_090115.csh
 		- |FCdir_vals|
 		- |FCdir_desc|
 	* 	- MB
-		- |MB_enable_vals|
-		- |MB_enable_desc|
+		- |MB_skip_vals|
+		- |MB_skip_desc|
 	* 	- conc
 		- |conc_vals|
 		- |conc_desc|
@@ -1285,12 +1314,13 @@ seed_correl
 -----------
 compute multi-volume correlation maps
 
+.. attention:: :code:`seed_correl` assumes successful completion of BOLD preprocessing (:ref:`cross_bold_pp`) and fcMRI preprocessing (:ref:`fcMRI_preproc`).
+
 Usage:	seed_correl_<version>.csh <parameters file> [instructions] [options]
 
 Examples::
 
 	seed_correl_161012.csh VB16168.params
-
 
 seed_correl_161012.csh
 ++++++++++++++++++++++
@@ -1301,6 +1331,75 @@ Options
 -noblur	analyze unblurred version of preprocessed data
 -A		use format in atlas subdirectory (default FCmaps directory)
 =======	===========================================================
+
+|params_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	*	- ROIdir
+		- |ROIdir_vals|
+		- |ROIdir_desc|
+	*	- ROIimg
+		- |ROIimg_vals|
+		- |ROIimg_desc|
+	*	- ROIlistfile
+		- |ROIlistfile_vals|
+		- |ROIlistfile_desc|
+	*	- ROIlist
+		- |ROIlist_vals|
+		- |ROIlist_desc|
+
+.. note:: Either ROIimg, ROIlistfile, or ROIlist need to be set.
+
+|inst_header|
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- MB
+		- |MB_skip_vals|
+		- |MB_skip_desc|
+	*	- FCdir
+		- |FCdir_vals|
+		- |FCdir_desc|
+	* 	- skip
+		- |skip_vals|
+		- |skip_desc|
+	* 	- conc
+		- |conc_vals|
+		- |conc_desc|
+	* 	- fmtfile
+		- |fmtfile_vals|
+		- |fmtfile_desc|
+	*	- bpss_params
+		- |bpss_params_vals|
+		- |bpss_params_desc|
+	*	- blur
+		- |blur_vals|
+		- |blur_desc|
+
+**Processing Steps**
+
+* Create (multi-volume) ROI image if $ROIlistfile or $ROIlist specified (:ref:`paste_4dfp`)
+* Calculate seed (ROI) regressors (:ref:`qntm_4dfp`)
+* Compute total correlations (:ref:`glm_4dfp`, options: -t)
+* Mask total correlation image (_tcorr) by defined voxels (:ref:`maskimg_4dfp`, options: -1)
+* Fisher z transform total correlation (:ref:`rho2z_4dfp`)
+* Compute zero-lag ROI-ROI correlation matrix (if number of ROIs <= 256) (:ref:`covariance`, options: -u, -o, -m0)
 
 seed_correl_140413.csh
 ++++++++++++++++++++++

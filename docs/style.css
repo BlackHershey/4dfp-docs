@@ -1,3 +1,7 @@
 .wrap-row td {
-    white-space: normal
+    white-space: normal;
+}
+
+.required {
+    color:red;
 }

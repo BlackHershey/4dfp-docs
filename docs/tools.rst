@@ -33,10 +33,6 @@ N.B.:	f_half is half frequency in 1/cm |br|
 N.B.:	FWHM*f_half = (2ln2/pi) = 0.4412712 |br|
 N.B.:	conc files must have extension "conc"
 
-butterworth_4dfp†
------------------
-spatial frequency domain
-
 imgblur_4dfp
 ------------
 spatial domain
@@ -57,10 +53,6 @@ Options
 =======	==================================================
 
 N.B.:	default blur is 3D isotropic
-
-parzen_4dfp†
-------------
-spatial domain
 
 hsphere_4dfp
 ------------
@@ -526,9 +518,6 @@ Options
 N.B.:	<image_4dfp> is overwritten unless the trailer option is used |br|
 N.B.:	<scale_factor> must be specified for proper operation
 
-ratio_4dfp†
------------
-A/B
 
 imgopr_4dfp
 -----------
@@ -571,18 +560,6 @@ N.B.:	image dimensions must match except for binary operations {aspr} in which a
 
 Interconvert image formats
 ==========================
-
-ima_info†
----------
-dump selected Siemens (pre-DICOM) header info to stdout
-
-imato4dfp1†
------------
-Siemens (pre-DICOM) :math:`\rightarrow` 4dfp for structural images
-
-imato4dfpC†
------------
-Siemens (pre-DICOM) :math:`\rightarrow` 4dfp for functional data
 
 .. _dcm_to_4dfp:
 
@@ -763,10 +740,6 @@ Options
 -@<b|l> output big or little endian (default input endian)
 =======	===============================================================
 
-Amirato4dfp†
-------------
-convert Amira :math:`\rightarrow` 4dfp
-
 vto4dfp
 -------
 Varian fid/procpar :math:`\rightarrow` 4dfp
@@ -792,9 +765,11 @@ Options
 
 N.B.:	vto4dfp expects <varian file path> to contain files "fid" and "procpar"
 
+.. _nifti_4dfp:
+
 nifti_4dfp
 ----------
-interconvert nifti :math:`\leftrightarrow` 4dfp
+interconvert nii :math:`\leftrightarrow` 4dfp
 
 Usage: nifti_4dfp -<4|n> <infile> <outfile> [options]
 
@@ -817,6 +792,24 @@ N.B.:	".4dfp.ifh" or ".nii" are appended to filenames specified without extensio
 N.B.:	option -N has effect only on converting nii->4dfp |br|
 N.B.:	option -T has effect only on converting 4dfp->nii
 
+niftigz_4dfp
+------------
+interconvert nii.gz :math:`\leftrightarrow` 4dfp (:ref:`nifti_4dfp` wrapper)
+
+Usage:	niftigz_4dfp -<4|n> <infile> <outfile> [options]
+
+Examples::
+
+	niftigz_4dfp -4 VB18896_mpr_n1_333_t88.nii.gz VB18896_mpr_n1_333_t88
+
+Options (for more options, see :ref:`nifti_4dfp`)
+
+=======	=====================================================================
+-v		verbose mode
+-s<int>	skip specified number of frames at run start on 4dfp->NIfTI coversion
+=======	=====================================================================
+
+N.B.:	niftigz_4dfp always gzips NIfTI output but unzipped NIfTI input is left unchanged |br|
 
 Rearrange voxels in space or time
 =================================
@@ -1089,7 +1082,7 @@ Options
 ================	=====================================================
 
 
-"Format" manipulation
+"Format" string manipulation
 =====================
 
 condense
@@ -1150,7 +1143,8 @@ Options
 
 cs2ap_4dfp
 ----------
-convert cosine and sine amplitude images to amplitude and phase
+Converts cosine and sine amplitude images to amplitude and phase. Primarily
+used for phase-encoded retinotopy.
 
 Usage:	cs2ap_4dfp <(4dfp) cos_img> <(4dfp) sin_img> <(4dfp) outroot>
 
@@ -1213,7 +1207,7 @@ Options
 -@<b|l>	output big or little endian (default input endian)
 =======	=========================================================
 
-rmspike_4dfp
+rmspike_4dfp [1]_
 ------------
 remove artifact due to k-space DC offset
 
@@ -1240,8 +1234,8 @@ cross_realign3d_4dfp
 --------------------
 motion correct fMRI timeseries within and across runs
 
-Usage:	cross_realign3d_4dfp -l4dfp_list_file
-		cross_realign3d_4dfp <run1_4dfp> <run2_4dfp>
+Usage: cross_realign3d_4dfp -l<4dfp_list_file> |br|
+or: cross_realign3d_4dfp <run1_4dfp> <run2_4dfp> ...
 
 Examples::
 
@@ -1380,6 +1374,8 @@ jitter
 ------
 optimally distribute n events on m frames
 
+.. TODO: add Avi's thoughts on randomization
+
 Usage:	jitter <(int) nevent> <(int) nframe> <(flt) tr_vol>
 
 Examples::
@@ -1466,10 +1462,6 @@ N.B.:	conc files must have extension "conc" |br|
 N.B.:	when using weight files 'x' frames in format are not counted |br|
 N.B.:	relative modulation images are zeroed where mean intensity < 0.5*whole_image_mode
 
-t4_actmapf_4dfp
----------------
-same functionality as actmapf_4dfp but with simultaneous resampling
-
 GC_4dfp
 -------
 Granger causality mapping
@@ -1551,13 +1543,6 @@ Options
 
 N.B.:	all input timeseries are made zero mean as a first step |br|
 N.B.:	region names can be specified on the first line of <profile> with '#' in the first column
-
-covariance_analysis
--------------------
-compute Bartlett correction for autocorrelation fMRI timeseries
-
-Usage:	covariance_analysis <lstfile>
-
 
 Evaluate and ROI-oriented programs
 ==================================
@@ -1678,6 +1663,8 @@ Options
 N.B.:	only the first frame of <mask> is used  |br|
 N.B.:	<image> and <mask> may be the same |br|
 N.B.:	conc files must have extension "conc"
+
+.. _qntm_4dfp:
 
 qntm_4dfp
 ---------
@@ -1965,6 +1952,8 @@ Options
 N.B.:	probability computed on assumption that voxel values are N(0,1) |br|
 N.B.:	undefined (1.e-37, NaN, Inf) voxels in input are output as 1.e-37
 
+.. _rho2z_4dfp:
+
 rho2z_4dfp
 ----------
 r-map :math:`\leftrightarrow` Fisher z-map
@@ -2160,44 +2149,3 @@ Options
 ==============	==============================================================
 
 N.B.:	default output is first two eigenvectors scaled by Asigma
-
-
-Operations on short int (“Analyze 7.5”) format images
-=====================================================
-
-addgrid†
---------
-“burn in” grid lines
-
-hard_ellipse†
--------------
-“burn in” ellipsoid
-
-2Dhist
-------
-construct 2D histogram voxel value histogram
-
-usage:	2Dhist <img1> <img2> <2Dhist_out>
-
-Examples::
-
-	2Dhist va1701_tir_ecatt_ANALYZE va1701_mpr_S va1701_tir_mpr_2Dhist
-	2Dhist va1701_tir_ecatt_ANALYZE va1701_mpr_S va1701_tir_mpr_2Dhist -r1:0to2500
-	2Dhist va1701_tir_ecatt_ANALYZE va1701_mpr_S va1701_tir_mpr_2Dhist -r1:2500
-
-Options
-
-======================	=====================================================
--g						suppress grid burn-in
--r<1|2>:[<int>to]<int>	specify usable voxel value range for <img1> or <img2>
--@<b|l>					output big or little endian (default CPU endian)
-======================	=====================================================
-
-N.B.:	2Dhist operates on short int (ANALYZE) format images
-
-fcm_fitgain3d†
---------------
-multi-spectral image segmentation using fuzzy class means
-
-
-† Solaris only

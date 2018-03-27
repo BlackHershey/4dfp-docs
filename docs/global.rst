@@ -1,3 +1,4 @@
+.. role:: required
 .. |br| raw:: html
 
     </br>
@@ -29,7 +30,7 @@
 .. |fstd_vals| replace:: <int array>
 .. |fstd_desc| replace:: list of scan numbers that map to run folders
 
-.. |gre_vals| replace:: <array>
+.. |gre_vals| replace:: <int array>
 .. |gre_desc| replace:: gradient echo measured field map scan numbers (magnitude image should be first, followed by phase image)
 
 .. |irun_vals| replace:: <str array>
@@ -39,16 +40,31 @@
 .. |mprs_desc| replace:: list of mprage scan numbers
 
 .. |patid_vals| replace:: <str>
-.. |patid_desc| replace:: participant folder
+.. |patid_desc| replace:: unique identifier for current subject/session
 
-.. |pdt2_vals| replace:: <array>
+.. |pdt2_vals| replace:: <int array>
 .. |pdt2_desc| replace:: list containing one study number for ptd
 
-.. |sefm_vals| replace:: <array>
+.. |ROIdir_vals| replace:: <str>
+.. |ROIdir_desc| replace:: directory containing ROI image(s)
+
+.. |ROIimg_vals| replace:: <str>
+.. |ROIimg_desc| replace:: base filename for single ROI image
+
+.. |ROIlist_vals| replace:: <str array>
+.. |ROIlist_desc| replace:: list of base filenames for ROI images
+
+.. |ROIlistfile_vals| replace:: <str>
+.. |ROIlistfile_desc| replace:: list file (.lst) of base filenames for ROI image
+
+.. |sefm_vals| replace:: <int array>
 .. |sefm_desc| replace:: spin echo measured field maps
 
 .. |srcdir_vals| replace:: <str>
 .. |srcdir_desc| replace:: source directory path (contains run directories)
+
+.. |tse_vals| replace:: <int array>
+.. |tse_desc| replace:: list of tse scan numbers
 
 .. |workdir_vals| replace:: <str>
 .. |workdir_desc| replace:: working directory path
@@ -111,7 +127,7 @@
 .. |FDtype_desc| replace:: frame displacement calculation (1 = absolute value, 2 = squares)
 
 .. |fmtfile_vals| replace:: <str>
-.. |fmtfile_desc| replace:: format file (if unspecified, frame censoring will be calculated)
+.. |fmtfile_desc| replace:: format file
 
 .. |FWHM_vals| replace:: <int>
 .. |FWHM_desc| replace:: full-width half maximum for spatial blur (default = 6)
@@ -130,9 +146,6 @@
 
 .. |lomotil_vals| replace:: <int>
 .. |lomotil_desc| replace:: lowpass filter specified motion parameter (:ref:`mat2dat`)
-
-.. |MB_enable_vals| replace:: 0,1
-.. |MB_enable_desc| replace:: enable slicing timing correction and debanding
 
 .. |MB_skip_vals| replace:: 0,1
 .. |MB_skip_desc| replace:: skip slice timing correction and debanding
