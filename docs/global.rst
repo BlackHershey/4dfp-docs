@@ -1,3 +1,11 @@
+.. |cross_bold_v12_epi2atl| raw:: html
+
+    <object data="_static\cross_bold_v12_epi2atl.svg" type="image/svg+xml"></object>
+
+.. |cross_bold_v16_epi2atl| raw:: html
+
+    <object data="_static\cross_bold_v16_epi2atl.svg" type="image/svg+xml"></object>
+
 .. role:: required
 .. |br| raw:: html
 

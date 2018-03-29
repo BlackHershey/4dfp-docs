@@ -252,6 +252,14 @@ Economy value	Files to be removed
 * Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
 * Compute MPRAGE atlas transforms (:ref:`mpr2atl1_4dfp` with first mpr if $Gad, otherwise :ref:`avgmpr_4dfp`)
 * Compute EPI atlas transform
+.. container:: toggle
+
+    .. container:: header
+
+        **(Show/Hide Details)**
+
+    |cross_bold_v16_epi2atl|
+
 * Make atlas transformed EPI anat_ave and t2w in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
 * Compute field mapping correction (:ref:`fmri_unwarp_170616.tcsh`)
 * Compute and apply unwarped epi to atlas transform (:ref:`imgreg_4dfp`, :ref:`t4_mul`, :ref:`t4img_4dfp`)
@@ -531,6 +539,13 @@ Economy value	Files to be removed
 * Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
 * Compute MPRAGE atlas transforms (:ref:`avgmpr_4dfp`)
 * Compute EPI atlas transform
+.. container:: toggle
+
+    .. container:: header
+
+        **(Show/Hide Details)**
+
+    |cross_bold_v12_epi2atl|
 * Make atlas transformed EPI anat_ave in 111, 222, and 333 (711-2B or MNI152 if $to_MNI152) atlas space (:ref:`t4img_4dfp`)
 * Make cross-realigned atlas-transformed resampled BOLD 4dfp stacks (:ref:`t4_xr3d_4dfp`)
 
