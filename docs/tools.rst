@@ -452,6 +452,8 @@ N.B.:	-l center of mass indices can be converted to atlas coordinates using inde
 Dicom utilities
 ===============
 
+.. _dcm_dump_file:
+
 dcm_dump_file
 -------------
 dump dicom header info to stdout

@@ -1,4 +1,6 @@
 .. role:: required
+.. |req| replace:: :required:`*`
+
 .. |br| raw:: html
 
     </br>
@@ -105,7 +107,7 @@
 .. |E4dfp_vals| replace:: 0,1
 .. |E4dfp_desc| replace:: if 4dfp files already exist (skips :ref:`dcm_to_4dfp`)
 
-.. |economy_vals| replace:: 2-7
+.. |economy_vals| replace:: <int>
 .. |economy_desc| replace:: level of removal for intermediate files created during execution (higher economy will remove more files)
 
 .. |epi2atl_vals| replace:: 0,1,2
@@ -140,6 +142,9 @@
 
 .. |goto_UNWARP_vals| replace:: 1
 .. |goto_UNWARP_desc| replace:: immediately go to unwarp step (will happen if variable is defined)
+
+.. |inpath_vals| replace:: <str>
+.. |inpath_desc| replace:: starting directory (usually subject directory)
 
 .. |interleave_vals| replace:: -S
 .. |interleave_desc| replace:: sequential slice acquisition (:ref:`frame_align_4dfp`)

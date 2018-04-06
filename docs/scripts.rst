@@ -7,6 +7,8 @@ Scripts
 Dicom utilities
 ===============
 
+.. _dcm_sort:
+
 dcm_sort
 --------
 sort dicom files by study series (used for flat directory structures)
@@ -33,6 +35,8 @@ Options
 N.B.:	dcm_sort removes existing single study subdirectories
 
 N.B.:	dcm_sort puts unclassifiable DICOMs into subdirectory study0
+
+.. _pseudo_dcm_sort:
 
 pseudo_dcm_sort.csh
 -------------------
@@ -75,6 +79,7 @@ Examples::
 	cross_bold_pp_161012.csh VB16168.params
 	generic_cross_bold_pp_090115.csh VB16168.params
 
+.. _cross_bold_pp_161012:
 
 cross_bold_pp_161012.csh
 ++++++++++++++++++++++++
@@ -101,6 +106,9 @@ cross_bold_pp_161012.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -129,7 +137,10 @@ cross_bold_pp_161012.csh
 	*	- Variable
 		- Values
 		- Description
-	* 	- target
+	*	- inpath
+		- |inpath_vals|
+		- |inpath_desc|
+	* 	- target |req|
 		- |target_vals|
 		- |target_desc|
 	*	- scrdir
@@ -177,6 +188,21 @@ cross_bold_pp_161012.csh
 	*	- nounpack
 		- |nounpack_vals|
 		- |nounpack_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	* 	- lomotil
 		- |lomotil_vals|
 		- |lomotil_desc|
@@ -194,7 +220,7 @@ cross_bold_pp_161012.csh
 		- |epi2atl_desc|
 	*	- FDthresh
 		- |FDthresh_vals|
-		- |FDtype_desc|
+		- |FDthresh_desc|
 	*	- FDtype
 		- |FDtype_vals|
 		- |FDtype_desc|
@@ -282,6 +308,9 @@ cross_bold_pp_130702.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -361,6 +390,21 @@ cross_bold_pp_130702.csh
 	*	- nounpack
 		- |nounpack_vals|
 		- |nounpack_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	*	- epidir
 		- |epidir_vals|
 		- |epidir_desc|
@@ -372,7 +416,7 @@ cross_bold_pp_130702.csh
 		- |epi2atl_desc|
 	*	- FDthresh
 		- |FDthresh_vals|
-		- |FDtype_desc|
+		- |FDthresh_desc|
 	*	- anat_aveb
 		- |anat_aveb_vals|
 		- |anat_aveb_desc|
@@ -458,6 +502,9 @@ cross_bold_pp_121215.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -486,6 +533,21 @@ cross_bold_pp_121215.csh
 	* 	- sorted
 		- |sorted_vals|
 		- |sorted_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	*	- Siemens_interleave
 		- |Siemens_interleave_vals|
 		- |Siemens_interleave_desc|
@@ -558,6 +620,9 @@ generic_cross_bold_pp_090115
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -616,6 +681,21 @@ generic_cross_bold_pp_090115
 	*	- nounpack
 		- |nounpack_vals|
 		- |nounpack_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	*	- epidir
 		- |epidir_vals|
 		- |epidir_desc|
