@@ -7,6 +7,8 @@ Scripts
 Dicom utilities
 ===============
 
+.. _dcm_sort:
+
 dcm_sort
 --------
 sort dicom files by study series (used for flat directory structures)
@@ -33,6 +35,8 @@ Options
 N.B.:	dcm_sort removes existing single study subdirectories
 
 N.B.:	dcm_sort puts unclassifiable DICOMs into subdirectory study0
+
+.. _pseudo_dcm_sort:
 
 pseudo_dcm_sort.csh
 -------------------
@@ -75,6 +79,7 @@ Examples::
 	cross_bold_pp_161012.csh VB16168.params
 	generic_cross_bold_pp_090115.csh VB16168.params
 
+.. _cross_bold_pp_161012:
 
 cross_bold_pp_161012.csh
 ++++++++++++++++++++++++
@@ -101,6 +106,9 @@ cross_bold_pp_161012.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -129,7 +137,10 @@ cross_bold_pp_161012.csh
 	*	- Variable
 		- Values
 		- Description
-	* 	- target
+	*	- inpath
+		- |inpath_vals|
+		- |inpath_desc|
+	* 	- target |req|
 		- |target_vals|
 		- |target_desc|
 	*	- scrdir
@@ -177,6 +188,21 @@ cross_bold_pp_161012.csh
 	*	- nounpack
 		- |nounpack_vals|
 		- |nounpack_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	* 	- lomotil
 		- |lomotil_vals|
 		- |lomotil_desc|
@@ -194,7 +220,7 @@ cross_bold_pp_161012.csh
 		- |epi2atl_desc|
 	*	- FDthresh
 		- |FDthresh_vals|
-		- |FDtype_desc|
+		- |FDthresh_desc|
 	*	- FDtype
 		- |FDtype_vals|
 		- |FDtype_desc|
@@ -290,6 +316,9 @@ cross_bold_pp_130702.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -369,6 +398,21 @@ cross_bold_pp_130702.csh
 	*	- nounpack
 		- |nounpack_vals|
 		- |nounpack_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	*	- epidir
 		- |epidir_vals|
 		- |epidir_desc|
@@ -380,7 +424,7 @@ cross_bold_pp_130702.csh
 		- |epi2atl_desc|
 	*	- FDthresh
 		- |FDthresh_vals|
-		- |FDtype_desc|
+		- |FDthresh_desc|
 	*	- anat_aveb
 		- |anat_aveb_vals|
 		- |anat_aveb_desc|
@@ -466,6 +510,9 @@ cross_bold_pp_121215.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -494,6 +541,21 @@ cross_bold_pp_121215.csh
 	* 	- sorted
 		- |sorted_vals|
 		- |sorted_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	*	- Siemens_interleave
 		- |Siemens_interleave_vals|
 		- |Siemens_interleave_desc|
@@ -573,6 +635,9 @@ generic_cross_bold_pp_090115
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
+	*	- tse
+		- |tse_vals|
+		- |tse_desc|
 	*	- pdt2
 		- |pdt2_vals|
 		- |pdt2_desc|
@@ -631,6 +696,21 @@ generic_cross_bold_pp_090115
 	*	- nounpack
 		- |nounpack_vals|
 		- |nounpack_desc|
+	*	- nx
+		- |nx_vals|
+		- |nx_desc|
+	* 	- ny
+		- |ny_vals|
+		- |ny_desc|
+	*	- skip
+		- |skip_vals|
+		- |skip_desc|
+	*	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
+	*	- TR_slc
+		- |TR_slc_vals|
+		- |TR_slc_desc|
 	*	- epidir
 		- |epidir_vals|
 		- |epidir_desc|
@@ -936,6 +1016,8 @@ Examples::
 	fcMRI_preproc_090115.csh VB16168.params
 
 
+.. _fcMRI_preproc_161012:
+
 fcMRI_preproc_161012.csh
 ++++++++++++++++++++++++
 
@@ -974,6 +1056,9 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	* 	- FCdir
 	  	- |FCdir_vals|
 	  	- |FCdir_desc|
+	*	- FSdir
+		- |FSdir_vals|
+		- |FSdir_desc|
   	* 	- MB
 	  	- |MB_skip_vals|
 	  	- |MB_skip_desc|
@@ -1001,6 +1086,21 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	*	- CSF_excl_lim
 		- |CSF_excl_lim_vals|
 		- |CSF_excl_lim_desc|
+	*	- CSF_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	* 	- CSF_sd1t
+		- |CSF_sd1t_vals|
+		- |CSF_sd1t_desc|
+	*	- CSF_svdt
+		- |svdt_vals|
+		- |svdt_desc|
+	*	- WM_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	*	- WM_svdt
+		- |svdt_vals|
+		- |svdt_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
@@ -1015,7 +1115,7 @@ Revised version of :ref:`fcMRI_preproc_130715`
 
 * Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
-* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified or if no $FDthresh is specified
+* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified, DVARS only if no $FDthresh is specified
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
 * Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
 * Make timeseries zero mean (:ref:`var_4dfp`)
@@ -1140,6 +1240,9 @@ fcMRI_preproc_130715.csh
 	* 	- FCdir
 		- |FCdir_vals|
 		- |FCdir_desc|
+	*	- FSdir
+		- |FSdir_vals|
+		- |FSdir_desc|
 	* 	- MB
 		- |MB_skip_vals|
 		- |MB_skip_desc|
@@ -1158,6 +1261,21 @@ fcMRI_preproc_130715.csh
 	* 	- anat_avet
 		- |anat_avet_vals|
 		- |anat_avet_desc|
+	*	- CSF_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	* 	- CSF_sd1t
+		- |CSF_sd1t_vals|
+		- |CSF_sd1t_desc|
+	*	- CSF_svdt
+		- |svdt_vals|
+		- |svdt_desc|
+	*	- WM_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	*	- WM_svdt
+		- |svdt_vals|
+		- |svdt_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
@@ -1324,6 +1442,7 @@ fcMRI_preproc_090115.csh
 * Paste nuisance regressors together (including task_regressor if supplied)
 * Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
 
+.. _seed_correl:
 
 seed_correl
 -----------
@@ -1336,6 +1455,8 @@ Usage:	seed_correl_<version>.csh <parameters file> [instructions] [options]
 Examples::
 
 	seed_correl_161012.csh VB16168.params
+
+.. _seed_correl_161012:
 
 seed_correl_161012.csh
 ++++++++++++++++++++++

@@ -16,3 +16,9 @@ Contents
    tools
    scripts
    appendix
+
+.. toctree::
+    :caption: Worked Examples
+    :maxdepth: 2
+
+    bold-example

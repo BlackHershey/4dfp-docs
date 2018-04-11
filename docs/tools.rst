@@ -470,6 +470,8 @@ N.B.:	-l center of mass indices can be converted to atlas coordinates using inde
 Dicom utilities
 ===============
 
+.. _dcm_dump_file:
+
 dcm_dump_file
 -------------
 dump dicom header info to stdout
@@ -1364,7 +1366,7 @@ Options
 -d <0|1>		specify slice acquisition direction (0:Inf->Sup; 1:Sup->Inf) (default=0)
 -m <int>		specify multi-band factor) (default=1)
 -TR_vol <flt>	specify frame TR in sec (default=2.36)
--TR_src <flt>	specify slice TR in sec (default=TR_vol/nslice)
+-TR_slc <flt>	specify slice TR in sec (default=TR_vol/nslice)
 =============	========================================================================
 
 N.B.:	space between option and value
