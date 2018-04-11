@@ -1,4 +1,4 @@
-Processing BOLD data
+Processing BOLD Data
 --------------------
 
 Scenario: You collected some BOLD data and you're interested in functional connectivity.
@@ -54,8 +54,8 @@ Now that we have our DICOM data sorted, we are almost ready to begin BOLD pre-pr
 :ref:`cross_bold_pp`. Unless you are processing data for a study that was using an older version of cross bold, you should always use the
 latest version.
 
-cross_bold_pp
-++++++++++++++
+Generic BOLD pre-processing
+++++++++++++++++++++++++++
 
 In order to run cross bold, we first need to set up some input files.
 
@@ -110,8 +110,7 @@ nothing besides :code:`dcm_sort` has already been run on the data and we won't s
 
 .. TODO: add bit about TR_slc, dwell, ped, maybe target
 
-Since we've chosen to set up our instruction file to define study-level params, we only need to define it once. For this reason, we will
-store it in the project directory.
+Since we've chosen to set up our instruction file to define study-level params, we'll store it in the project directory.
 
 .. code-block:: bash
 
@@ -137,12 +136,12 @@ store it in the project directory.
     set FDthresh = 0.2
     set FDtype = 1
 
-    set TR_vol = 1.23
-    set TR_slc = .019
+    set TR_vol = 1.23 # sec
+    set TR_slc = 0 # use default (TR_vol/nslices)
     set epidir = 0
 
-    set TE_vol = .033
-    set dwell = .59
+    set TE_vol = 33 # sec
+    set dwell = .59 # msec
     set ped = y-
     set rsam_cmnd = $RELEASE/one_step_resample.csh
 
@@ -203,5 +202,170 @@ Afterwards, you'll have the following subject anf bold directory structures::
 
 .. tip:: A lot of files get generated per run and the folders can get cluttered. If you don't intend to use the intermediate files, you should set the economy flag to 5 to remove some of them.
 
-fcMRI_preproc
-+++++++++++++
+fcMRI pre-processing
+++++++++++++++++++++
+After running generic bold processing, you'll want to run functional connectivity specific processing. However, before we can run
+:ref:`fcMRI_preproc`, there is a prerequiste step of running Freesurfer to generate masks for the subjects which will be used to calculate
+the nuisance regressors.
+
+If you don't already have project freesufer directory, go ahead and make one::
+
+    $ mkdir ../freesurfer
+
+Next we'll need to get a DICOM from our T1w image to use as our input file for Freesurfer::
+
+    $ cat SCANS.studies.txt | grep T1w
+    10   tfl3d1_16ns    ABCD_T1w_MPR_vNav                                   176
+
+    $ ls SCANS/10/DICOM/*10.1.*
+    ../SCANS/10/DICOM/NEWT002_s1.MR.head_Hershey.10.1.20161130.131330.1ldrvyd.dcm
+
+With this information at hand, we can now launch the Freesurfer job ::
+
+    $ at now
+    at> setenv SUBJECTS_DIR /data/cerbo1/data/NEWT/freesurfer
+    at> recon-all -all -s NEWT002_s1 -i /data/cerbo/data1/NEWT/NEWT002_s1/SCANS/10/DICOM/NEWT002_s1.MR.head_Hershey.10.1.20161130.131330.1ldrvyd.dcm
+    at> <ctrl-d>
+
+Same as before, :ref:`fcMRI_preproc` accepts a params and instructions file. If you look at the variable specification for
+:ref:`fcMRI_preproc_161012`, you'll see that it shares some variables with :ref:`cross_bold_pp_161012` - we'll leave those the same and
+simply add in the fcMRI-specific ones::
+
+    $ gedit ../NEWT.params
+
+.. TODO: explain lcube, sd1t, and svdt params
+
+.. code-block:: csh
+    :caption: NEWT.params
+
+    # BOLD pre-processing
+    set inpath = $cwd
+    set target = $REFDIR/TRIO_KY_NDC
+    set go = 1
+    set sorted = 1
+    set economy = 0
+    set epi2atl = 1
+    set normode = 0
+
+    set nx = 90
+    set ny = 90
+
+    set skip = 9
+
+    set FDthresh = 0.2
+    set FDtype = 1
+
+    set TR_vol = 1.23
+    set TR_slc = .019
+    set epidir = 0
+
+    set TE_vol = 33
+    set dwell = .59
+    set ped = y-
+    set rsam_cmnd = one_step_resample.csh
+
+    # fcMRI pre-processing
+    set srcdir = $cwd
+    set FSdir = /data/cerbo/data1/NEWT/freesurfer/${patid}
+    set fcbolds = ( ${irun} )
+    set CSF_lcube = 3
+    set CSF_sd1t = 25
+    set CSF_svdt = .2
+    set WM_lcube = 5
+    set WM_svdt = .15
+    set bpss_params = ( -bh .1 -oh 2 )
+    set blur = .73542
+
+No changes are needed to the params file, so now we can run the script::
+
+    $ fcMRI_preproc_161012.csh NEWT002_s1.params ../NEWT.params
+
+Afterwards, we will have the following new files::
+
+    # per run
+    % ls -tr bold1/*atl_*
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_dsd0.4dfp.img
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_dsd0.4dfp.ifh
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_dsd0.4dfp.hdr
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_dsd0.4dfp.img.rec
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_uout.4dfp.img
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_uout.4dfp.ifh
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_uout.4dfp.hdr
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_uout.4dfp.img.rec
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss.4dfp.img
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss.4dfp.ifh
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss.4dfp.hdr
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss.4dfp.img.rec
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid.4dfp.img
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid.4dfp.ifh
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid.4dfp.hdr
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid.4dfp.img.rec
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid_g7.4dfp.img
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid_g7.4dfp.ifh
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid_g7.4dfp.hdr
+    NEWT002_s1_b1_faln_dbnd_xr3d_uwrp_atl_bpss_resid_g7.4dfp.img.rec
+
+Seed-based correlation
+++++++++++++++++++++++
+
+After preprocessing, we can now generate a correlation matrix for our subject.
+
+If you look at the docs for :ref:`seed_correl_161012`, you'll see that we only need to add which regions to analyze (ROIs) to our
+instructions file.
+
+Here we'll use a prescribed list file of ROIs as our input.
+
+.. code-block:: csh
+    :caption:
+
+    # BOLD pre-processing
+    set inpath = $cwd
+    set target = $REFDIR/TRIO_KY_NDC
+    set go = 1
+    set sorted = 1
+    set economy = 0
+    set epi2atl = 1
+    set normode = 0
+
+    set nx = 90
+    set ny = 90
+
+    set skip = 9
+
+    set FDthresh = 0.2
+    set FDtype = 1
+
+    set TR_vol = 1.23
+    set TR_slc = .019
+    set epidir = 0
+
+    set TE_vol = 33
+    set dwell = .59
+    set ped = y-
+    set rsam_cmnd = one_step_resample.csh
+
+    # fcMRI pre-processing
+    set srcdir = $cwd
+    set FSdir = /data/cerbo/data1/NEWT/freesurfer/${patid}
+    set fcbolds = ( ${irun} )
+    set CSF_lcube = 3
+    set CSF_sd1t = 25
+    set CSF_svdt = .2
+    set WM_lcube = 5
+    set WM_svdt = .15
+    set bpss_params = ( -bh .1 -oh 2 )
+    set blur = .73542
+
+    # seed_corrl ROIs
+    set ROIdir = /data/petsun43/data1/atlas/CanonicalROIsNP705
+    set ROIlistfile = CanonicalROIsNP705.lst
+
+Now we can go ahead and run it::
+
+    $ seed_correl_161012.csh NEWT002_s1.params ../NEWT.params
+
+This produces a correlation matrix, ${FCdir}/${patid}_seed_regressors_CCR.dat.
+
+You can display the matrix by importing the data into matlab and using the :code:`imagesc` function.
+
+.. image:: _static/corr_matrix.png

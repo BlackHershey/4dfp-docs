@@ -1001,6 +1001,8 @@ Examples::
 	fcMRI_preproc_090115.csh VB16168.params
 
 
+.. _fcMRI_preproc_161012:
+
 fcMRI_preproc_161012.csh
 ++++++++++++++++++++++++
 
@@ -1039,6 +1041,9 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	* 	- FCdir
 	  	- |FCdir_vals|
 	  	- |FCdir_desc|
+	*	- FSdir
+		- |FSdir_vals|
+		- |FSdir_desc|
   	* 	- MB
 	  	- |MB_skip_vals|
 	  	- |MB_skip_desc|
@@ -1066,6 +1071,21 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	*	- CSF_excl_lim
 		- |CSF_excl_lim_vals|
 		- |CSF_excl_lim_desc|
+	*	- CSF_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	* 	- CSF_sd1t
+		- |CSF_sd1t_vals|
+		- |CSF_sd1t_desc|
+	*	- CSF_svdt
+		- |svdt_vals|
+		- |svdt_desc|
+	*	- WM_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	*	- WM_svdt
+		- |svdt_vals|
+		- |svdt_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
@@ -1080,7 +1100,7 @@ Revised version of :ref:`fcMRI_preproc_130715`
 
 * Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
-* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified or if no $FDthresh is specified
+* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified, DVARS only if no $FDthresh is specified
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
 * Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
 * Make timeseries zero mean (:ref:`var_4dfp`)
@@ -1205,6 +1225,9 @@ fcMRI_preproc_130715.csh
 	* 	- FCdir
 		- |FCdir_vals|
 		- |FCdir_desc|
+	*	- FSdir
+		- |FSdir_vals|
+		- |FSdir_desc|
 	* 	- MB
 		- |MB_skip_vals|
 		- |MB_skip_desc|
@@ -1223,6 +1246,21 @@ fcMRI_preproc_130715.csh
 	* 	- anat_avet
 		- |anat_avet_vals|
 		- |anat_avet_desc|
+	*	- CSF_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	* 	- CSF_sd1t
+		- |CSF_sd1t_vals|
+		- |CSF_sd1t_desc|
+	*	- CSF_svdt
+		- |svdt_vals|
+		- |svdt_desc|
+	*	- WM_lcube
+		- |lcube_vals|
+		- |lcube_desc|
+	*	- WM_svdt
+		- |svdt_vals|
+		- |svdt_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
@@ -1389,6 +1427,7 @@ fcMRI_preproc_090115.csh
 * Paste nuisance regressors together (including task_regressor if supplied)
 * Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
 
+.. _seed_correl:
 
 seed_correl
 -----------
@@ -1401,6 +1440,8 @@ Usage:	seed_correl_<version>.csh <parameters file> [instructions] [options]
 Examples::
 
 	seed_correl_161012.csh VB16168.params
+
+.. _seed_correl_161012:
 
 seed_correl_161012.csh
 ++++++++++++++++++++++

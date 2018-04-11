@@ -86,8 +86,8 @@
 .. |blur_vals| replace:: <flt>
 .. |blur_desc| replace:: f_half for spatial blur (no blurring if unspecified)
 
-.. |bpss_params_vals| replace:: <str>
-.. |bpss_params_desc| replace:: additional options to use for bandpass filtering (-E,M,F already specified)
+.. |bpss_params_vals| replace:: <array>
+.. |bpss_params_desc| replace:: additional options to use for bandpass filtering (-E,M,F already specified), e.g. ( -bh .1 -oh 2 )
 
 .. |conc_vals| replace:: <str>
 .. |conc_desc| replace:: pre-existing conc file to use
@@ -97,6 +97,9 @@
 
 .. |CSF_excl_lim_vals| replace:: <flt>
 .. |CSF_excl_lim_desc| replace:: mask threshold for CSF (default = .126)
+
+.. |CSF_sd1t_vals| replace:: <flt>
+.. |CSF_sd1t_desc| replace:: threshold CSF sd1 image
 
 .. |delta_vals| replace:: <flt>
 .. |delta_desc| replace:: difference between field map echo times (ms)
@@ -131,6 +134,9 @@
 .. |fmtfile_vals| replace:: <str>
 .. |fmtfile_desc| replace:: format file
 
+.. |FSdir_vals| replace:: <str>
+.. |FSdir_desc| replace:: freesurfer directory
+
 .. |FWHM_vals| replace:: <int>
 .. |FWHM_desc| replace:: full-width half maximum for spatial blur (default = 6)
 
@@ -148,6 +154,9 @@
 
 .. |interleave_vals| replace:: -S
 .. |interleave_desc| replace:: sequential slice acquisition (:ref:`frame_align_4dfp`)
+
+.. |lcube_vals| replace:: <int>
+.. |lcube_desc| replace:: cube dimension (in voxels) used by :ref:`qntv_4dfp`
 
 .. |lomotil_vals| replace:: <int>
 .. |lomotil_desc| replace:: lowpass filter specified motion parameter (:ref:`mat2dat`)
@@ -202,6 +211,9 @@
 
 .. |sorted_vals| replace:: 0,1
 .. |sorted_desc| replace:: if dcm sort already been run (if 0, dcm_sort will be run)
+
+.. |svdt_vals| replace:: <flt>
+.. |svdt_desc| replace:: limit regressor covariance condition number to (1/{})^2
 
 .. |sx_vals| replace:: <int>
 .. |sx_desc| replace:: unpacked x-dimension squeeze factor (:ref:`unpack_4dfp`)
