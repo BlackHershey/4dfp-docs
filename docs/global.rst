@@ -83,7 +83,7 @@
 .. |inst_header| replace:: :ref:`instructions` variables
 
 .. |anat_aveb_vals| replace:: <flt>
-.. |anat_aveb_desc| replace:: run_dvar_4dfp preblur in mm
+.. |anat_aveb_desc| replace:: run_dvar_4dfp preblur in mm (for small voxels, set to 10mm)
 
 .. |anat_avet_vals| replace:: <flt>
 .. |anat_avet_desc| replace:: run_dvar_4dfp criterion
@@ -106,8 +106,14 @@
 .. |CSF_excl_lim_vals| replace:: <flt>
 .. |CSF_excl_lim_desc| replace:: mask threshold for CSF (default = .126)
 
+.. |CSF_lcube_vals| replace:: |lcube_vals|
+.. |CSF_lcube_desc| replace:: |lcube_desc| for CSF (recommended: 3)
+
 .. |CSF_sd1t_vals| replace:: <flt>
-.. |CSF_sd1t_desc| replace:: threshold CSF sd1 image
+.. |CSF_sd1t_desc| replace:: threshold CSF sd1 image (recommended: 25)
+
+.. |CSF_svdt_vals| replace:: |svdt_vals|
+.. |CSF_svdt_desc| replace:: |svdt_desc| for CSF (recommended: .2)
 
 .. |delta_vals| replace:: <flt>
 .. |delta_desc| replace:: difference between field map echo times (ms)
@@ -252,3 +258,9 @@
 
 .. |uwrp_cmnd_vals| replace:: <str>
 .. |uwrp_cmnd_desc| replace:: script to use for unwarping
+
+.. |WM_lcube_vals| replace:: |lcube_vals|
+.. |WM_lcube_desc| replace:: |lcube_desc| for WM (recommended: 5)
+
+.. |WM_svdt_vals| replace:: |svdt_vals|
+.. |WM_svdt_desc| replace:: |svdt_desc| for WM (recommended: .15)

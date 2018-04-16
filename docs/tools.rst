@@ -1354,20 +1354,21 @@ Usage: frame_align_4dfp <(4dfp) input> <frames_to_skip> [options]
 
 Examples::
 
-	frame_align_4dfp bold_run.4dfp.img 4
-	frame_align_4dfp bold_run.4dfp.img 4 -TR_vol 2.5
-	frame_align_4dfp bold_run.4dfp.img 4 -TR_vol 2.5 -TR_slc .136
+	frame_align_4dfp bold_run.4dfp.img 4 -TR_vol 2.5 -TR_slc .136 -d 1
+	frame_align_4dfp bold_run.4dfp.img 4 -TR_vol 2.5 -TR_slc .136 -seqstr 1,8,5,2,9,6,3,10,7,4
+
 
 Options
 
-=============	========================================================================
+=============	==============================================================================================
 -N				enable interleaved order 2,4,6,...,1,3,5,... for even total slice counts
 -S				specify sequential slice acquisition (default interleaved)
 -d <0|1>		specify slice acquisition direction (0:Inf->Sup; 1:Sup->Inf) (default=0)
 -m <int>		specify multi-band factor) (default=1)
+-seqstr <str>   specify [MB] slice sequence (counting from 1) as a comma-separated (no spaces) integer string
 -TR_vol <flt>	specify frame TR in sec (default=2.36)
 -TR_slc <flt>	specify slice TR in sec (default=TR_vol/nslice)
-=============	========================================================================
+=============	==============================================================================================
 
 N.B.:	space between option and value
 

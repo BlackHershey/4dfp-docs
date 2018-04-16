@@ -1087,20 +1087,20 @@ Revised version of :ref:`fcMRI_preproc_130715`
 		- |CSF_excl_lim_vals|
 		- |CSF_excl_lim_desc|
 	*	- CSF_lcube
-		- |lcube_vals|
-		- |lcube_desc|
+		- |CSF_lcube_vals|
+		- |CSF_lcube_desc|
 	* 	- CSF_sd1t
 		- |CSF_sd1t_vals|
 		- |CSF_sd1t_desc|
 	*	- CSF_svdt
-		- |svdt_vals|
-		- |svdt_desc|
+		- |CSF_svdt_vals|
+		- |CSF_svdt_desc|
 	*	- WM_lcube
-		- |lcube_vals|
-		- |lcube_desc|
+		- |WM_lcube_vals|
+		- |WM_lcube_desc|
 	*	- WM_svdt
-		- |svdt_vals|
-		- |svdt_desc|
+		- |WM_svdt_vals|
+		- |WM_svdt_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
@@ -1262,20 +1262,20 @@ fcMRI_preproc_130715.csh
 		- |anat_avet_vals|
 		- |anat_avet_desc|
 	*	- CSF_lcube
-		- |lcube_vals|
-		- |lcube_desc|
+		- |CSF_lcube_vals|
+		- |CSF_lcube_desc|
 	* 	- CSF_sd1t
 		- |CSF_sd1t_vals|
 		- |CSF_sd1t_desc|
 	*	- CSF_svdt
-		- |svdt_vals|
-		- |svdt_desc|
+		- |CSF_svdt_vals|
+		- |CSF_svdt_desc|
 	*	- WM_lcube
-		- |lcube_vals|
-		- |lcube_desc|
+		- |WM_lcube_vals|
+		- |WM_lcube_desc|
 	*	- WM_svdt
-		- |svdt_vals|
-		- |svdt_desc|
+		- |WM_svdt_vals|
+		- |WM_svdt_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
 		- |fmtfile_desc|
