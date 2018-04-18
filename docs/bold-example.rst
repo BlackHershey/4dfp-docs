@@ -87,7 +87,7 @@ This will print out tags from the DICOM header, including echo time and repetiti
     0018 0088       16 //     ACQ Spacing Between Slices//2.4000000349655
     0018 0089        2 //ACQ Number of Phase Encoding Steps//90
 
-.. attention:: Be sure to pay attention to units. The DICOM header stores times in milliseconds and cross_bold expects seconds.
+.. attention:: Be sure to pay attention to units. The DICOM header stores times in milliseconds and some cross_bold variables are in seconds.
 
 Some variables don't match a specific tag in the DICOM header. For example, :code:`nx` and :code:`ny` (the dimensions for the unpacked
 volumes) need to be calculated. You will need to grab the 'Img Rows' (0028,0010) and 'NumberOfImagesInMosiac' (0019,100a) tags.
@@ -120,30 +120,34 @@ Since we've chosen to set up our instruction file to define study-level params, 
 .. code-block:: csh
     :caption: NEWT.params
 
-    set inpath = ~/NEWT/${patid}
+    set inpath = /data/cerbo/data1/NEWT/${patid}
     set target = $REFDIR/TRIO_KY_NDC
-    set sorted = 1
     set go = 1
-    set economy = 7
+    set sorted = 1
+    set economy = 0
     set epi2atl = 1
     set normode = 0
 
     set nx = 90
     set ny = 90
 
-    set skip = 9
+    set skip = 0
 
     set FDthresh = 0.2
     set FDtype = 1
+    set anat_aveb = 10 # use 10mm preblur (voxel size < 3mm)
 
-    set TR_vol = 1.23 # sec
+    set TR_vol = 1.23
     set TR_slc = 0 # use default (TR_vol/nslices)
     set epidir = 0
+    set MBfac = 4
+    set seqstr = 1,8,15,6,13,4,11,2,9,16,7,14,5,12,3,10 # non-standard interleaving
+    set lomotil = 2 # filter FD in phase-encoding direction
 
-    set TE_vol = 33 # sec
-    set dwell = .59 # msec
+    set TE_vol = 33
+    set dwell = .59
     set ped = y-
-    set rsam_cmnd = $RELEASE/one_step_resample.csh
+    set rsam_cmnd = one_step_resample.csh
 
 Our params file, on the other hand, needs to be specified per subject as it contains a mapping to a subject's specific scan numbers.
 The file outputted by dcm_sort, :code:`SCANS.studies.txt`, is a good reference to have handy when creating a subject's params file.
@@ -238,8 +242,8 @@ simply add in the fcMRI-specific ones::
 .. code-block:: csh
     :caption: NEWT.params
 
-    # BOLD pre-processing
-    set inpath = $cwd
+    # BOLD variables
+    set inpath = /data/cerbo/data1/NEWT/${patid}
     set target = $REFDIR/TRIO_KY_NDC
     set go = 1
     set sorted = 1
@@ -250,14 +254,18 @@ simply add in the fcMRI-specific ones::
     set nx = 90
     set ny = 90
 
-    set skip = 9
+    set skip = 0
 
     set FDthresh = 0.2
     set FDtype = 1
+    set anat_aveb = 10 # use 10mm preblur (voxel size < 3mm)
 
     set TR_vol = 1.23
-    set TR_slc = .019
+    set TR_slc = 0 # use default (TR_vol/nslices)
     set epidir = 0
+    set MBfac = 4
+    set seqstr = 1,8,15,6,13,4,11,2,9,16,7,14,5,12,3,10 # non-standard interleaving
+    set lomotil = 2 # filter FD in phase-encoding direction
 
     set TE_vol = 33
     set dwell = .59
@@ -318,8 +326,8 @@ Here we'll use a prescribed list file of ROIs as our input.
 .. code-block:: csh
     :caption:
 
-    # BOLD pre-processing
-    set inpath = $cwd
+    # BOLD variables
+    set inpath = /data/cerbo/data1/NEWT/${patid}
     set target = $REFDIR/TRIO_KY_NDC
     set go = 1
     set sorted = 1
@@ -330,14 +338,18 @@ Here we'll use a prescribed list file of ROIs as our input.
     set nx = 90
     set ny = 90
 
-    set skip = 9
+    set skip = 0
 
     set FDthresh = 0.2
     set FDtype = 1
+    set anat_aveb = 10 # use 10mm preblur (voxel size < 3mm)
 
     set TR_vol = 1.23
-    set TR_slc = .019
+    set TR_slc = 0 # use default (TR_vol/nslices)
     set epidir = 0
+    set MBfac = 4
+    set seqstr = 1,8,15,6,13,4,11,2,9,16,7,14,5,12,3,10 # non-standard interleaving
+    set lomotil = 2 # filter FD in phase-encoding direction
 
     set TE_vol = 33
     set dwell = .59

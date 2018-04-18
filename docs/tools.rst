@@ -109,6 +109,8 @@ N.B.:	omitting high end order specification disables low  pass component
 Register in space (and other t4 oriented programs)
 ==================================================
 
+.. _imgreg_4dfp:
+
 imgreg_4dfp
 -----------
 compute transform (various modes)
@@ -231,6 +233,8 @@ remove transform stretch
 Usage:	stretch_out <t4file> [t4file_new]
 
 N.B.:	default output filename is <t4file>"r"
+
+.. _t4_mul:
 
 t4_mul
 ------
@@ -2170,3 +2174,5 @@ Options
 ==============	==============================================================
 
 N.B.:	default output is first two eigenvectors scaled by Asigma
+
+.. [1] only needed for older sequences

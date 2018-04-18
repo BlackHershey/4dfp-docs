@@ -140,7 +140,7 @@ cross_bold_pp_161012.csh
 	*	- inpath
 		- |inpath_vals|
 		- |inpath_desc|
-	* 	- target |req|
+	* 	- target
 		- |target_vals|
 		- |target_desc|
 	*	- scrdir
@@ -253,7 +253,7 @@ cross_bold_pp_161012.csh
 		- |ped_desc|
 	* 	- rsam_cmnd
 		- |rsam_cmnd_vals|
-		- |rsam_cmnd_desc|
+		- |rsam_cmnd_desc| (recommended: :ref:`one_step_resample`)
 
 =============	===========================================================================================
 Economy value	Files to be removed
@@ -287,7 +287,7 @@ Economy value	Files to be removed
     |cross_bold_v16_epi2atl|
 
 * Make atlas transformed EPI anat_ave and t2w in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
-* Compute field mapping correction (:ref:`fmri_unwarp_170616.tcsh`)
+* Compute field mapping correction (:ref:`fmri_unwarp_170616`)
 * Compute and apply unwarped epi to atlas transform (:ref:`imgreg_4dfp`, :ref:`t4_mul`, :ref:`t4img_4dfp`)
 * Resample unwarped images ($rsam_cmnd)
 
@@ -756,6 +756,206 @@ Economy value	Files to be removed
 * Make atlas transformed EPI anat_ave in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
 * Make cross-realigned atlas-transformed resampled BOLD 4dfp stacks (:ref:`t4_xr3d_4dfp`)
 
+.. _fmri_unwarp_170616:
+
+fmri_unwarp_170616.tcsh
+----------------------
+distortion correction wrapper script for fMRI preprocessing
+
+Measured field map
+++++++++++++++++++
+
+Usage: fmri_unwarp_170616.tcsh -map	<patid> <epi> <mag> <phase> <dwell> <te> <ped> <delta>
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- epi
+		- |epi_vals|
+		- |epi_desc|
+	*	- mag
+		- |mag_vals|
+		- |mag_desc|
+	*	- phase
+		- |phase_vals|
+		- |phase_desc|
+	* 	- dwell
+		- |dwell_vals|
+		- |dwell_desc|
+	*	- te
+		- |TE_vol_vals|
+		- |TE_vol_desc|
+	*	- ped
+		- |ped_vals|
+		- |ped_desc|
+	*	- delta
+		- |delta_vals|
+		- |delta_desc|
+
+
+Mean field map
+++++++++++++++
+Usage: fmri_unwarp_170616.tcsh -mean	<epi> <FMmean> <epi_to_atl_t4> <dwell> <ped>
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- epi
+		- |epi_vals|
+		- |epi_desc|
+	* 	- FMmean
+		- |FMmean_vals|
+		- |FMmean_desc|
+	*	- epi_to_atl_t4
+		- |epi2atl_t4_vals|
+		- |epi2atl_t4_desc|
+	* 	- dwell
+		- |dwell_vals|
+		- |dwell_desc|
+	*	- ped
+		- |ped_vals|
+		- |ped_desc|
+
+basis_opt field map
++++++++++++++++++++
+
+Usage: fmri_unwarp_170616.tcsh -basis <epi> <t2w> <FMmean> <FMbases> <epi_to_t2w_t4> <epi_to_atl_t4> <dwell> <ped> <nbasis> [t2w brain mask]
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- epi
+		- |epi_vals|
+		- |epi_desc|
+	* 	- t2w
+		- |t2w_vals|
+		- |t2w_desc|
+	* 	- FMmean
+		- |FMmean_vals|
+		- |FMmean_desc|
+	* 	- epi_to_t2w_t4
+		- |epi2t2w_t4_vals|
+		- |epi2t2w_t4_desc|
+	*	- epi_to_atl_t4
+		- |epi2atl_t4_vals|
+		- |epi2atl_t4_desc|
+	* 	- dwell
+		- |dwell_vals|
+		- |dwell_desc|
+	*	- ped
+		- |ped_vals|
+		- |ped_desc|
+	* 	- nbasis
+		- |nbasis_vals|
+		- |nbasis_desc|
+
+N.B.:	with option -basis, basis_opt optimizes the <dwell> value (aka, echo spacing) by default |br|
+
+.. _sefm_pp_AZS:
+
+sefm_pp_AZS.csh
+---------------
+merge AP/PA into one image and run topup to derive field map
+
+Usage:	sefm_pp_AZS.csh <params file> [instructions file]
+
+Examples::
+
+	sefm_pp_AZS.csh PSQ0001_s1.params ../PSQ_study.params
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	*	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- sefm
+		- |sefm_vals|
+		- |sefm_desc|
+	* 	- sorted
+		- 1
+		- |sorted_desc| (must be sorted)
+
+.. _one_step_resample:
+
+one_step_resample.csh
+---------------------
+one step resampling with support for bias field correction
+
+Usage:	one_step_resample.csh <parameters file> [instructions]
+
+Examples::
+
+	one_step_resample.csh VB16168.params
+
+Params variables
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	*	- patid
+		- |patid_vals|
+		- |patid_desc|
+	* 	- day1_patid
+		- |day1_patid_vals|
+		- |day1day1_patid_desc|
+	*	- day1_path
+		- |day1_path_vals|
+		- |day1_path_desc|
+	* 	- irun
+		- |irun_vals|
+		- |irun_desc|
+
+Instructions variables
+
+.. list-table::
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- use_anat_ave
+		- |use_anat_ave_vals|
+		- |use_anat_ave_desc|
+	*	- outres
+		- |outres_vals|
+		- |outres_desc|
+	*	- target
+		- |target_vals|
+		- |target_desc|
+	*	- MB
+		- |MB_vals|
+		- |MB_desc|
+	* 	- BiasField
+		- |BiasField_vals|
+		- |BiasField_desc|
+
+
+
 epi2mpr2atlv_4dfp
 -----------------
 EPI :math:`\rightarrow` T1W :math:`\rightarrow` atlas
@@ -779,6 +979,7 @@ noinit	inhibits reinitialization of epi->mpr t4 files
 N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
 
 N.B.:	All named images must be in either ANALYZE or 4dfp format. ANALYZE will be converted to 4dfp
+
 
 epi2t2w2mpr2atlv_4dfp
 ---------------------
@@ -1113,7 +1314,7 @@ Revised version of :ref:`fcMRI_preproc_130715`
 
 **Processing steps**
 
-* Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
+* Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
 * Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified, DVARS only if no $FDthresh is specified
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
@@ -1288,7 +1489,7 @@ fcMRI_preproc_130715.csh
 
 **Processing steps**
 
-* Generate FS masks (results in ../atlas) (:ref:`Generate_FS_Masks_AZS.csh`)
+* Generate FS masks (results in ../atlas) (:ref:`Generate_FS_Masks_AZS`)
 * Create conc file (:ref:`conc_4dfp`) and move it to FCdir
 * Compute frame censoring (DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- only if no $fmtfile specified
 * Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
@@ -1546,6 +1747,35 @@ seed_correl_130715.csh
 seed_correl_090115.csh
 ++++++++++++++++++++++
 
+.. _Generate_FS_Masks_AZS:
+
+Generate_FS_Masks_AZS.csh
+--------------------------
+generate Freesurfer masks for whole brain, WM, GM, CSF
+
+Usage:	Generate_FS_Masks_AZS.csh <parameters file> [instructions]
+
+Examples::
+
+	Generate_FS_Masks_AZS.csh FCS_039_A_1.params ../uwrp_process_Stroke_SMG_Subjects.params
+
+.. list-table::
+	:widths: 15	5 65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Description
+	* 	- patid
+		- |patid_vals|
+		- |patid_desc|
+	*	- FSdir
+		- |FSdir_vals|
+		- |FSdir_desc|
+	*	- target
+		- |target_vals|
+		- |target_desc|
 
 DTI
 ===
@@ -1595,9 +1825,31 @@ redo							suppress initialization of existing t4 file
 setecho							set echo
 ===========================		=======================================================
 
-N.B.:	<mpr_anat> may include a path, e.g., /data/petmr1/data7/stem9/scout/654-3
+N.B.:	<mpr_anat> may include a path, e.g., /data/petmr1/data7/stem9/scout/654-3 |br|
+N.B.:	<mpr_anat> must be in either ANALYZE short int or 4dfp format; ANALYZE will be converted to 4dfp |br|
 
-N.B.:	<mpr_anat> must be in either ANALYZE short int or 4dfp format; ANALYZE will be converted to 4dfp
+.. _mpr2atl1_4dfp:
+
+mpr2atl1_4dfp
+------------
+T1W :math:`\rightarrow` atlas
+
+Usage:	mpr2atl1_4dfp <mpr_anat> [options]
+
+Examples::
+
+	mpr2atl1_4dfp vc1234_654-3[.4dfp.img]
+	mpr2atl1_4dfp vc1234_654-3[.4dfp.img] -T/data/petsun23/data1/atlas/NP345[.4dfp.img]
+
+Options
+
+=========================	===================================================
+-T<target including path>	specify arbitrary atlas representative target image
+crossmodal					use cross-modal mpr->target registration
+useold						suppress recomputation of existing t4 file
+redo						suppress t4 file initialization
+setecho						set echo
+=========================	===================================================
 
 .. _avgmpr_4dfp:
 
@@ -1774,6 +2026,36 @@ N.B.:	all images (\*.4dfp.img and \*.4dfp.ifh) referred to in <newatl>.lst must 
 
 Miscellaneous scripts
 =====================
+
+freesurfer2mpr_4dfp
+-------------------
+transform freesurfer generated images back to atlas space
+
+Usage:	freesurfer2mpr_4dfp <(4dfp) mpr> <(4dfp) orig> [options]
+
+Examples::
+
+	freesurfer2mpr_4dfp vc1234_654-3[.4dfp.img] vc1234_orig
+	freesurfer2mpr_4dfp vc1234_654-3 vc1234_orig -T711-2V -alh.ribbon.mgz -arh.ribbon apply
+
+Options
+
+==========	=============================================================================
+-skew		general affine orig->mpr registeration (default 6 parameter rigid body)
+-T<target>	specify atlas representative target
+-a<segimg>	add named (4dfp format) freesurfer segemntation result to "apply" list
+apply		proceed directly to transform (4dfp format) segmentations
+force		force atlas transformation of segmentation results even if it already exists
+setecho		set echo
+==========	=============================================================================
+
+N.B.:	<(4dfp) orig> is the freesurfer-resampled 256x256x256 coronal mpr |br|
+N.B.:	the default "apply" list includes (4dfp format) images named \*parc\* and \*aseg\* |br|
+
+.. tip:: You must convert the freesurfer-created mgz (i.e. orig, aparc+aseg) images to 4dfp before running this script. To convert mgz to 4dfp::
+
+	$ mri_convert orig.mgz orig.nii --out-orientation RAS
+	$ nifti_4dfp orig.nii orig.4dfp.img
 
 split_ROIs
 ----------

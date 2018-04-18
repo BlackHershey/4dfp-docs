@@ -119,7 +119,7 @@
 .. |delta_desc| replace:: difference between field map echo times (ms)
 
 .. |dwell_vals| replace:: <flt>
-.. |dwell_desc| replace:: EPI dwell time/echo spacing (ms)
+.. |dwell_desc| replace:: EPI dwell time/echo spacing (ms), = 1/(BandwidthPerPixelPhaseEncode\*#PhaseEncodes)
 
 .. |E4dfp_vals| replace:: 0,1
 .. |E4dfp_desc| replace:: if 4dfp files already exist (skips :ref:`dcm_to_4dfp`)
@@ -129,6 +129,15 @@
 
 .. |epi2atl_vals| replace:: 0,1,2
 .. |epi2atl_desc| replace:: if EPI to atlas transform is required (0 = no transform, 1 = transform to 333 space, 2 = skip to resampling step)
+
+.. |epi2atl_t4_vals| replace:: <t4 file>
+.. |epi2atl_t4_desc| replace:: EPI to atlas t4 file
+
+.. |epi2t2w_t4_vals| replace:: <t4 file>
+.. |epi2t2w_t4_desc| replace:: EPI to T2-weighted t4 file
+
+.. |epi_vals| replace:: <4dfp img>
+.. |epi_desc| replace:: EPI anat image (_anat_ave or _func_vols_ave)
 
 .. |epi_zflip_vals| replace:: 0,1
 .. |epi_zflip_desc| replace:: flip z when unpacking (:ref:`unpack_4dfp`)
@@ -149,7 +158,7 @@
 .. |fmtfile_desc| replace:: format file
 
 .. |FSdir_vals| replace:: <str>
-.. |FSdir_desc| replace:: freesurfer directory
+.. |FSdir_desc| replace:: freesurfer directory containing mri/aparc+aseg.mgz
 
 .. |FWHM_vals| replace:: <int>
 .. |FWHM_desc| replace:: full-width half maximum for spatial blur (default = 6)
@@ -175,6 +184,9 @@
 .. |lomotil_vals| replace:: <int>
 .. |lomotil_desc| replace:: lowpass filter specified motion parameter (:ref:`mat2dat`)
 
+.. |mag_vals| replace:: <nifti img>
+.. |mag_desc| replace:: magnitude field map image
+
 .. |MB_skip_vals| replace:: 0,1
 .. |MB_skip_desc| replace:: skip slice timing correction and debanding
 
@@ -186,6 +198,9 @@
 
 .. |movement_regressors_vals| replace:: raw,bpss,none
 .. |movement_regressors_desc| replace:: (default="bpss")
+
+.. |nbasis_vals| replace:: <int>
+.. |nbasis_desc| replace:: ??
 
 .. |noGSR_vals| replace:: 0,1
 .. |noGSR_desc| replace:: suppress global signal (WB) regression
@@ -208,8 +223,14 @@
 .. |onestep_vals| replace:: 0,1
 .. |onestep_desc| replace:: exit program at end of each step
 
+.. |outres_vals| replace:: 111,222,333
+.. |outres_desc| replace:: output resolution (default = 333)
+
 .. |ped_vals| replace:: x,x-,y,y-,z,z-
 .. |ped_desc| replace:: EPI phase encoding direction (default = y-)
+
+.. |phase_vals| replace:: <nifti img>
+.. |phase_desc| replace:: phase field map image
 
 .. |rsam_cmnd_vals| replace:: <str>
 .. |rsam_cmnd_desc| replace:: script to use for resampling
@@ -234,6 +255,9 @@
 
 .. |sy_vals| replace:: <int>
 .. |sy_desc| replace:: unpacked y-dimension squeeze factor (:ref:`unpack_4dfp`)
+
+.. |t2w_vals| replace:: <4dfp img>
+.. |t2w_desc| replace:: structural 4dfp image (can be t2w or mpr)
 
 .. |target_vals| replace:: <img>
 .. |target_desc| replace:: atlas to be used for alignment
