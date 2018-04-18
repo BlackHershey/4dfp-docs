@@ -238,6 +238,9 @@
 .. |scrdir_vals| replace:: <str>
 .. |scrdir_desc| replace:: scratch directory to be used if desired
 
+.. |seqstr_vals| replace:: <str>
+.. |seqstr_desc| replace:: specify [MB] slice sequence (counting from 1) as a comma-separated (no spaces) integer string (if non-standard interleaving)
+
 .. |Siemens_interleave_vals| replace:: 0,1
 .. |Siemens_interleave_desc| replace:: enables Siemens interleave order (:ref:`frame_align_4dfp`)
 

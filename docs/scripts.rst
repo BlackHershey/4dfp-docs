@@ -179,6 +179,9 @@ cross_bold_pp_161012.csh
 	*	- Siemens_interleave
 		- |Siemens_interleave_vals|
 		- |Siemens_interleave_desc|
+	*	- seqstr
+		- |seqstr_vals|
+		- |seqstr_desc|
 	* 	- MBfac
 		- |MBfac_vals|
 		- |MBfac_desc|
