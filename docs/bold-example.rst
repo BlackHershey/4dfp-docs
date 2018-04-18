@@ -324,7 +324,7 @@ instructions file.
 Here we'll use a prescribed list file of ROIs as our input.
 
 .. code-block:: csh
-    :caption:
+    :caption: NEWT.params
 
     # BOLD variables
     set inpath = /data/cerbo/data1/NEWT/${patid}
