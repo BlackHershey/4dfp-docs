@@ -1,5 +1,5 @@
-.wrap-row td {
-    white-space: normal;
+.wy-table-responsive td:last-child {
+    white-space: normal !important;
 }
 
 .required {

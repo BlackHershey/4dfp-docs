@@ -54,7 +54,7 @@ Options
 -d	debug mode (set echo)
 -s	DICOM files are within a subdirectory of numeric subdirectories (default directly in numeric subdirectory)
 -e	identify DICOM files by specified extension (default extension = dcm)
--r	identify DICOM files by specified root (default root = 'MR*')
+-r	identify DICOM files by specified root (default root = 'MR\*')
 -i	take DICOM files with integer filenames
 -t	toggle off use of -t in call to dcm_dump_file (default ON)
 ==	==========================================================================================================
@@ -84,11 +84,9 @@ Examples::
 cross_bold_pp_161012.csh
 ++++++++++++++++++++++++
 
-|params_header|
+Required variables
 
 .. list-table::
-	:widths: 15	5 65
-	:class: wrap-row
 	:header-rows: 1
 
 	*	- Variable
@@ -106,91 +104,15 @@ cross_bold_pp_161012.csh
 	*	- mprs
 		- |mprs_vals|
 		- |mprs_desc|
-	*	- tse
-		- |tse_vals|
-		- |tse_desc|
-	*	- pdt2
-		- |pdt2_vals|
-		- |pdt2_desc|
-	* 	- day1_patid
-		- |day1_patid_vals|
-		- |day1_patid_desc|
-	* 	- sefm
-		- |sefm_vals|
-		- |sefm_desc|
-	*	- gre
-		- |gre_vals|
-		- |gre_desc|
-	*	- FMmean
-		- |FMmean_vals|
-		- |FMmean_desc|
-	*	- FMbases
-		- |FMbases_vals|
-		- |FMbases_desc|
-
-|inst_header|
-
-.. list-table::
-	:class: wrap-row
-	:header-rows: 1
-
-	*	- Variable
-		- Values
-		- Description
 	*	- inpath
 		- |inpath_vals|
 		- |inpath_desc|
 	* 	- target
 		- |target_vals|
 		- |target_desc|
-	*	- scrdir
-		- |scrdir_vals|
-		- |scrdir_desc|
-	* 	- sorted
-		- |sorted_vals|
-		- |sorted_desc|
-	* 	- MB
-		- |MB_skip_vals|
-		- |MB_skip_desc|
-	*	- sx
-		- |sx_vals|
-		- |sx_desc|
-	* 	- sy
-		- |sy_vals|
-		- |sy_desc|
-	* 	- E4dfp
-		- |E4dfp_vals|
-		- |E4dfp_desc|
-	*	- use_anat_ave
-		- |use_anat_ave_vals|
-		- |use_anat_ave_desc|
-	*	- goto_UNWARP
-		- |goto_UNWARP_vals|
-		- |goto_UNWARP_desc|
-	*	- min_frames
-		- |min_frames_vals|
-		- |min_frames_desc|
-	*	- epi_zflip
-		- |epi_zflip_vals|
-		- |epi_zflip_desc|
-	*	- interleave
-		- |interleave_vals|
-		- |interleave_desc|
-	*	- Siemens_interleave
-		- |Siemens_interleave_vals|
-		- |Siemens_interleave_desc|
-	*	- seqstr
-		- |seqstr_vals|
-		- |seqstr_desc|
-	* 	- MBfac
-		- |MBfac_vals|
-		- |MBfac_desc|
 	*	- go
 		- |go_vals|
 		- |go_desc|
-	*	- nounpack
-		- |nounpack_vals|
-		- |nounpack_desc|
 	*	- nx
 		- |nx_vals|
 		- |nx_desc|
@@ -206,12 +128,6 @@ cross_bold_pp_161012.csh
 	*	- TR_slc
 		- |TR_slc_vals|
 		- |TR_slc_desc|
-	* 	- lomotil
-		- |lomotil_vals|
-		- |lomotil_desc|
-	*	- BiasField
-		- |BiasField_vals|
-		- |BiasField_desc|
 	*	- epidir
 		- |epidir_vals|
 		- |epidir_desc|
@@ -224,30 +140,9 @@ cross_bold_pp_161012.csh
 	*	- FDthresh
 		- |FDthresh_vals|
 		- |FDthresh_desc|
-	*	- FDtype
-		- |FDtype_vals|
-		- |FDtype_desc|
-	*	- anat_aveb
-		- |anat_aveb_vals|
-		- |anat_aveb_desc|
-	*	- anat_avet
-		- |anat_avet_vals|
-		- |anat_avet_desc| (set excessively high to skip DVARS censoring)
 	*	- normode
 		- |normode_vals|
 		- |normode_desc|
-	*	- cross_day_nostretch
-		- |cross_day_nostretch_vals|
-		- |cross_day_nostretch_desc|
-	*	- Gad
-		- |Gad_vals|
-		- |Gad_desc|
-	*	- delta
-		- |delta_vals|
-		- |delta_desc|
-	* 	- TE_vol
-		- |TE_vol_vals|
-		- |TE_vol_desc|
 	*	- dwell
 		- |dwell_vals|
 		- |dwell_desc|
@@ -265,6 +160,148 @@ Economy value	Files to be removed
 > 3				frame-aligned images (_faln)
 > 4				cross-realigned avg images (_r3d_avg or xr3d_BC_avg if $BiasField) (only if $epi2atl == 0)
 =============	===========================================================================================
+
+Field map correction variables (required)
+
+========    ==============  =======================
+Variable    Values          Description
+========    ==============  =======================
+**Option 1** (:ref:`measured_fm` - gradient echo)
+---------------------------------------------------
+gre         |gre_vals|      |gre_desc|
+delta       |delta_vals|    |delta_desc|
+TE_vol      |TE_vol_vals|   |TE_vol_desc|
+**Option 2** (:ref:`measured_fm` - spin echo)
+---------------------------------------------------
+sefm        |sefm_vals|     |sefm_desc|
+TE_vol      |TE_vol_vals|   |TE_vol_desc|
+**Option 3** (:ref:`mean_fm`)
+---------------------------------------------------
+FMmean      |FMmean_vals|   |FMmean_desc|
+**Option 4** (:ref:`basis_opt_fm`)
+---------------------------------------------------
+FMmean      |FMmean_vals|   |FMmean_desc|
+FMBases     |FMBases_vals|  |FMBases_desc|
+========    ==============  =======================
+
+Optional parameters
+
+.. tip:: Although :code:`tse` and :code:`pdt2` are optional, you should specify one or the other if you have them in order to get a better registration to atlas.
+
+.. list-table::
+    :widths: 15	5 5 65
+    :class: wrap-row
+    :header-rows: 1
+
+    *	- Variable
+        - Values
+        - Default
+        - Description
+    *	- tse
+    	- |tse_vals|
+        -
+    	- |tse_desc|
+    *	- pdt2
+    	- |pdt2_vals|
+        -
+    	- |pdt2_desc|
+    * 	- day1_patid
+    	- |day1_patid_vals|
+        -
+    	- |day1_patid_desc|
+    *	- scrdir
+    	- |scrdir_vals|
+        -
+    	- |scrdir_desc|
+    * 	- sorted
+        - |sorted_vals|
+        - |sorted_default|
+        - |sorted_desc|
+    * 	- MB
+    	- |MB_skip_vals|
+        - |MB_skip_default|
+    	- |MB_skip_desc|
+    *	- sx
+    	- |sx_vals|
+        - |sx_default|
+    	- |sx_desc|
+    * 	- sy
+    	- |sy_vals|
+        - |sy_default|
+    	- |sy_desc|
+    * 	- E4dfp
+    	- |E4dfp_vals|
+        - |E4dfp_default|
+    	- |E4dfp_desc|
+    *	- use_anat_ave
+    	- |use_anat_ave_vals|
+        - |use_anat_ave_default|
+    	- |use_anat_ave_desc|
+    *	- min_frames
+    	- |min_frames_vals|
+        - |min_frames_default|
+    	- |min_frames_desc|
+    *	- interleave
+    	- |interleave_vals|
+        -
+    	- |interleave_desc|
+    *	- seqstr
+    	- |seqstr_vals|
+        -
+    	- |seqstr_desc|
+    * 	- MBfac
+    	- |MBfac_vals|
+        - |MBfac_default|
+    	- |MBfac_desc|
+    * 	- lomotil
+    	- |lomotil_vals|
+        -
+    	- |lomotil_desc|
+    *	- BiasField
+    	- |BiasField_vals|
+        - |BiasField_default|
+    	- |BiasField_desc|
+    *	- FDtype
+    	- |FDtype_vals|
+        - |FDType_default|
+    	- |FDtype_desc|
+    *	- anat_aveb
+    	- |anat_aveb_vals|
+        -
+    	- |anat_aveb_desc|
+    *	- anat_avet
+    	- |anat_avet_vals|
+        - |anat_avet_default|
+    	- |anat_avet_desc| (set excessively high to skip DVARS censoring)
+    *	- cross_day_nostretch
+    	- |cross_day_nostretch_vals|
+        - |cross_day_nostretch_default|
+    	- |cross_day_nostretch_desc|
+    *	- Gad
+    	- |Gad_vals|
+        - |Gad_default|
+    	- |Gad_desc|
+
+Additional optional variables
+
+.. warning:: Only specify the following variables if the action is desired. They will happen if you specify them at all (even if you set them to 0).
+
+.. list-table::
+	:widths: 15	65
+	:class: wrap-row
+	:header-rows: 1
+
+	*	- Variable
+		- Description
+	*	- goto_UNWARP
+		- |goto_UNWARP_desc|
+	*	- epi_zflip
+		- |epi_zflip_desc|
+	*	- Siemens_interleave
+		- |Siemens_interleave_desc|
+	*	- nounpack
+		- |nounpack_desc|
+
 
 **Processing steps**
 
@@ -347,120 +384,120 @@ cross_bold_pp_130702.csh
 |inst_header|
 
 .. list-table::
-	:class: wrap-row
-	:header-rows: 1
+    :class: wrap-row
+    :header-rows: 1
 
-	*	- Variable
-		- Values
-		- Description
-	* 	- target
-		- |target_vals|
-		- |target_desc|
-	*	- scrdir
-		- |scrdir_vals|
-		- |scrdir_desc|
-	* 	- sorted
-		- |sorted_vals|
-		- |sorted_desc|
-	* 	- MB
-		- |MB_skip_vals|
-		- |MB_skip_desc|
-	*	- sx
-		- |sx_vals|
-		- |sx_desc|
-	* 	- sy
-		- |sy_vals|
-		- |sy_desc|
-	* 	- E4dfp
-		- |E4dfp_vals|
-		- |E4dfp_desc|
-	*	- use_anat_ave
-		- |use_anat_ave_vals|
-		- |use_anat_ave_desc|
-	*	- goto_UNWARP
-		- |goto_UNWARP_vals|
-		- |goto_UNWARP_desc|
-	*	- min_frames
-		- |min_frames_vals|
-		- |min_frames_desc|
-	*	- epi_zflip
-		- |epi_zflip_vals|
-		- |epi_zflip_desc|
-	*	- interleave
-		- |interleave_vals|
-		- |interleave_desc|
-	*	- Siemens_interleave
-		- |Siemens_interleave_vals|
-		- |Siemens_interleave_desc|
-	* 	- MBfac
-		- |MBfac_vals|
-		- |MBfac_desc|
-	*	- go
-		- |go_vals|
-		- |go_desc|
-	*	- nounpack
-		- |nounpack_vals|
-		- |nounpack_desc|
-	*	- nx
-		- |nx_vals|
-		- |nx_desc|
-	* 	- ny
-		- |ny_vals|
-		- |ny_desc|
-	*	- skip
-		- |skip_vals|
-		- |skip_desc|
-	*	- TR_vol
-		- |TR_vol_vals|
-		- |TR_vol_desc|
-	*	- TR_slc
-		- |TR_slc_vals|
-		- |TR_slc_desc|
-	*	- epidir
-		- |epidir_vals|
-		- |epidir_desc|
-	* 	- economy
-		- |economy_vals|
-		- |economy_desc|
-	*	- epi2atl
-		- |epi2atl_vals|
-		- |epi2atl_desc|
-	*	- FDthresh
-		- |FDthresh_vals|
-		- |FDthresh_desc|
-	*	- anat_aveb
-		- |anat_aveb_vals|
-		- |anat_aveb_desc|
-	*	- anat_avet
-		- |anat_avet_vals|
-		- |anat_avet_desc| (set excessively high to skip DVARS censoring)
-	*	- normode
-		- |normode_vals|
-		- |normode_desc|
-	*	- cross_day_nostretch
-		- |cross_day_nostretch_vals|
-		- |cross_day_nostretch_desc|
-	*	- Gad
-		- |Gad_vals|
-		- |Gad_desc|
-	*	- delta
-		- |delta_vals|
-		- |delta_desc|
-	* 	- TE_vol
-		- |TE_vol_vals|
-		- |TE_vol_desc|
-	*	- dwell
-		- |dwell_vals|
-		- |dwell_desc|
-	*	- ped
-		- |ped_vals|
-		- |ped_desc|
-	*	- uwrp_cmnd
-		- |uwrp_cmnd_vals|
-		- |uwrp_cmnd_desc|
-	* 	- rsam_cmnd
-		- |rsam_cmnd_vals|
-		- |rsam_cmnd_desc|
+    *	- Variable
+    	- Values
+    	- Description
+    * 	- target
+    	- |target_vals|
+    	- |target_desc|
+    *	- scrdir
+    	- |scrdir_vals|
+    	- |scrdir_desc|
+    * 	- sorted
+    	- |sorted_vals|
+    	- |sorted_desc|
+    * 	- MB
+    	- |MB_skip_vals|
+    	- |MB_skip_desc|
+    *	- sx
+    	- |sx_vals|
+    	- |sx_desc|
+    * 	- sy
+    	- |sy_vals|
+    	- |sy_desc|
+    * 	- E4dfp
+    	- |E4dfp_vals|
+    	- |E4dfp_desc|
+    *	- use_anat_ave
+    	- |use_anat_ave_vals|
+    	- |use_anat_ave_desc|
+    *	- goto_UNWARP
+    	- |goto_UNWARP_vals|
+    	- |goto_UNWARP_desc|
+    *	- min_frames
+    	- |min_frames_vals|
+    	- |min_frames_desc|
+    *	- epi_zflip
+    	- |epi_zflip_vals|
+    	- |epi_zflip_desc|
+    *	- interleave
+    	- |interleave_vals|
+    	- |interleave_desc|
+    *	- Siemens_interleave
+    	- |Siemens_interleave_vals|
+    	- |Siemens_interleave_desc|
+    * 	- MBfac
+    	- |MBfac_vals|
+    	- |MBfac_desc|
+    *	- go
+    	- |go_vals|
+    	- |go_desc|
+    *	- nounpack
+    	- |nounpack_vals|
+    	- |nounpack_desc|
+    *	- nx
+    	- |nx_vals|
+    	- |nx_desc|
+    * 	- ny
+    	- |ny_vals|
+        - |ny_desc|
+    *	- skip
+    	- |skip_vals|
+    	- |skip_desc|
+    *	- TR_vol
+    	- |TR_vol_vals|
+    	- |TR_vol_desc|
+    *	- TR_slc
+    	- |TR_slc_vals|
+    	- |TR_slc_desc|
+    *	- epidir
+    	- |epidir_vals|
+    	- |epidir_desc|
+    * 	- economy
+    	- |economy_vals|
+    	- |economy_desc|
+    *	- epi2atl
+    	- |epi2atl_vals|
+    	- |epi2atl_desc|
+    *	- FDthresh
+    	- |FDthresh_vals|
+    	- |FDthresh_desc|
+    *	- anat_aveb
+    	- |anat_aveb_vals|
+    	- |anat_aveb_desc|
+    *	- anat_avet
+    	- |anat_avet_vals|
+    	- |anat_avet_desc| (set excessively high to skip DVARS censoring)
+    *	- normode
+    	- |normode_vals|
+    	- |normode_desc|
+    *	- cross_day_nostretch
+    	- |cross_day_nostretch_vals|
+    	- |cross_day_nostretch_desc|
+    *	- Gad
+    	- |Gad_vals|
+    	- |Gad_desc|
+    *	- delta
+    	- |delta_vals|
+    	- |delta_desc|
+    * 	- TE_vol
+    	- |TE_vol_vals|
+    	- |TE_vol_desc|
+    *	- dwell
+    	- |dwell_vals|
+    	- |dwell_desc|
+    *	- ped
+    	- |ped_vals|
+    	- |ped_desc|
+    *	- uwrp_cmnd
+    	- |uwrp_cmnd_vals|
+    	- |uwrp_cmnd_desc|
+    * 	- rsam_cmnd
+    	- |rsam_cmnd_vals|
+    	- |rsam_cmnd_desc|
 
 =============	===========================================================================================
 Economy value	Files to be removed
@@ -762,8 +799,10 @@ Economy value	Files to be removed
 .. _fmri_unwarp_170616:
 
 fmri_unwarp_170616.tcsh
-----------------------
+-----------------------
 distortion correction wrapper script for fMRI preprocessing
+
+.. _measured_fm:
 
 Measured field map
 ++++++++++++++++++
@@ -800,8 +839,9 @@ Usage: fmri_unwarp_170616.tcsh -map	<patid> <epi> <mag> <phase> <dwell> <te> <pe
 		- |ped_desc|
 	*	- delta
 		- |delta_vals|
-		- |delta_desc|
+		- |delta_desc| (required only for gradient-echo field map)
 
+.. _mean_fm:
 
 Mean field map
 ++++++++++++++
@@ -829,6 +869,8 @@ Usage: fmri_unwarp_170616.tcsh -mean	<epi> <FMmean> <epi_to_atl_t4> <dwell> <ped
 	*	- ped
 		- |ped_vals|
 		- |ped_desc|
+
+.. _basis_opt_fm:
 
 basis_opt field map
 +++++++++++++++++++
@@ -924,7 +966,7 @@ Params variables
 		- |patid_desc|
 	* 	- day1_patid
 		- |day1_patid_vals|
-		- |day1day1_patid_desc|
+		- |day1_patid_desc|
 	*	- day1_path
 		- |day1_path_vals|
 		- |day1_path_desc|
@@ -951,8 +993,8 @@ Instructions variables
 		- |target_vals|
 		- |target_desc|
 	*	- MB
-		- |MB_vals|
-		- |MB_desc|
+		- |MB_skip_vals|
+		- |MB_skip_desc|
 	* 	- BiasField
 		- |BiasField_vals|
 		- |BiasField_desc|
@@ -1834,7 +1876,7 @@ N.B.:	<mpr_anat> must be in either ANALYZE short int or 4dfp format; ANALYZE wil
 .. _mpr2atl1_4dfp:
 
 mpr2atl1_4dfp
-------------
+-------------
 T1W :math:`\rightarrow` atlas
 
 Usage:	mpr2atl1_4dfp <mpr_anat> [options]

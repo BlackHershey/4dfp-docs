@@ -1107,7 +1107,7 @@ Options
 
 
 "Format" string manipulation
-=====================
+============================
 
 condense
 --------
@@ -1232,7 +1232,7 @@ Options
 =======	=========================================================
 
 rmspike_4dfp [1]_
-------------
+------------------
 remove artifact due to k-space DC offset
 
 Usage:	rmspike_4dfp <file_4dfp>
