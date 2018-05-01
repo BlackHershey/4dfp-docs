@@ -209,6 +209,10 @@ Optional parameters
     	- |day1_patid_vals|
         -
     	- |day1_patid_desc|
+    *   - day1_path
+        - |day1_path_vals|
+        -
+        - |day1_path_desc|
     *	- scrdir
     	- |scrdir_vals|
         -

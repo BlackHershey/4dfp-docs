@@ -132,7 +132,7 @@
 .. |E4dfp_desc| replace:: if 4dfp files already exist (skips :ref:`dcm_to_4dfp`)
 
 .. |economy_vals| replace:: <int>
-.. |economy_desc| replace:: level of removal for intermediate files created during execution (higher economy will remove more files)
+.. |economy_desc| replace:: level of removal for intermediate files created during execution (see table below)
 
 .. |epi2atl_vals| replace:: 0,1,2
 .. |epi2atl_desc| replace:: if EPI to atlas transform is required (0 = no transform, 1 = transform to 333 space, 2 = skip to resampling step)
