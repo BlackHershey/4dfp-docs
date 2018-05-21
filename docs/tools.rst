@@ -859,6 +859,15 @@ append or average selected frames from multiple files (list directed)
 
 Usage:	paste_4dfp <inlist> <outfile>
 
+
+:code:`inlist` is a file containing rows of 1 to 3 columns: filename, starting frame (counting from 1), number of frames.
+
+	.. note::
+
+		* If a starting frame (column 2) is not specified, the first frame will be used.
+		* Column 3 is only applied during append mode (-a). The period value (-p) will be used otherwise.
+		* In append mode, column 3 has priority over the -p flag. The period value (-p) will only be used for rows that do not specify column 3.
+
 Options
 
 =======	==========================================================
