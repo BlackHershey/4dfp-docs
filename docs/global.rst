@@ -85,6 +85,7 @@
 .. |vals_any| replace:: (will happen if any value is specified)
 
 .. |anat_aveb_vals| replace:: <flt>
+.. |anat_aveb_default| replace:: 0
 .. |anat_aveb_desc| replace:: run_dvar_4dfp preblur in mm (for small voxels, set to 10mm)
 
 .. |anat_avet_vals| replace:: <flt>
@@ -96,7 +97,8 @@
 .. |BiasField_desc| replace:: perform bias field correction
 
 .. |blur_vals| replace:: <flt>
-.. |blur_desc| replace:: f_half for spatial blur (no blurring if unspecified)
+.. |blur_default| replace:: no blur
+.. |blur_desc| replace:: f_half for spatial blur
 
 .. |bpss_params_vals| replace:: <array>
 .. |bpss_params_desc| replace:: additional options to use for bandpass filtering (-E,M,F already specified), e.g. ( -bh .1 -oh 2 )
@@ -154,7 +156,8 @@
 .. |epidir_desc| replace:: direction of EPI slices (0 = inferior to superior, 1 = superior to inferior)
 
 .. |FCdir_vals| replace:: <str>
-.. |FCdir_desc| replace:: output directory name (default = FCmaps)
+.. |FCdir_default| replace:: FCmaps
+.. |FCdir_desc| replace:: output directory name
 
 .. |FDthresh_vals| replace:: <flt>
 .. |FDthresh_desc| replace:: frame displacement thresholds
@@ -210,7 +213,8 @@
 .. |MBfac_desc| replace:: multiband factor
 
 .. |min_frames_vals| replace:: <int>
-.. |min_frames_default| replace:: 240
+.. |min_frames_crossbold_default| replace:: 240
+.. |min_frames_fcpreproc_default| replace:: numframes / 2
 .. |min_frames_desc| replace:: minimum number of remaining frames after scrubbing for participant to be included
 
 .. |movement_regressors_vals| replace:: raw,bpss,none
@@ -292,7 +296,6 @@
 .. |target_desc| replace:: atlas to be used for alignment
 
 .. |task_regressor_vals| replace:: <str>
-.. |task_regressor_default| replace:: no task regession
 .. |task_regressor_desc| replace:: optional externally supplied task regressor
 
 .. |TE_vol_vals| replace:: <int>

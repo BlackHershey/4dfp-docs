@@ -243,7 +243,7 @@ Optional parameters
     	- |use_anat_ave_desc|
     *	- min_frames
     	- |min_frames_vals|
-        - |min_frames_default|
+        - |min_frames_crossbold_default|
     	- |min_frames_desc|
     *	- interleave
     	- |interleave_vals|
@@ -1273,11 +1273,10 @@ fcMRI_preproc_161012.csh
 
 Revised version of :ref:`fcMRI_preproc_130715`
 
-|params_header|
+**Required variables**
 
 .. list-table::
 	:widths: 15	5 65
-	:class: wrap-row
 	:header-rows: 1
 
 	*	- Variable
@@ -1286,56 +1285,21 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	* 	- patid
 		- |patid_vals|
 		- |patid_desc|
+	*	- target
+		- |target_vals|
+		- |target_desc|
+	*	- FSdir
+		- |FSdir_vals|
+		- |FSdir_desc|
 	* 	- srcdir
 		- |srcdir_vals|
 		- |srcdir_desc|
 	* 	- fcbolds
 		- |fcbolds_vals|
 		- |fcbolds_desc|
-
-|inst_header|
-
-.. list-table::
-	:widths: 15	5 65
-	:class: wrap-row
-	:header-rows: 1
-
-	*	- Variable
-		- Values
-		- Description
-	* 	- FCdir
-	  	- |FCdir_vals|
-	  	- |FCdir_desc|
-	*	- FSdir
-		- |FSdir_vals|
-		- |FSdir_desc|
-  	* 	- MB
-	  	- |MB_skip_vals|
-	  	- |MB_skip_desc|
-	* 	- conc
-	  	- |conc_vals|
-	  	- |conc_desc|
-  	* 	- task_regressor
-	  	- |task_regressor_vals|
-	  	- |task_regressor_desc|
-  	* 	- noGSR
-		- |noGSR_vals|
-		- |noGSR_desc|
-	* 	- anat_aveb
-		- |anat_aveb_vals|
-		- |anat_aveb_desc|
-	* 	- anat_avet
-		- |anat_avet_vals|
-		- |anat_avet_desc|
-	*	- FDthresh
-		- |FDthresh_vals|
-		- |FDthresh_desc|
-	* 	- FDtype
-		- |FDtype_vals|
-		- |FDtype_desc|
-	*	- CSF_excl_lim
-		- |CSF_excl_lim_vals|
-		- |CSF_excl_lim_desc|
+	* 	- TR_vol
+		- |TR_vol_vals|
+		- |TR_vol_desc|
 	*	- CSF_lcube
 		- |CSF_lcube_vals|
 		- |CSF_lcube_desc|
@@ -1351,15 +1315,77 @@ Revised version of :ref:`fcMRI_preproc_130715`
 	*	- WM_svdt
 		- |WM_svdt_vals|
 		- |WM_svdt_desc|
+
+**Optional variables**
+
+.. list-table::
+	:widths: 15	5 5 60
+	:header-rows: 1
+
+	*	- Variable
+		- Values
+		- Default
+		- Description
+	*	- FCdir
+		- |FCdir_vals|
+		- |FCdir_default|
+		- |FCdir_desc|
+	*	- day1_patid
+		- |day1_patid_vals|
+		-
+		- |day1_patid_desc|
+	*	- MB
+		- |MB_skip_vals|
+		- |MB_skip_default|
+		- |MB_skip_desc|
+	* 	- blur
+		- |blur_vals|
+		- |blur_default|
+		- |blur_desc|
+	*	- bpss_params
+		- |bpss_params_vals|
+		-
+		- |bpss_params_desc|
+	*	- conc
+		- |conc_vals|
+		-
+		- |conc_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
+		-
 		- |fmtfile_desc|
-	* 	- bpss_params
-		- |bpss_params_vals|
-		- |bpss_params_desc|
-	*	- blur
-		- |blur_vals|
-		- |blur_desc|
+	*	- FDthresh
+		- |FDthresh_vals|
+		-
+		- |FDthresh_desc|
+	* 	- FDtype
+		- |FDtype_vals|
+		- |FDType_default|
+		- |FDtype_desc|
+	* 	- anat_aveb
+		- |anat_aveb_vals|
+		- |anat_aveb_default|
+		- |anat_aveb_desc|
+	* 	- anat_avet
+		- |anat_avet_vals|
+		- |anat_avet_default|
+		- |anat_avet_desc|
+	* 	- min_frames
+		- |min_frames_vals|
+		- |min_frames_fcpreproc_default|
+		- |min_frames_desc|
+	*	- CSF_excl_lim
+		- |CSF_excl_lim_vals|
+		- |CSF_excl_lim_default|
+		- |CSF_excl_lim_desc|
+	* 	- task_regressor
+	  	- |task_regressor_vals|
+		-
+	  	- |task_regressor_desc|
+  	* 	- noGSR
+		- |noGSR_vals|
+		- |noGSR_default|
+		- |noGSR_desc|
 
 **Processing steps**
 
@@ -1718,11 +1744,10 @@ Options
 -A		use format in atlas subdirectory (default FCmaps directory)
 =======	===========================================================
 
-|params_header|
+**Required variables**
 
 .. list-table::
 	:widths: 15	5 65
-	:class: wrap-row
 	:header-rows: 1
 
 	*	- Variable
@@ -1734,49 +1759,60 @@ Options
 	*	- ROIdir
 		- |ROIdir_vals|
 		- |ROIdir_desc|
-	*	- ROIimg
-		- |ROIimg_vals|
-		- |ROIimg_desc|
-	*	- ROIlistfile
-		- |ROIlistfile_vals|
-		- |ROIlistfile_desc|
-	*	- ROIlist
-		- |ROIlist_vals|
-		- |ROIlist_desc|
+	* 	- skip
+		- |skip_vals|
+		- |skip_desc|
 
-.. note:: Either ROIimg, ROIlistfile, or ROIlist need to be set.
+**ROI specification variables (required)**
 
-|inst_header|
+===========    ==================   =======================
+Variable       Values               Description
+===========    ==================   =======================
+**Option 1**
+-----------------------------------------------------------
+ROIimg         |ROIimg_vals|        |ROIimg_desc|
+**Option 2**
+-----------------------------------------------------------
+ROIlist        |ROIlist_vals|       |ROIlist_desc|
+**Option 3**
+-----------------------------------------------------------
+ROIlistfile    |ROIlistfile_vals|   |ROIlistfile_desc|
+===========    ==================   =======================
+
+**Optional variables**
 
 .. list-table::
-	:widths: 15	5 65
-	:class: wrap-row
+	:widths: 15	5 5 60
 	:header-rows: 1
 
 	*	- Variable
 		- Values
+		- Default
 		- Description
-	* 	- MB
-		- |MB_skip_vals|
-		- |MB_skip_desc|
 	*	- FCdir
 		- |FCdir_vals|
+		- |FCdir_default|
 		- |FCdir_desc|
-	* 	- skip
-		- |skip_vals|
-		- |skip_desc|
+	* 	- MB
+		- |MB_skip_vals|
+		- |MB_skip_default|
+		- |MB_skip_desc|
+	*	- blur
+		- |blur_vals|
+		- |blur_default|
+		- |blur_desc|
+	*	- bpss_params
+		- |bpss_params_vals|
+		-
+		- |bpss_params_desc|
 	* 	- conc
 		- |conc_vals|
+		-
 		- |conc_desc|
 	* 	- fmtfile
 		- |fmtfile_vals|
+		-
 		- |fmtfile_desc|
-	*	- bpss_params
-		- |bpss_params_vals|
-		- |bpss_params_desc|
-	*	- blur
-		- |blur_vals|
-		- |blur_desc|
 
 **Processing Steps**
 
