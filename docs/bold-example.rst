@@ -6,32 +6,10 @@ Scenario: You collected some BOLD data and you're interested in functional conne
 This example will walk you through the typical functional connectivity pipeline in the 4dfp suite - generic BOLD pre-processing, fcMRI
 pre-processing, and seed-based correlation.
 
-Downloading data from CNDA
-+++++++++++++++++++++++++++
-
-There are 3 ways to download dicoms:
-
-* Manual download of a single subject
-    * You can download dicoms for a single subject by navigating to a particular subject session and selecting the 'Download' option from the actions menu.
-     .. image:: _static/cnda_session_page.png
-    * This will bring you to a page where you can select individual scans to download for a session.
-     .. image:: _static/cnda_single_session_download.png
-
-* Manual bulk download (will not work in Chrome, run from IE or other browser)
-    * You can bulk download dicoms for a project by navigating to the project page and selecting 'Download Images' from the actions menu.
-     .. image:: _static/cnda_project_page.png
-    * This will bring you to a page where you can select scan types to download for multiple subjects. The defaults in step 3 should be sufficient.
-     .. image:: _static/cnda_project_download.png
-    * The next screen will show a pop-up asking for permission to run the applet, choose 'Run'.
-     .. image:: _static/cnda_project_download_run_screen1.png
-    * You will then choose a folder to store the downloads in before selecting 'Start' to begin the download.
-     .. image:: _static/cnda_project_download_run_screen2.png
-
-* API download
-    * Instuctions for using the XNAT REST API can be found on the `XNAT wiki <https://wiki.xnat.org/docs16/4-developer-documentation/using-the-xnat-rest-api/downloading-files-via-xnat-rest-api>`_
-
 Preparing your DICOMs
 +++++++++++++++++++++
+
+If you haven't already downloaded your data, see :ref:`cnda_download`.
 
 Once you have your data downloaded and transferred to your project directory, you will start by sorting your dicoms.
 How to run this will depend on the dicom directory structure::
