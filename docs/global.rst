@@ -14,7 +14,7 @@
     </br>
 
 .. csh script params file data dictionary
-.. |params_header| replace:: :ref:`params` variables
+.. |params_header| replace:: **Params file variables**
 
 .. |day1_path_vals| replace:: <str>
 .. |day1_path_desc| replace:: path to day1 atlas directory (if patid is not patient's first session)
@@ -80,7 +80,7 @@
 .. |workdir_desc| replace:: working directory path
 
 .. csh script instruction file data dictionary
-.. |inst_header| replace:: :ref:`instructions` variables
+.. |inst_header| replace:: **Instructions file variables**
 
 .. |vals_any| replace:: (will happen if any value is specified)
 

@@ -15,7 +15,14 @@ Contents
    format
    tools
    scripts
-   appendix
+
+
+.. toctree::
+    :caption: Appendix
+    :maxdepth: 2
+
+    params_inst
+
 
 .. toctree::
     :caption: Worked Examples
