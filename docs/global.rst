@@ -13,11 +13,14 @@
 
     </br>
 
+
 .. csh script params file data dictionary
 .. |params_header| replace:: **Params file variables**
 
+.. |optional_warning| replace:: Although :code:`tse` and :code:`pdt2` are optional, you should specify one or the other if you have them in order to get a better registration to atlas.
+.. |any_val_warning| replace:: Only specify the following variables if the action is desired. They will happen if you specify them at all (even if you set them to 0).
 .. |day1_path_vals| replace:: <str>
-.. |day1_path_desc| replace:: path to day1 atlas directory (if patid is not patient's first session)
+.. |day1_path_desc| replace:: path to day1 atlas directory (required if day1_patid is set)
 
 .. |day1_patid_vals| replace:: <str>
 .. |day1_patid_desc| replace:: patient directory for first session (if patid is not patient's first session)
@@ -72,6 +75,9 @@
 
 .. |srcdir_vals| replace:: <str>
 .. |srcdir_desc| replace:: source directory path (contains run directories)
+
+.. |t1w_vals| replace:: <int array>
+.. |t1w_desc| replace:: list of t1w scan numbers
 
 .. |tse_vals| replace:: <int array>
 .. |tse_desc| replace:: list of tse scan numbers
