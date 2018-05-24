@@ -84,21 +84,80 @@ This will print out tags from the DICOM header, including echo time and repetiti
 
 .. attention:: Be sure to pay attention to units. The DICOM header stores times in milliseconds and some cross_bold variables are in seconds.
 
-Some variables don't match a specific tag in the DICOM header. For example, :code:`nx` and :code:`ny` (the dimensions for the unpacked
-volumes) need to be calculated. You will need to grab the 'Img Rows' (0028,0010) and 'NumberOfImagesInMosiac' (0019,100a) tags.
+Some variables don't match a specific tag in the DICOM header and need to be calculated.
 
-.. code-block:: bash
+* :code:`nx` and :code:`ny`
 
-    $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0028 0010' | awk '{print $8}'
-    720 # imgRows
+    You will need to grab the 'Img Rows' (0028,0010) and 'NumberOfImagesInMosiac' (0019,100a) tags.
 
-    $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0019 100a' | awk '{print $7}'
-    64 # numImgs
+    .. code-block:: bash
 
-With these numbers, you can calculate :code:`nx` and :code:`ny` with the following formula:
+        $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0028 0010' | awk '{print $8}'
+        720 # imgRows
 
-.. math:: imgRows / ceil(sqrt(numImgs))
+        $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0019 100a' | awk '{print $7}'
+        64 # numImgs
 
+    With these numbers, you can calculate :code:`nx` and :code:`ny` with the following formula:
+
+    .. math:: imgRows / ceil(sqrt(numImgs))
+
+* :code:`seqstr`
+
+    The slice acquisition sequence in multiband fMRI does not follow the old "Siemens_interleave" rule.
+    In this case, the slice sequence depends on the number of slices and the multiband factor to ensure there is no adjacent slice excitation.
+    Siemens now provides an exact listing of slice times in each fMRI DICOM header in the 'MosaicRefAcqTimes' (0019,1029) tag.
+
+    In order to correct slice timing for multiband sequences, the slice sequence needs to be identified and
+    passed to :ref:`frame_align_4dfp` via the :code:`seqstr` parameter.
+
+    AFNI has a function :code:`dicom_hdr` that you can use to extract the slice timing from the header:
+
+    .. code-block:: bash
+
+        $ dicom_hdr -slice_times SCANS/25/DICOM/NEWT002_s1.MR.head_Hershey.25.1.20161130.131330.adfigp.dcm
+        -- Siemens timing (64 entries): 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0
+
+    Based on the timing output, we can see that there are 64 slices and a multiband factor of 4. This gives us 16 slices per band.
+    With this information, we can now calculate the slice order for a single band:
+
+    .. code-block:: bash
+
+        # replace <num_slice_per_band> before use
+        $ dicom_hdr -slice_times SCANS/25/DICOM/NEWT002_s1.MR.head_Hershey.25.1.20161130.131330.adfigp.dcm | cut -d ":" -f2 | tr " " "\n" | tail -n <num_slice_per_band> | gawk '{print NR, $1}' | sort -n -k 2,2 | gawk '{printf("%d,", $1);}'
+        1,8,15,6,13,4,11,2,9,16,7,14,5,12,3,10,
+
+    Alternatively, if you don't have AFNI, you can run :code:`strings` on the header:
+
+    .. code-block:: bash
+
+        $ strings SCANS/25/DICOM/NEWT002_s1.MR.head_Hershey.25.1.20161130.131330.adfigp.dcm | grep 'MosaicRefAcqTimes' -A 66
+        MosaicRefAcqTimes
+        sGRADSPEC.asGPAData[0].sEddyCompensationX.aflT
+        0.00000000
+        530.00000000
+        1057.50000000
+        377.50000000
+        907.50000000
+        227.50000001
+        755.00000000
+        75.00000001
+        605.00000001
+        1135.00000001
+        452.50000001
+        982.50000001
+        302.49999999
+        832.50000002
+        149.99999999
+        679.99999999
+        ...
+
+    You can then copy the slice timing of one band into a file (i.e. temp.dat), and run the following:
+
+    .. code-block:: bash
+
+        $ cat temp.dat | gawk '{print NR, $1}' | sort -n -k 2,2 | gawk '{printf("%d,", $1);}'
+        1,8,15,6,13,4,11,2,9,16,7,14,5,12,3,10,
 
 Now that we know how to source information for the instructions file, we'll go ahead and put one together. In this example, we will assume
 nothing besides :code:`dcm_sort` has already been run on the data and we won't skip any processing steps.

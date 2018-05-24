@@ -21,4 +21,5 @@ Contents
     :caption: Worked Examples
     :maxdepth: 2
 
+    cnda-example
     bold-example
