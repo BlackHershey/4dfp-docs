@@ -90,12 +90,15 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
 
 * :code:`nx` and :code:`ny`
 
-    You will need to grab the 'Img Rows' (0028,0010) and 'NumberOfImagesInMosiac' (0019,100a) tags.
+    You will need to grab the 'Img Rows' (0028,0010), 'Img Columns' (0028,0011) and 'NumberOfImagesInMosiac' (0019,100a) tags.
 
     .. code-block:: bash
 
         $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0028 0010' | awk '{print $8}'
         720 # imgRows
+
+        $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0028 0011' | awk '{print $8}'
+        720 # imgColumns
 
         $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0019 100a' | awk '{print $7}'
         64 # numImgs
