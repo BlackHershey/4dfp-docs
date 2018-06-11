@@ -133,7 +133,7 @@
 .. |delta_desc| replace:: difference between field map echo times (ms)
 
 .. |dwell_vals| replace:: <flt>
-.. |dwell_desc| replace:: EPI dwell time/echo spacing (ms), = 1/(BandwidthPerPixelPhaseEncode\*#PhaseEncodes)
+.. |dwell_desc| replace:: EPI dwell time (echo spacing) (ms)
 
 .. |E4dfp_vals| replace:: 0,1
 .. |E4dfp_default| replace:: 0
@@ -203,9 +203,9 @@
 .. |lcube_vals| replace:: <int>
 .. |lcube_desc| replace:: cube dimension (in voxels) used by :ref:`qntv_4dfp`
 
-.. |lomotil_vals| replace:: <int>
+.. |lomotil_vals| replace:: 1-6
 .. |lomotil_default| replace:: no lowpass
-.. |lomotil_desc| replace:: lowpass filter specified motion parameter (:ref:`mat2dat`)
+.. |lomotil_desc| replace:: lowpass filter for specified motion parameter (:ref:`mat2dat` -l), used for filtered FD (set to 2 for y direction)
 
 .. |mag_vals| replace:: <nifti img>
 .. |mag_desc| replace:: magnitude field map image

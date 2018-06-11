@@ -253,7 +253,8 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 * Compute and apply mode 1000 normalization (:ref:`normalize_4dfp`, :ref:`scale_4dfp`)
 * Extract/format movement data from on cross_realign3d_4dfp output (:ref:`mat2dat`)
 * Extract EPI first frame (anatomy) image (:ref:`paste_4dfp`)
-* Make func_vols_ave image with high movement frames removed (FD if $FDthresh and DVARS) (:ref:`actmapf_4dfp`)
+* Compute high movement frames using FD (if $FDthresh specified) and DVARS (:ref:`run_dvar_4dfp`) -- will stop processing if $min_frames criteria not met
+* Make func_vols_ave image with high movement frames removed (:ref:`actmapf_4dfp`)
 * Compute cross-session BOLD atlas transform -- if $day1_patid specified for current patid (:ref:`cross_day_imgreg_4dfp`)
 * Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
 * Compute MPRAGE atlas transforms (:ref:`mpr2atl1_4dfp` with first mpr if $Gad, otherwise :ref:`avgmpr_4dfp`)
