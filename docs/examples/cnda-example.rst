@@ -9,11 +9,11 @@ Manual download of a single subject
 +++++++++++++++++++++++++++++++++++
 You can download dicoms for a single subject by navigating to a particular subject session and selecting the 'Download' option from the actions menu.
 
-.. image:: _static/cnda_session_page.png
+.. image:: ../_static/cnda_session_page.png
 
 This will bring you to a page where you can select individual scans to download for a session.
 
-.. image:: _static/cnda_single_session_download.png
+.. image:: ../_static/cnda_single_session_download.png
 
 Manual bulk download
 ++++++++++++++++++++
@@ -21,19 +21,19 @@ Manual bulk download
 
 You can bulk download dicoms for a project by navigating to the project page and selecting 'Download Images' from the actions menu.
 
-.. image:: _static/cnda_project_page.png
+.. image:: ../_static/cnda_project_page.png
 
 This will bring you to a page where you can select scan types to download for multiple subjects. The defaults in step 3 should be sufficient.
 
-.. image:: _static/cnda_project_download.png
+.. image:: ../_static/cnda_project_download.png
 
 The next screen will show a pop-up asking for permission to run the applet, choose 'Run'.
 
-.. image:: _static/cnda_project_download_run_screen1.png
+.. image:: ../_static/cnda_project_download_run_screen1.png
 
 You will then choose a folder to store the downloads in before selecting 'Start' to begin the download.
 
-.. image:: _static/cnda_project_download_run_screen2.png
+.. image:: ../_static/cnda_project_download_run_screen2.png
 
 API download
 ++++++++++++

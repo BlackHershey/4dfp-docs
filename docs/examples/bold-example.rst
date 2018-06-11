@@ -54,7 +54,7 @@ Generic BOLD pre-processing
 
 In order to run cross bold, we first need to set up some input files.
 
-If you look at the usage for :ref:`cross_bold_pp`, it has one required argument and one optional. As mentioned in :ref:`params`, the
+If you look at the usage for :ref:`cross_bold_pp`, it has one required argument and one optional. As mentioned in :ref:`params_inst`, the
 convention is to use both, putting subject-specific parameters in the params file and study-specific parametes in the instructions file.
 
 When creating these files, you'll want to have the list of variables handy. These can be found under the specific version of the script.
@@ -434,4 +434,4 @@ This produces a correlation matrix, ${FCdir}/${patid}_seed_regressors_CCR.dat.
 
 You can display the matrix by importing the data into matlab and using the :code:`imagesc` function.
 
-.. image:: _static/corr_matrix.png
+.. image:: ../_static/corr_matrix.png

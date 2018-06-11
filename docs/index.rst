@@ -10,11 +10,26 @@ Contents
 ========
 
 .. toctree::
-   :maxdepth: 4
+    :caption: Format
+    :maxdepth: 2
 
-   format
-   tools
-   scripts
+    format
+
+
+.. toctree::
+    :caption: Tools
+    :glob:
+    :maxdepth: 2
+
+    tools/*
+
+
+.. toctree::
+    :caption: Scripts
+    :glob:
+    :maxdepth: 3
+
+    scripts/*
 
 
 .. toctree::
@@ -26,7 +41,7 @@ Contents
 
 .. toctree::
     :caption: Worked Examples
+    :glob:
     :maxdepth: 2
 
-    cnda-example
-    bold-example
+    examples/*
