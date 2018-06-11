@@ -57,11 +57,7 @@ Generic BOLD pre-processing
 In order to run cross bold, we first need to set up some input files.
 
 If you look at the usage for :ref:`cross_bold_pp`, it has one required argument and one optional. As mentioned in :ref:`params_inst`, the
-<<<<<<< HEAD:docs/examples/bold-example.rst
 convention is to use both, putting subject-specific parameters in the params file and study-specific parametes in the instructions file.
-=======
-convention is to use both, putting session-specific parameters in the params file and study-specific parametes in the instructions file.
->>>>>>> 2daca9eb5f8a04c3e1ab66f7a8ebadcca2d9e2b2:docs/bold-example.rst
 
 When creating these files, you'll want to have the list of variables handy. These can be found under the specific version of the script.
 For this example we'll be using :ref:`cross_bold_pp_161012`.
