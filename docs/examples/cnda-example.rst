@@ -3,11 +3,11 @@
 Downloading data from CNDA
 ---------------------------
 
-There are 3 ways to download dicoms from CNDA.
+There are 3 ways to download DICOM data from CNDA.
 
 Manual download of a single subject
 +++++++++++++++++++++++++++++++++++
-You can download dicoms for a single subject by navigating to a particular subject session and selecting the 'Download' option from the actions menu.
+You can download DICOM data for a single subject by navigating to a particular subject session and selecting the 'Download' option from the actions menu.
 
 .. image:: ../_static/cnda_session_page.png
 
@@ -17,9 +17,9 @@ This will bring you to a page where you can select individual scans to download 
 
 Manual bulk download
 ++++++++++++++++++++
-.. warning:: This will not work in Chrome; run from IE or other browser.
+.. warning:: This Java applet will not work in Chrome; run from IE or other browser.
 
-You can bulk download dicoms for a project by navigating to the project page and selecting 'Download Images' from the actions menu.
+You can bulk download DICOM data for a project by navigating to the project page and selecting 'Download Images' from the actions menu.
 
 .. image:: ../_static/cnda_project_page.png
 
@@ -27,11 +27,11 @@ This will bring you to a page where you can select scan types to download for mu
 
 .. image:: ../_static/cnda_project_download.png
 
-The next screen will show a pop-up asking for permission to run the applet, choose 'Run'.
+The next screen will show a pop-up asking for permission to run the Java applet, choose 'Run'.
 
 .. image:: ../_static/cnda_project_download_run_screen1.png
 
-You will then choose a folder to store the downloads in before selecting 'Start' to begin the download.
+You will then choose a local folder to store the downloaded data before selecting 'Start' to begin the download.
 
 .. image:: ../_static/cnda_project_download_run_screen2.png
 

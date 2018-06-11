@@ -1,18 +1,20 @@
 Processing BOLD Data
 --------------------
 
-Scenario: You collected some BOLD data and you're interested in functional connectivity.
+Scenario: You've collected some BOLD data and you're interested in functional connectivity.
 
 This example will walk you through the typical functional connectivity pipeline in the 4dfp suite - generic BOLD pre-processing, fcMRI
 pre-processing, and seed-based correlation.
 
-Preparing your DICOMs
+Preparing DICOM data
 +++++++++++++++++++++
 
 If you haven't already downloaded your data, see :ref:`cnda_download`.
 
-Once you have your data downloaded and transferred to your project directory, you will start by sorting your dicoms.
-How to run this will depend on the dicom directory structure::
+Once you have DICOM data downloaded and transferred to your project directory, you will start by sorting your DICOM data.
+How to run this will depend on the DICOM directory structure.
+In the following examples we'll use :code:`NEWT002_s1` for an example MR session,
+and assume that the DICOM data is under the :code:`SCANS/` directory::
 
     $ cd /path/to/project
     $ cd NEWT002_s1
@@ -25,12 +27,12 @@ If :code:`SCANS/` contains a flat list of DICOMs, you will use :ref:`dcm_sort`::
 
     $ dcm_sort SCANS
 
-If :code:`SCANS/` contains number directories, you will use :ref:`pseudo_dcm_sort`::
+If :code:`SCANS/` contains numbered directories, you will use :ref:`pseudo_dcm_sort`::
 
     $ pseudo_dcm_sort.csh SCANS
 
 This will create :code:`study` folders for each of the scans downloaded from CNDA, as well as a :code:`SCANS.studies.txt` file that
-contains the mapping of study number to CNDA series description ::
+contains the mapping of study number to series description ::
 
     $ ls
     SCANS               study10     study21     study25     study29
@@ -55,10 +57,14 @@ Generic BOLD pre-processing
 In order to run cross bold, we first need to set up some input files.
 
 If you look at the usage for :ref:`cross_bold_pp`, it has one required argument and one optional. As mentioned in :ref:`params_inst`, the
+<<<<<<< HEAD:docs/examples/bold-example.rst
 convention is to use both, putting subject-specific parameters in the params file and study-specific parametes in the instructions file.
+=======
+convention is to use both, putting session-specific parameters in the params file and study-specific parametes in the instructions file.
+>>>>>>> 2daca9eb5f8a04c3e1ab66f7a8ebadcca2d9e2b2:docs/bold-example.rst
 
 When creating these files, you'll want to have the list of variables handy. These can be found under the specific version of the script.
-We'll be using :ref:`cross_bold_pp_161012`.
+For this example we'll be using :ref:`cross_bold_pp_161012`.
 
 The instructions file contains customizations for the processing pipeline in addition to information about the scan sequence. To obtain
 the scan parameters, you can use :ref:`dcm_dump_file`. Since we are looking to process BOLD data, be sure to grab a DICOM from one of
@@ -88,19 +94,23 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
 
 * :code:`nx` and :code:`ny`
 
-    You will need to grab the 'Img Rows' (0028,0010) and 'NumberOfImagesInMosiac' (0019,100a) tags.
+    You will need to grab the 'Img Rows' (0028,0010), 'Img Columns' (0028,0011) and 'NumberOfImagesInMosiac' (0019,100a) tags.
 
     .. code-block:: bash
 
         $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0028 0010' | awk '{print $8}'
         720 # imgRows
 
+        $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0028 0011' | awk '{print $8}'
+        720 # imgColumns
+
         $ dcm_dump_file -t study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep '0019 100a' | awk '{print $7}'
         64 # numImgs
 
-    With these numbers, you can calculate :code:`nx` and :code:`ny` with the following formula:
+    With these numbers, you can calculate :code:`nx` and :code:`ny` with the following formulas:
 
-    .. math:: imgRows / ceil(sqrt(numImgs))
+    .. math:: nx = imgRows / ceil(sqrt(numImgs))
+    .. math:: ny = imgColumns / ceil(sqrt(numImgs))
 
 * :code:`seqstr`
 
@@ -168,13 +178,13 @@ Since we've chosen to set up our instruction file to define study-level params, 
 
 .. code-block:: bash
 
-    $ cd ..
-    $ gedit NEWT.params
+    $ cd /path/to/project
+    $ gedit NEWT_study.params
 
 .. code-block:: csh
-    :caption: NEWT.params
+    :caption: NEWT_study.params
 
-    set inpath = /data/cerbo/data1/NEWT/${patid}
+    set inpath = /path/to/project/${patid}
     set target = $REFDIR/TRIO_KY_NDC
     set go = 1
     set sorted = 1
@@ -223,12 +233,12 @@ The file outputted by dcm_sort, :code:`SCANS.studies.txt`, is a good reference t
     set sefm = ( 21 23 )
 
 Since our subjects have a T2 image and spin-echo field maps, we specified :code:`tse` and :code:`sefm`, respectively. However, which
-parameters get specified here will depend on the data you have available. For EPI to atlas registration, you should specify either
+parameters are specified here will depend on the data you have available. For EPI to atlas registration, you should specify either
 :code:`tse`, :code:`pdt2`, or neither. For field map correction, you should specify either :code:`sefm` or :code:`gre`.
 
 Now, we run cross bold::
 
-    $ cross_bold_pp_161012.csh NEWT002_s1.params ../NEWT.params
+    $ cross_bold_pp_161012.csh NEWT002_s1.params ../NEWT_study.params
 
 Afterwards, you'll have the following subject anf bold directory structures::
 
@@ -262,16 +272,18 @@ Afterwards, you'll have the following subject anf bold directory structures::
 
 fcMRI pre-processing
 ++++++++++++++++++++
-After running generic bold processing, you'll want to run functional connectivity specific processing. However, before we can run
+After running bold pre-processing, you'll want to run functional connectivity specific processing. However, before we can run
 :ref:`fcMRI_preproc`, there is a prerequiste step of running Freesurfer to generate masks for the subjects which will be used to calculate
 the nuisance regressors.
 
-If you don't already have project freesufer directory, go ahead and make one::
+If you don't already have a :code:`SUBJECTS_DIR` for your project, go ahead and make one::
 
-    $ mkdir ../freesurfer
+    $ mkdir /path/to/project/freesurfer
+    $ setenv SUBJECTS_DIR /path/to/project/freesurfer
 
 Next we'll need to get a DICOM from our T1w image to use as our input file for Freesurfer::
 
+    $ cd /path/to/project/NEWT002_s1
     $ cat SCANS.studies.txt | grep T1w
     10   tfl3d1_16ns    ABCD_T1w_MPR_vNav                                   176
 
@@ -281,23 +293,23 @@ Next we'll need to get a DICOM from our T1w image to use as our input file for F
 With this information at hand, we can now launch the Freesurfer job ::
 
     $ at now
-    at> setenv SUBJECTS_DIR /data/cerbo1/data/NEWT/freesurfer
-    at> recon-all -all -s NEWT002_s1 -i /data/cerbo/data1/NEWT/NEWT002_s1/SCANS/10/DICOM/NEWT002_s1.MR.head_Hershey.10.1.20161130.131330.1ldrvyd.dcm
+    at> setenv SUBJECTS_DIR /path/to/project/freesurfer
+    at> recon-all -all -s NEWT002_s1 -i /path/to/project/NEWT002_s1/SCANS/10/DICOM/NEWT002_s1.MR.head_Hershey.10.1.20161130.131330.1ldrvyd.dcm
     at> <ctrl-d>
 
 Same as before, :ref:`fcMRI_preproc` accepts a params and instructions file. If you look at the variable specification for
 :ref:`fcMRI_preproc_161012`, you'll see that it shares some variables with :ref:`cross_bold_pp_161012` - we'll leave those the same and
 simply add in the fcMRI-specific ones::
 
-    $ gedit ../NEWT.params
+    $ gedit /path/to/project/NEWT_study.params
 
 .. TODO: explain lcube, sd1t, and svdt params
 
 .. code-block:: csh
-    :caption: NEWT.params
+    :caption: NEWT_study.params
 
     # BOLD variables
-    set inpath = /data/cerbo/data1/NEWT/${patid}
+    set inpath = /path/to/project/${patid}
     set target = $REFDIR/TRIO_KY_NDC
     set go = 1
     set sorted = 1
@@ -328,7 +340,7 @@ simply add in the fcMRI-specific ones::
 
     # fcMRI pre-processing
     set srcdir = $cwd
-    set FSdir = /data/cerbo/data1/NEWT/freesurfer/${patid}
+    set FSdir = /path/to/project/freesurfer/${patid}
     set fcbolds = ( ${irun} )
     set CSF_lcube = 3
     set CSF_sd1t = 25
@@ -338,9 +350,9 @@ simply add in the fcMRI-specific ones::
     set bpss_params = ( -bh .1 -oh 2 )
     set blur = .73542
 
-No changes are needed to the params file, so now we can run the script::
+No changes are needed to the session params file, so now we can run the script::
 
-    $ fcMRI_preproc_161012.csh NEWT002_s1.params ../NEWT.params
+    $ fcMRI_preproc_161012.csh NEWT002_s1.params ../NEWT_study.params
 
 Afterwards, we will have the following new files::
 
@@ -370,7 +382,7 @@ Afterwards, we will have the following new files::
 Seed-based correlation
 ++++++++++++++++++++++
 
-After preprocessing, we can now generate a correlation matrix for our subject.
+After preprocessing, we can now generate a seed-to-seed correlation matrix for our subject.
 
 If you look at the docs for :ref:`seed_correl_161012`, you'll see that we only need to add which regions to analyze (ROIs) to our
 instructions file.
@@ -378,10 +390,10 @@ instructions file.
 Here we'll use a prescribed list file of ROIs as our input.
 
 .. code-block:: csh
-    :caption: NEWT.params
+    :caption: NEWT_study.params
 
     # BOLD variables
-    set inpath = /data/cerbo/data1/NEWT/${patid}
+    set inpath = /path/to/project/${patid}
     set target = $REFDIR/TRIO_KY_NDC
     set go = 1
     set sorted = 1
@@ -412,7 +424,7 @@ Here we'll use a prescribed list file of ROIs as our input.
 
     # fcMRI pre-processing
     set srcdir = $cwd
-    set FSdir = /data/cerbo/data1/NEWT/freesurfer/${patid}
+    set FSdir = /path/to/project/freesurfer/${patid}
     set fcbolds = ( ${irun} )
     set CSF_lcube = 3
     set CSF_sd1t = 25
@@ -423,12 +435,12 @@ Here we'll use a prescribed list file of ROIs as our input.
     set blur = .73542
 
     # seed_corrl ROIs
-    set ROIdir = /data/petsun43/data1/atlas/CanonicalROIsNP705
+    set ROIdir = ${REFDIR}/CanonicalROIsNP705
     set ROIlistfile = CanonicalROIsNP705.lst
 
 Now we can go ahead and run it::
 
-    $ seed_correl_161012.csh NEWT002_s1.params ../NEWT.params
+    $ seed_correl_161012.csh NEWT002_s1.params ../NEWT_study.params
 
 This produces a correlation matrix, ${FCdir}/${patid}_seed_regressors_CCR.dat.
 
