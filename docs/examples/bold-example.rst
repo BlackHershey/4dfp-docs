@@ -52,7 +52,7 @@ Now that we have our DICOM data sorted, we are almost ready to begin BOLD pre-pr
 latest version.
 
 Generic BOLD pre-processing
-++++++++++++++++++++++++++
++++++++++++++++++++++++++++
 
 In order to run cross bold, we first need to set up some input files.
 
@@ -108,6 +108,38 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
     .. math:: nx = imgRows / ceil(sqrt(numImgs))
     .. math:: ny = imgColumns / ceil(sqrt(numImgs))
 
+* :code:`dwell`
+
+    You will need to grab the 'BandwidthPerPixelPhaseEncode' (0019,1028) tag and nx (or ny) calculated above.
+
+    .. code-block:: bash
+
+        $ strings study25/NEWT002_s1.MR.head_Hershey.25.173.20161130.131330.19u1n9g.dcm | grep BandwidthPer -A 1
+        BandwidthPerPixelPhaseEncode
+        18.83200000
+
+    You can then calculate dwell using the following formula, using :code:`nx` for 'MatrixPhase':
+
+    .. math:: dwell = imgRows / (BandwidthPerPixelPhaseEncode * MatrixPhase)
+
+    .. tip:: For Siemens 3T fMRI, dwell times should be in the range 0.4 - 0.6 ms.
+
+* :code:`delta`
+
+    If you are using a gradient-echo field map (which the current example does not), you will need to calculate :code:`delta`.
+    To do so, you will need to grab the values of the 'Echo Time' (0018,0081) field from your maginitude field map image.
+
+    .. code-block:: bash
+
+        % dcm_dump_file -t /path/to/magnitude/fm/image | grep "0018 0081"
+        0018 0081        4 //                  ACQ Echo Time//7.38
+        0018 0081        4 //                  ACQ Echo Time//4.92
+
+    To get :code:`delta`, compute the difference of the echo time values.
+
+    .. tip:: For Siemens GRE field map sequences, delta is typically 2.46 ms.
+
+
 * :code:`seqstr`
 
     The slice acquisition sequence in multiband fMRI does not follow the old "Siemens_interleave" rule.
@@ -133,7 +165,7 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
         $ dicom_hdr -slice_times SCANS/25/DICOM/NEWT002_s1.MR.head_Hershey.25.1.20161130.131330.adfigp.dcm | cut -d ":" -f2 | tr " " "\n" | tail -n <num_slice_per_band> | gawk '{print NR, $1}' | sort -n -k 2,2 | gawk '{printf("%d,", $1);}'
         1,8,15,6,13,4,11,2,9,16,7,14,5,12,3,10,
 
-    Alternatively, if you don't have AFNI, you can run :code:`strings` on the header:
+    Alternatively, you can run :code:`strings` on the header:
 
     .. code-block:: bash
 
