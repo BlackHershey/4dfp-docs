@@ -24,6 +24,7 @@ cross_bold_pp_161012.csh
 **Required parameters**
 
 .. list-table::
+	:widths: 15 15 60
 	:header-rows: 1
 
 	*	- Variable
@@ -126,7 +127,7 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 .. tip:: |optional_warning|
 
 .. list-table::
-    :widths: 15	5 5 65
+    :widths: 15	5 5 75
     :header-rows: 1
 
     *	- Variable
@@ -227,8 +228,7 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 .. warning:: |any_val_warning|
 
 .. list-table::
-	:widths: 15	65
-	:class: wrap-row
+	:widths: 10 90
 	:header-rows: 1
 
 	*	- Variable
@@ -245,32 +245,75 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 
 **Processing steps**
 
-* Convert bold run dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
-* Covert mosiac format to volume -- if not $nounpack (:ref:`unpack_4dfp`)
-* Correct slice timing and odd/even slice intensities -- if not $MB (:ref:`frame_align_4dfp`, :ref:`deband_4dfp`)
-* Motion correction via rigid body transform of each volume to reference frame (:ref:`cross_realign3d_4dfp`)
-* Bias field correction -- if $BiasField
-* Compute and apply mode 1000 normalization (:ref:`normalize_4dfp`, :ref:`scale_4dfp`)
-* Extract/format movement data from on cross_realign3d_4dfp output (:ref:`mat2dat`)
-* Extract EPI first frame (anatomy) image (:ref:`paste_4dfp`)
-* Compute high movement frames using FD (if $FDthresh specified) and DVARS (:ref:`run_dvar_4dfp`) -- will stop processing if $min_frames criteria not met
-* Make func_vols_ave image with high movement frames removed (:ref:`actmapf_4dfp`)
-* Compute cross-session BOLD atlas transform -- if $day1_patid specified for current patid (:ref:`cross_day_imgreg_4dfp`)
-* Convert MPRAGE dicoms to 4dfp format (:ref:`dcm_to_4dfp`)
-* Compute MPRAGE atlas transforms (:ref:`mpr2atl1_4dfp` with first mpr if $Gad, otherwise :ref:`avgmpr_4dfp`)
-* Compute EPI atlas transform
-.. container:: toggle
+.. list-table::
+	:widths: 25 15 30
+	:class: wrap-rows
+	:header-rows: 1
 
-    .. container:: header
+	*	- Step description
+		- Function
+		- Output
+	*	- Convert bold run DICOM data to 4dfp format
+		- :ref:`dcm_to_4dfp`
+		-
+	* 	- Convert mosaic format to volume (if not $nounpack)
+		- :ref:`unpack_4dfp`
+		- **bold<irun>/** |br| <patid>_b<irun>.4dfp.img
+	*	- Correct slice timing and odd/even slice intensities (if not $MB)
+		- :ref:`frame_align_4dfp`, :ref:`deband_4dfp`
+		-  **bold<irun>/** |br| <patid>_b<irun>_faln.4dfp.img |br| <patid>_b<irun>_faln_dbnd.4dfp.img
+	*	- Motion correction via rigid body transform of each volume to reference frame
+		- :ref:`cross_realign3d_4dfp`
+		- **bold<irun>/** |br| <patid>_b<irun>[_faln_dbnd]_xr3d.4dfp.img |br| <patid>_b<irun>[_faln_dbnd]_r3d_avg.4dfp.img |br| <patid>_b<irun>[_faln_dbnd]_xr3d.mat
+	*	- Bias field correction (if $BiasField)
+		- FSL bet, FSL fast, :ref:`extend_fast_4dfp`
+		- **bold<irun>/** |br| <patid>_b<irun>[_faln_dbnd]_xr3d_BC_avg.4dfp.img |br| **atlas/** |br| <patid>[_faln_dbnd]_xr3d_avg_brain.nii.gz |br| <patid>[_faln_dbnd]_xr3d_avg_brain_restore(.4dfp.img, .nii.gz)
+	*	- Compute and apply within-run mode 1000 normalization
+		- :ref:`normalize_4dfp`, :ref:`scale_4dfp`
+		- **bold<irun>/** |br| <patid>_b<irun>[_faln_dbnd]_xr3d[_BC]_norm.4dfp.img
+	*	- Extract/format movement data from cross-realign output
+		- :ref:`mat2dat`
+		- **movement/** |br| <patid>_b<irun>[_faln_dbnd]_xr3d(.dat, .ddat, .rdat)
+	*	- Extract EPI first frame (anatomy) image and create functional volume conc file
+		- :ref:`paste_4dfp`, :ref:`conc_4dfp`
+		- **atlas/** |br| <patid>_anat_ave.4dfp.img |br| <patid>_func_vols.conc
+	* 	- Compute high movement frames using FD (if $FDthresh specified) and DVARS (stops here if $min_frames criteria not met)
+		- FD.awk (using .ddat movement file), :ref:`run_dvar_4dfp`
+		- **movement/** |br| <patid>[_faln_dbnd]_xr3d.FD |br| **atlas/** |br| <patid>[_faln_dbnd]_xr3d.FD.format (if $FDthresh) |br| <patid>_func_vols(.vals, .dat, .crit, .xmgr, .format)
+	* 	- Make func_vols_ave image with high movement frames removed
+		- :ref:`actmapf_4dfp`
+		- **atlas/** |br| <patid>_func_vols_ave.4dfp.img
+	*	- Compute cross-session BOLD atlas transform if $day1_patid specified (then skips to applying EPI transform step)
+		- :ref:`cross_day_imgreg_4dfp`, :ref:`t4_mul`
+		- **atlas/** |br| <patid>_anat_ave_to_<target>_t4 |br| (and other intermediate t4 files)
+	*	- Convert MPRAGE DICOM data to 4dfp format (if not $E4dfp)
+	 	- :ref:`dcm_to_4dfp`
+		- **atlas/** |br| <patid>_mpr#.4dfp.img
+	*	- Convert MPRAGE images to tranverse orientation (if not already)
+		- :ref:`c2t_4dfp` or :ref:`s2t_4dfp`
+		- **atlas/** |br| <patid>_mpr#T.4dfp.img
+	*	- Compute MPRAGE average
+		- :ref:`avgmpr_4dfp`
+		- **atlas/** |br| <patid>_mpr_n#.4dfp.img
+	*	- Create transverse t2w image (if $tse or $pdt)
+		- :ref:`collate_slices_4dfp` if $tse, :ref:`extract_frame_4dfp` (second frame) if $pdt, :ref:`c2t_4dfp` or :ref:`s2t_4dfp`
+		- **atlas/** |br| <patid>_t2w[T].4dfp.img
+	* 	- Compute EPI to atlas transform
+		- :ref:`epi2mpr2atl2_4dfp` if neither $tse nor $pdt, otherwise :ref:`epi2t2w2mpr2atl2_4dfp`
+		- **atlas/** |br| <patid>_anat_ave_to_<target>_t4 |br| (and other intermediate t4 files)
+	*	- Make atlas transformed EPI average image and t2w in 111, 222, and 333 atlas space
+		- :ref:`t4img_4dfp`
+		- **atlas/** |br| <patid>_(anat\|func_vols)_ave_on_<target>_111.4dfp.img |br| <patid>_(anat\|func_vols)_ave_on_<target>_222.4dfp.img |br| <patid>_(anat\|func_vols)_ave_on_<target>_333.4dfp.img
+	* 	- Compute field mapping correction
+		- :ref:`fmri_unwarp_170616`
+		- **unwarp/** |br| <patid>_(anat|func_vols)_ave_uwrp.4dfp.img
+	* 	- Compute and apply unwarped epi to atlas transform
+		- :ref:`imgreg_4dfp`, :ref:`t4_mul`, :ref:`t4img_4dfp`
+		- **unwarp/** |br| <patid>_(anat\|func_vols)_ave_uwrp_on_<target>_111.4dfp.img |br| <patid>_(anat\|func_vols)_ave_uwrp_on_<target>_222.4dfp.img |br| <patid>_(anat\|func_vols)_ave_uwrp_on_<target>_333.4dfp.img
+	* 	- One-step resample unwarped images
+		- $rsam_cmnd
+		- **bold<irun>/** |br| <patid>_[_faln_dbnd]_xr3d_uwrp_atl.4dfp.img
 
-        **(Show/Hide Details)**
-
-    |cross_bold_v16_epi2atl|
-
-* Make atlas transformed EPI anat_ave and t2w in 111, 222, and 333 atlas space (:ref:`t4img_4dfp`)
-* Compute field mapping correction (:ref:`fmri_unwarp_170616`)
-* Compute and apply unwarped epi to atlas transform (:ref:`imgreg_4dfp`, :ref:`t4_mul`, :ref:`t4img_4dfp`)
-* Resample unwarped images ($rsam_cmnd)
 
 cross_bold_pp_130702.csh
 ++++++++++++++++++++++++

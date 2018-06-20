@@ -142,23 +142,71 @@ Revised version of :ref:`fcMRI_preproc_130715`
 
 **Processing steps**
 
-* Generate FS masks if they don't already exist (results in ../atlas) (:ref:`Generate_FS_Masks_AZS`)
-* Create conc file (:ref:`conc_4dfp`) and move it to FCdir
-* Compute frame censoring (FD and DVARS) (:ref:`run_dvar_4dfp`) and create avg censored image -- skipped if $fmtfile is specified, DVARS only if no $FDthresh is specified
-* Compute defined mask and apply it (:ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`)
-* Compute initial sd1 mean (:ref:`var_4dfp`, :ref:`qnt_4dfp`)
-* Make timeseries zero mean (:ref:`var_4dfp`)
-* Make movement regressors for each bold run (:ref:`mat2dat`)
-* Temporal bandpass filter using $bpss_params (:ref:`bandpass_4dfp`)
-* Make whole brain regressors including the 1st derivative (:ref:`qnt_4dfp`)
-* Make extra-axial CSF regressors with mask threshold = $CSF_excl_lim (:ref:`maskimg_4dfp`)
-* Make venticle movement_regressors (:ref:`qntv_4dfp`)
-* Make white matter regressors (:ref:`qntv_4dfp`)
-* Paste nuisance regressors together (including task_regressor if supplied)
-* Pass final set of nuisance regressors (omitting WB and WB derivative) through :ref:`covariance` -D250
-* Remove nuisance regressors out of volumetric time series (:ref:`glm_4dfp`)
-* Spatial blur with f_half = $blur if specified (:ref:`gauss_4dfp`)
+.. list-table::
+	:widths: 25 15 30
+	:class: wrap-rows
+	:header-rows: 1
 
+	*	- Step description
+		- Function
+		- Output
+	* 	- Generate FS masks if they don't already exist
+		- :ref:`Generate_FS_Masks_AZS`
+		- **atlas/** |br| <patid>_orig_to_<target>_t4 |br| <patid>_FSWB_on_<target>_333.4dfp.img |br| <patid>_GM_on_<target>_333_comp_b60.4dfp.img |br| <patid>_(WM,CS)_erode_on_<target>_333_clus.4dfp.img
+	*	- Create conc file
+		- :ref:`conc_4dfp`
+		- **<FCdir>/** |br| $conc |br| or, <patid>[_faln_dbnd]_xr3d_uwrp_atl.conc
+	* 	- Compute frame censoring using FD (if $FDthresh specified) and DVARS -- skipped if $fmtfile is specified
+		-  FD.awk, :ref:`run_dvar_4dfp`
+		- **movement/** |br| <patid>[_faln_dbnd]_xr3d.FD |br| **atlas/** |br| <patid>[_faln_dbnd]_xr3d.FD.format (if $FDthresh) |br| <patid>_func_vols(.vals, .dat, .crit, .xmgr, .format)
+	*	- Create average censored image
+		- :ref:`actmapf_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_ave.4dfp.img
+	*	- Compute defined mask and apply it
+		- :ref:`compute_defined_4dfp`, :ref:`maskimg_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_dfnd.4dfp.img |br| **atlas/** |br|  <patid>[_faln_dbnd]_xr3d_uwrp_atl_dfndm.4dfp.img
+	*	- Compute initial sd1 mean
+		- :ref:`var_4dfp`, :ref:`qnt_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_sd1.4dfp.img
+	* 	- Make timeseries zero mean
+		- :ref:`var_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_uout.conc
+	*	- Make movement regressors for each bold run
+		- :ref:`mat2dat`, :ref:`conc_4dfp`, :ref:`bandpass_4dfp`, :ref:`4dfptoascii`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_dat.conc |br| <patid>[_faln_dbnd]_xr3d_dat_bpss.conc |br| <patid>_<patid>_mov_regressors.dat
+	* 	- Temporal bandpass filter using $bpss_params
+		- :ref:`bandpass_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss.conc
+	*	- Make whole brain regressors including the 1st derivative
+		- :ref:`qnt_4dfp`
+		- **<FCdir>/** |br| <patid>_WB_regressors_dt.dat
+	* 	- Make extra-axial CSF regressors (thresholded at $CSF_excl_lim)
+		- :ref:`maskimg_4dfp`, :ref:`qntv_4dfp`
+		- **<FCdir>/** |br| <patid>_CSF_mask.4dfp.img |br| <patid>_CSF_dies.4dfp.img |br| <patid>_CSF_regressors.dat
+	*	-  Make venticle regressors
+		- :ref:`maskimg_4dfp`, :ref:`qntv_4dfp`
+		- **<FCdir>/** |br| <patid>_vent_mask.4dfp.img |br| <patid>_vent_dies.4dfp.img |br| <patid>_vent_regressors.dat
+	*	- Make white matter regressors
+		- :ref:`maskimg_4dfp`, :ref:`qntv_4dfp`
+		- **<FCdir>/** |br| <patid>_WM_mask.4dfp.img |br| <patid>_WM_dies.4dfp.img |br| <patid>_WM_regressors.dat
+	*	- Paste nuisance regressors (mov, CSF, vent, WM, task) together and run covariance analysis
+		- :ref:`covariance` (-D250)
+		-
+	* 	- Paste together WB and WB derivative, and covaried nuissance regressors
+		-
+		- **<FCdir>/** |br| <patid>_nuisance_regressors.dat
+	*	- Remove nuisance regressors out of volumetric time series
+		- :ref:`glm_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid.conc |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_coeff.4dfp.img
+	*	- Compute sd1 mean for bandpass-filtered and nuisance regressed data
+		- :ref:`var_4dfp`, :ref:`qnt_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid_sd1.4dfp.img |br| (comparison to initial WB mean reported to stdout)
+	*	- Spatial blur with f_half = $blur if specified
+		- :ref:`gauss_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid_g<blur>.conc
+	*	- Compute sd1 mean for blurred data if $blur
+		- :ref:`var_4dfp`, :ref:`qnt_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid_g<blur>_sd1.4dfp.img |br| (mean reported to stdout)
 
 fcMRI_preproc_140413.csh
 ++++++++++++++++++++++++
@@ -508,7 +556,7 @@ Examples::
 seed_correl_161012.csh
 ++++++++++++++++++++++
 
-Options
+**Options**
 
 =======	===========================================================
 -noblur	analyze unblurred version of preprocessed data
@@ -536,19 +584,19 @@ Options
 
 **ROI specification variables (required)**
 
-===========    ==================   =======================
+===========    ==================   =================================================================================
 Variable       Values               Description
-===========    ==================   =======================
+===========    ==================   =================================================================================
 **Option 1**
------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 ROIimg         |ROIimg_vals|        |ROIimg_desc|
 **Option 2**
------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 ROIlist        |ROIlist_vals|       |ROIlist_desc|
 **Option 3**
------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
 ROIlistfile    |ROIlistfile_vals|   |ROIlistfile_desc|
-===========    ==================   =======================
+===========    ==================   =================================================================================
 
 **Optional variables**
 
@@ -587,12 +635,32 @@ ROIlistfile    |ROIlistfile_vals|   |ROIlistfile_desc|
 
 **Processing Steps**
 
-* Create (multi-volume) ROI image if $ROIlistfile or $ROIlist specified (:ref:`paste_4dfp`)
-* Calculate seed (ROI) regressors (:ref:`qntm_4dfp`)
-* Compute total correlations (:ref:`glm_4dfp`, options: -t)
-* Mask total correlation image (_tcorr) by defined voxels (:ref:`maskimg_4dfp`, options: -1)
-* Fisher z transform total correlation (:ref:`rho2z_4dfp`)
-* Compute zero-lag ROI-ROI correlation matrix (if number of ROIs <= 256) (:ref:`covariance`, options: -u, -o, -m0)
+.. list-table::
+	:widths: 25 15 30
+	:class: wrap-rows
+	:header-rows: 1
+
+	*	- Step description
+		- Function
+		- Output
+	* 	- Create (multi-volume) ROI image if $ROIlistfile or $ROIlist specified
+		- :ref:`paste_4dfp`
+		-
+	*	- Calculate seed (ROI) regressors
+		- :ref:`qntm_4dfp`
+		- **<FCdir>/** |br| <patid>_seed_regressors.dat |br| <patid>_seed_regressors.rec
+	*	- Compute total correlations
+		- :ref:`glm_4dfp` (options: -t)
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid[_g<blur>]_tcorr.4dfp.img
+	*	- Mask total correlation image by defined voxels
+		- :ref:`maskimg_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid[_g<blur>]_tcorr_dfnd.4dfp.img
+	*	- Fisher z transform total correlation
+		- :ref:`rho2z_4dfp`
+		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid[_g<blur>]_tcorr_dfnd_zfrm.4dfp.img
+	*	- Compute zero-lag ROI-ROI correlation matrix (if number of ROIs <= 256)
+		- :ref:`covariance`, options: -u, -o, -m0
+		- **<FCdir>/** |br| <patid>_seed_regressors_CCR.dat
 
 seed_correl_140413.csh
 ++++++++++++++++++++++

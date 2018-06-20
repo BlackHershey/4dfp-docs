@@ -190,6 +190,8 @@ Options
 
 N.B.:	default output root = <imgroot>"S"
 
+.. _s2t_4dfp:
+
 S2T_4dfp
 --------
 sagittal :math:`\rightarrow` transverse
@@ -208,6 +210,8 @@ Options
 =======	==================================================
 
 N.B.:	default output root = <imgroot>"T"
+
+.. _c2t_4dfp:
 
 C2T_4dfp
 --------

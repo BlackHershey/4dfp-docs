@@ -1,5 +1,16 @@
+.wy-nav-content {
+    max-width: 1000px;
+}
 .wy-table-responsive td:last-child {
     white-space: normal !important;
+}
+
+.wy-table-responsive .wrap-rows td {
+    white-space: normal !important;
+}
+
+.wy-table-responsive .wrap-rows td:last-child {
+    white-space: nowrap !important;
 }
 
 .required {
