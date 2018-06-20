@@ -47,20 +47,15 @@ contains the mapping of study number to series description ::
     27   epfid2d1_90    fMRI_AP_2p4mm_MB4_tr1230_te33                       250
     29   epfid2d1_90    fMRI_AP_2p4mm_MB4_tr1230_te33                       250
 
-Now that we have our DICOM data sorted, we are almost ready to begin BOLD pre-processing. In the 4dfp suite, this is done via
-:ref:`cross_bold_pp`. Unless you are processing data for a study that was using an older version of cross bold, you should always use the
-latest version.
 
 Generic BOLD pre-processing
 +++++++++++++++++++++++++++
 
-In order to run cross bold, we first need to set up some input files.
+Now that we have our DICOM data sorted, we are ready to begin BOLD pre-processing. In the 4dfp suite, this is done via :ref:`cross_bold_pp_161012`.
 
-If you look at the usage for :ref:`cross_bold_pp`, it has one required argument and one optional. As mentioned in :ref:`params_inst`, the
-convention is to use both, putting subject-specific parameters in the params file and study-specific parametes in the instructions file.
-
-When creating these files, you'll want to have the list of variables handy. These can be found under the specific version of the script.
-For this example we'll be using :ref:`cross_bold_pp_161012`.
+In order to run cross bold, we first need to set up some input files. If you look at the usage for cross bold, it has one required argument and one optional.
+As mentioned in :ref:`params_inst`, the convention is to use both, putting subject-specific parameters in the params file and study-specific parametes in the instructions file.
+When creating these files, you'll want to have the list of variables handy. These can be found in the :ref:`cross_bold_pp_161012` docs.
 
 The instructions file contains customizations for the processing pipeline in addition to information about the scan sequence. To obtain
 the scan parameters, you can use :ref:`dcm_dump_file`. Since we are looking to process BOLD data, be sure to grab a DICOM from one of
@@ -301,7 +296,7 @@ Afterwards, you'll have the following subject anf bold directory structures::
 fcMRI pre-processing
 ++++++++++++++++++++
 After running bold pre-processing, you'll want to run functional connectivity specific processing. However, before we can run
-:ref:`fcMRI_preproc`, there is a prerequiste step of running Freesurfer to generate masks for the subjects which will be used to calculate
+:ref:`fcMRI_preproc_161012`, there is a prerequiste step of running Freesurfer to generate masks for the subjects which will be used to calculate
 the nuisance regressors.
 
 If you don't already have a :code:`SUBJECTS_DIR` for your project, go ahead and make one::
@@ -325,7 +320,7 @@ With this information at hand, we can now launch the Freesurfer job ::
     at> recon-all -all -s NEWT002_s1 -i /path/to/project/NEWT002_s1/SCANS/10/DICOM/NEWT002_s1.MR.head_Hershey.10.1.20161130.131330.1ldrvyd.dcm
     at> <ctrl-d>
 
-Same as before, :ref:`fcMRI_preproc` accepts a params and instructions file. If you look at the variable specification for
+Same as before, fcMRI_preproc accepts a params and instructions file. If you look at the variable specification for
 :ref:`fcMRI_preproc_161012`, you'll see that it shares some variables with :ref:`cross_bold_pp_161012` - we'll leave those the same and
 simply add in the fcMRI-specific ones::
 

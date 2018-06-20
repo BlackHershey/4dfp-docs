@@ -19,7 +19,8 @@ Contents
     :glob:
     :maxdepth: 3
 
-    scripts/*
+    scripts/[a-z]*
+    scripts/_deprecated
 
 .. toctree::
     :caption: Worked Examples

@@ -3,6 +3,8 @@
 Rearrange voxels in space or time
 =================================
 
+.. _collate_slice_4dfp:
+
 collate_slice_4dfp
 ------------------
 collate interleaved datasets
@@ -40,6 +42,8 @@ Options
 -p<int>	specify period in frames (default=1)
 -@<b|l>	output big or little endian (default initial input endian)
 =======	==========================================================
+
+.. _extract_frame_4dfp:
 
 extract_frame_4dfp
 ------------------
@@ -113,9 +117,9 @@ Options
 =======	==============================================================
 
 N.B.:	reindex_4dfp swaps specified indices |br|
-N.B.: <index1> and <index2> must be unequal integers in the range 1-4 except as follows:
-	* <index1> == 4 and <index2> == 0: right rotate indices (first index <-  last index)
-	* <index1> == 0 and <index2> == 4:  left rotate indices ( last index <- first index)
+N.B.: <index1> and <index2> must be unequal integers in the range 1-4 except as follows: |br|
+<index1> == 4 and <index2> == 0: right rotate indices (first index <-  last index) |br|
+<index1> == 0 and <index2> == 4:  left rotate indices ( last index <- first index)
 
 .. _unpack_4dfp:
 

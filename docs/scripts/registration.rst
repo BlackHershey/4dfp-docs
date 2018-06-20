@@ -1,6 +1,6 @@
 .. include:: ../global.rst
 
-Anatomical registration scripts
+Registration scripts
 ===============================
 
 mpr2atl_4dfp
