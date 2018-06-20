@@ -13,12 +13,9 @@
 
     </br>
 
-
 .. csh script params file data dictionary
 .. |params_header| replace:: **Params file variables**
 
-.. |optional_warning| replace:: Although :code:`tse` and :code:`pdt2` are optional, you should specify one or the other if you have them in order to get a better registration to atlas.
-.. |any_val_warning| replace:: Only specify the following variables if the action is desired. They will happen if you specify them at all (even if you set them to 0).
 .. |day1_path_vals| replace:: <str>
 .. |day1_path_desc| replace:: path to day1 atlas directory (required if day1_patid is set)
 

@@ -3,6 +3,9 @@
 fcMRI oriented scripts
 ======================
 
+.. include:: ../notes/params-file-tip.rst
+
+
 .. _fcMRI_preproc:
 
 fcMRI_preproc
@@ -650,7 +653,7 @@ ROIlistfile    |ROIlistfile_vals|   |ROIlistfile_desc|
 		- :ref:`qntm_4dfp`
 		- **<FCdir>/** |br| <patid>_seed_regressors.dat |br| <patid>_seed_regressors.rec
 	*	- Compute total correlations
-		- :ref:`glm_4dfp` (options: -t)
+		- :ref:`glm_4dfp` (-t)
 		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid[_g<blur>]_tcorr.4dfp.img
 	*	- Mask total correlation image by defined voxels
 		- :ref:`maskimg_4dfp`
@@ -659,7 +662,7 @@ ROIlistfile    |ROIlistfile_vals|   |ROIlistfile_desc|
 		- :ref:`rho2z_4dfp`
 		- **<FCdir>/** |br| <patid>[_faln_dbnd]_xr3d_uwrp_atl_bpss_resid[_g<blur>]_tcorr_dfnd_zfrm.4dfp.img
 	*	- Compute zero-lag ROI-ROI correlation matrix (if number of ROIs <= 256)
-		- :ref:`covariance`, options: -u, -o, -m0
+		- :ref:`covariance` (-u, -o, -m0)
 		- **<FCdir>/** |br| <patid>_seed_regressors_CCR.dat
 
 seed_correl_140413.csh

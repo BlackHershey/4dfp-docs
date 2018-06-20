@@ -3,6 +3,8 @@
 fMRI oriented scripts
 =====================
 
+.. include:: ../notes/params-file-tip.rst
+
 .. _cross_bold_pp:
 
 cross_bold_pp
@@ -124,7 +126,7 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 
 **Optional parameters**
 
-.. tip:: |optional_warning|
+.. include:: ../notes/cross-bold-optional-tip.rst
 
 .. list-table::
     :widths: 15	5 5 75
@@ -225,7 +227,7 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 
 **Additional optional parameters**
 
-.. warning:: |any_val_warning|
+.. include:: ../notes/any-value-warning.rst
 
 .. list-table::
 	:widths: 10 90
@@ -412,7 +414,7 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 
 **Optional parameters**
 
-.. tip:: |optional_warning|
+.. include:: ../notes/cross-bold-optional-tip.rst
 
 .. list-table::
 	:widths: 15	5 5 60
@@ -490,7 +492,7 @@ FMBases     |FMBases_vals|  |FMBases_desc|
 
 **Additional optional parameters**
 
-.. warning:: |any_val_warning|
+.. include:: ../notes/any-value-warning.rst
 
 .. list-table::
 	:widths: 15	65
@@ -604,7 +606,7 @@ Economy value	Files to be removed
 
 **Optional parameters**
 
-.. tip:: |optional_warning|
+.. include:: ../notes/cross-bold-optional-tip.rst
 
 .. list-table::
 	:widths: 15	5 5 60
@@ -649,7 +651,7 @@ Economy value	Files to be removed
 
 **Additional optional parameters**
 
-.. warning:: Only specify the following variables if the action is desired. They will happen if you specify them at all (even if you set them to 0).
+.. include:: ../notes/any-value-warning.rst
 
 .. list-table::
 	:widths: 15	65
@@ -753,7 +755,7 @@ Economy value	Files to be removed
 
 **Optional parameters**
 
-.. tip:: |optional_warning|
+.. include:: ../notes/cross-bold-optional-tip.rst
 
 .. list-table::
 	:widths: 15	5 5 60
@@ -826,7 +828,7 @@ Economy value	Files to be removed
 
 **Additional optional parameters**
 
-.. warning:: |any_val_warning|
+.. include:: ../notes/any-value-warning.rst
 
 .. list-table::
 	:widths: 15 60

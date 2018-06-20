@@ -3,6 +3,8 @@
 DTI
 ===
 
+.. include:: ../notes/params-file-tip.rst
+
 generic_DWI_script_090219
 -------------------------
 generic DTI processing

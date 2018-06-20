@@ -5,24 +5,14 @@
 
 .. include:: ../README.rst
 
-
 Contents
 ========
 
 .. toctree::
-    :caption: Format
-    :maxdepth: 2
+    :caption: General
+    :maxdepth: 1
 
     format
-
-
-.. toctree::
-    :caption: Tools
-    :glob:
-    :maxdepth: 2
-
-    tools/*
-
 
 .. toctree::
     :caption: Scripts
@@ -31,17 +21,22 @@ Contents
 
     scripts/*
 
-
-.. toctree::
-    :caption: Appendix
-    :maxdepth: 2
-
-    params_inst
-
-
 .. toctree::
     :caption: Worked Examples
     :glob:
     :maxdepth: 2
 
     examples/*
+
+.. toctree::
+    :caption: Tools
+    :glob:
+    :maxdepth: 2
+
+    tools/*
+
+.. toctree::
+    :caption: Appendix
+    :maxdepth: 2
+
+    params_inst

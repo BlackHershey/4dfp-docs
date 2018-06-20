@@ -1,5 +1,5 @@
-File structure
---------------
+File format
+------------
 
 The voxel data are stored in the form of a binary image as one UNIX file.
 Consequently, 4dfp images may be directly loaded and viewed using IDL, matlab, fsleyes, etc. Information critical to interpreting the binary data (e.g., orientation, image dimensions, voxel dimensions) are stored in separate header file(s).
@@ -25,7 +25,7 @@ All 4dfp based image analysis programs used at the Washington University School 
 
 
 Image data
-==========
+===========
 
 The 4dfp file format was developed to manage human head images acquired with a Siemens MRI scanner. The imato4dfp utility converts Siemens slice-based image (.ima) files into 4dfp format. This is accomplished by extracting (without reordering) the stored pixel values, converting short int to to float and writing the results to the 4dfp image file. Within each 3D volume the Siemens .ima files are read in order of decreasing image number.
 
