@@ -46,8 +46,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'4dfp'
-copyright = u'2017, Jon Koller, Haley Acevedo'
-author = u'Jon Koller, Haley Acevedo'
+copyright = u'2017, Avi Snyder, Jon Koller, Haley Acevedo'
+author = u'Avi Snyder, Jon Koller, Haley Acevedo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -139,7 +139,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, '4dfp.tex', u'4dfp Documentation',
-     u'Jon Koller, Haley Acevedo', 'manual'),
+     u'Avi Snyder, Jon Koller, Haley Acevedo', 'manual'),
 ]
 
 

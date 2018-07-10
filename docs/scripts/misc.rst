@@ -54,6 +54,8 @@ Options
 
 N.B.:	split_ROIs output files are put into the subdirectory ./single_ROIs
 
+.. _brec:
+
 brec
 ----
 parse rec file by procedure depth

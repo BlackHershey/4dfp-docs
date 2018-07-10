@@ -1,5 +1,11 @@
-File format
+4dfp format
 ------------
+
+The 4dfp (4-dimensional floating point) format was designed for functional neuroimaging. The four dimensions typically correspond to x, y, z, and time. Three dimensional structural images can be represented in 4dfp format by setting the depth of the fourth dimension to 1.
+
+.. TODO: add info about why 4dfp is different from other image formats
+
+.. note:: NIfTI and 4dfp images are ALWAYS y-flipped to each other. Be sure to use 4dfp tools to convert back and forth, so that this is accounted for.
 
 The voxel data are stored in the form of a binary image as one UNIX file.
 Consequently, 4dfp images may be directly loaded and viewed using IDL, matlab, fsleyes, etc. Information critical to interpreting the binary data (e.g., orientation, image dimensions, voxel dimensions) are stored in separate header file(s).
@@ -133,7 +139,7 @@ The critical feature of the rec file convention is inclusion of antecedent rec f
 	endrec
 	endrec Thu May 18 17:16:26 2000  avi
 
-The brec (beautify rec file) utility parses rec files and writes to stdout a more easily readable version of the text. Here is the above rec file filtered through brec ::
+The :ref:`brec` (beautify rec file) utility parses rec files and writes to stdout a more easily readable version of the text. Here is the above rec file filtered through brec ::
 
 	1rec vm6c_b1_rmsp_dbnd.4dfp.img  Thu May 18 17:16:23 2000  avi
 	1      /data/petsun4/data1/solaris/deband_4dfp -n4 vm6c_b1_rmsp
