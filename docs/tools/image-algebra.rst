@@ -45,6 +45,7 @@ Options
 N.B.:	<image_4dfp> is overwritten unless the trailer option is used |br|
 N.B.:	<scale_factor> must be specified for proper operation
 
+.. _imgopr_4dfp:
 
 imgopr_4dfp
 -----------

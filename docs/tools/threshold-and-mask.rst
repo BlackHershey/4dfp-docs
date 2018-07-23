@@ -65,6 +65,8 @@ Options
 N.B.:	default output 4dfp root is <(4dfp) image>"z" |br|
 N.B.:	first field can't be used for options because threshold might be negative
 
+.. _zero_ltgt_4dfp:
+
 zero_ltgt_4dfp
 --------------
 zero voxels **outside** specified range

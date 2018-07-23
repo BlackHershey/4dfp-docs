@@ -3,6 +3,8 @@
 Miscellaneous scripts
 =====================
 
+.. _freesurfer2mpr_4dfp:
+
 freesurfer2mpr_4dfp
 -------------------
 transform freesurfer generated images back to atlas space
@@ -28,10 +30,7 @@ setecho		set echo
 N.B.:	<(4dfp) orig> is the freesurfer-resampled 256x256x256 coronal mpr |br|
 N.B.:	the default "apply" list includes (4dfp format) images named \*parc\* and \*aseg\* |br|
 
-.. tip:: You must convert the freesurfer-created mgz (i.e. orig, aparc+aseg) images to 4dfp before running this script. To convert mgz to 4dfp::
-
-	$ mri_convert orig.mgz orig.nii --out-orientation RAS
-	$ nifti_4dfp orig.nii orig.4dfp.img
+.. tip:: You must convert the freesurfer-created mgz (i.e. orig, aparc+aseg) images to 4dfp before running this script. For more details, see :ref:`fs-roi-example`.
 
 split_ROIs
 ----------
