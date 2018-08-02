@@ -10,15 +10,14 @@ Transforming a Freesurfer segmentation to atlas space
 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 If you ran recon-all using a native-space T1 image and did not specify a custom atlas,
-you will need to transform your Freesurfer segmentation (mri/aparc+aseg) to your atlas space.
+you will need to transform your Freesurfer segmentation to your atlas space.
+The command to do this is :ref:`freesurfer2mpr_4dfp`.
 
-If you have run :ref:`fcMRI_preproc_161012` on your subjects, you can skip this step as it has already been done.
+.. note:: If you have run :ref:`fcMRI_preproc_161012` on your subjects, you can skip this step as it has already been done.
 
-To transform the Freesurfer segmentation to a specified atlas, you will use the command
-:ref:`freesurfer2mpr_4dfp`. As shown in the usage information, it takes in the Freesurfer :code:`orig` and :code:`aparc+aseg`
-files in 4dfp format.
-
-To begin, we'll convert the required images to 4dfp.
+As shown in the usage information for the script, we will need to supply the Freesurfer :code:`orig` and :code:`aparc+aseg`
+files in 4dfp format. Since Freesurfer outputs images in mgz format, we will first need to convert the required images to
+4dfp. There is no direct conversion from mgz to 4dfp, so we will use nifti as an intermediate format.
 
 .. code-block:: csh
 
@@ -31,12 +30,12 @@ To begin, we'll convert the required images to 4dfp.
     $ mri_convert /path/to/fsdir/NEWT002_s1/mri/aparc+aseg.mgz NEWT002_s1_aparc+aseg.nii --out_orientation RAS
     $ nifti_4dfp -4 NEWT002_s1_aparc+aseg.nii NEWT002_s1_aparc+aseg.4dfp.img
 
-The script assumes that there is a transform file from the subject's MPRAGE to the target atlas in
-the subject's atlas folder. Since there is no t4 file argument, it looks for a t4 file of the form
-<(4dfp) mpr>_to_<target>_t4, where <(4dfp) mpr> is the MPRAGE supplied as the first argument (sans
-the 4dfp extension) and <target> is the value supplied to the -T flag.
+The script relies on an existing transform from the subject's MPRAGE to the target atlas. Because you don't
+supply the script with a t4 file, it looks in the atlas directory for a t4 file of the form
+<(4dfp) mpr>_to_<target>_t4, where <(4dfp) mpr> is the MPRAGE supplied as the first argument (sans the
+4dfp extension) and <target> is the value supplied to the -T flag.
 
-Now from the subject's atlas directory, we can run the script, making sure to use the MPRAGE and
+From the subject's atlas directory, we can now run the script - making sure to use the MPRAGE and
 atlas that match the existing t4.
 
 .. code-block:: csh
@@ -71,7 +70,7 @@ that region's value. If we wanted the left Amygdala, we would use the following:
     $ zero_ltgt_4dfp 18to18 NEWT002_s1_aparc+aseg_on_TRIO_KY_NDC_333 NEWT002_s1_lAmygdala
 
 If we wanted a binary mask of both the left and right Amydala, then we would need to follow the steps above again,
-this time using the value for the right Amygdala (54). Then, we would need to combine them together using the :code:`add`
+this time using the value for the right Amygdala. Then, we would need to combine them together using the :code:`add`
 operation of :ref:`imgopr_4dfp`. Finlly, we would use :ref:`maskimg_4dfp` with the :code:`-v1` flag to binarize the values.
 
 .. code-block:: csh
