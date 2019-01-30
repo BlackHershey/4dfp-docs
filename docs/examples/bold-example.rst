@@ -6,6 +6,40 @@ Scenario: You've collected some BOLD data and you're interested in functional co
 This example will walk you through the typical functional connectivity pipeline in the 4dfp suite - generic BOLD pre-processing, fcMRI
 pre-processing, and seed-based correlation.
 
+System requirements
++++++++++++++++++++
+
+These scripts assume that the current shell is :code:`csh`. To check/change your shell you can use the following commands::
+
+    # output the current shell
+    echo $0
+
+    # switch to csh shell
+    csh
+
+They also expect :code:`REFDIR` to be set as an environment variable, so you will need to add it to your login script::
+
+    setenv REFDIR /data/petsun43/data1/atlas
+
+
+Additionally, the scripts rely on a couple external programs that will need to be on your system path.
+
+First, check if :code:`mri_convert` and :code:`mcverter` are on your path::
+
+    which mri_convert
+    which mcverter
+
+If either program is not found, you will need to add the following lines to your login script.
+
+.. code-block:: csh
+    :caption: ~/.lin.cshrc
+
+    set path = ( $path \
+                 $FREESURFER_HOME/bin \
+                 /data/nil-bluearc/hershey/unix/software/MRIConvert/MRIConvert-2.1.0/usr/bin
+               )
+
+
 Preparing DICOM data
 +++++++++++++++++++++
 
@@ -410,7 +444,32 @@ After preprocessing, we can now generate a seed-to-seed correlation matrix for o
 If you look at the docs for :ref:`seed_correl_161012`, you'll see that we only need to add which regions to analyze (ROIs) to our
 instructions file.
 
-Here we'll use a prescribed list file of ROIs as our input.
+Here we'll use the canonical ROI list from :code:`$REFDIR` as our input. You can use a different list of ROIS (i.e. BigBrain264,
+BigBrain305), but there are a few things to be aware of:
+
+* ROIlistfile should contain only a single column
+
+    The single column should contain just the ROI file names. If you have additional columns (i.e. listing the coordinates),
+    :ref:`paste_4dfp` will misinterpret them and cause the script to error. You can use the following command to create a file with just
+    the first column:
+
+    .. code-block:: csh
+
+        cat $ROIlistfile | cut -d'' -f 1 > ${ROIlistfile}_1col.txt
+
+* The correlation matrix will **not** get generated if you have more than 256 ROIs
+
+    :ref:`covariance` used to only support up to 256 ROIs, so :code:`seed_correl` checks for this and skips the correlation matrix step.
+    While :code:`covariance` has been updated to support more ROIs, :code:`seed_correl` has not. If you are using an ROI list with greater
+    than 256 ROIs, you will run the following commands (*after* you run :code:`seed_correl`) to get the correlation matrix (and remove
+    intermediate files):
+
+    .. code-block:: csh
+
+        # from $FCdir
+        covariance -um0 <patid>\[_faln_dbnd\]_xr3d_uwrp_atl.format <patid>_seed_regressors.dat
+        /bin/rm \*_ROI\*_CCR.dat
+
 
 .. code-block:: csh
     :caption: NEWT_study.params
@@ -467,6 +526,6 @@ Now we can go ahead and run it::
 
 This produces a correlation matrix, ${FCdir}/${patid}_seed_regressors_CCR.dat.
 
-You can display the matrix by importing the data into matlab and using the :code:`imagesc` function.
+You can display the matrix with any plotting tool (i.e. :code:`imagesc` in matlab, :code:`matplotlib.pyplot.imshow` in python).
 
 .. image:: ../_static/corr_matrix.png
