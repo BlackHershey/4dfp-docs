@@ -455,7 +455,7 @@ BigBrain305), but there are a few things to be aware of:
 
     .. code-block:: csh
 
-        cat $ROIlistfile | cut -d'' -f 1 > ${ROIlistfile}_1col.txt
+        cat $ROIlistfile | awk '{print $1}' > ${ROIlistfile}_1col.txt
 
 * The correlation matrix will **not** get generated if you have more than 256 ROIs
 
@@ -467,8 +467,8 @@ BigBrain305), but there are a few things to be aware of:
     .. code-block:: csh
 
         # from $FCdir
-        covariance -um0 <patid>\[_faln_dbnd\]_xr3d_uwrp_atl.format <patid>_seed_regressors.dat
-        /bin/rm \*_ROI\*_CCR.dat
+        covariance -uom0 <patid>[_faln_dbnd]_xr3d_uwrp_atl.format <patid>_seed_regressors.dat
+        /bin/rm *_ROI*_CCR.dat
 
 
 .. code-block:: csh
@@ -518,7 +518,7 @@ BigBrain305), but there are a few things to be aware of:
 
     # seed_corrl ROIs
     set ROIdir = ${REFDIR}/CanonicalROIsNP705
-    set ROIlistfile = CanonicalROIsNP705.lst
+    set ROIlistfile = ${REFDIR}/CanonicalROIsNP705/CanonicalROIsNP705.lst
 
 Now we can go ahead and run it::
 
