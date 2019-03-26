@@ -36,7 +36,7 @@ If either program is not found, you will need to add the following lines to your
 
     set path = ( $path \
                  $FREESURFER_HOME/bin \
-                 /data/nil-bluearc/hershey/unix/software/MRIConvert/MRIConvert-2.1.0/usr/bin
+                 /data/nil-bluearc/hershey/unix/software/MRIConvert/MRIConvert-2.1.0/usr/bin \
                )
 
 
@@ -149,7 +149,7 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
 
     You can then calculate dwell using the following formula, using :code:`nx` for 'MatrixPhase':
 
-    .. math:: dwell = imgRows / (BandwidthPerPixelPhaseEncode * MatrixPhase)
+    .. math:: dwell = 1000 / (BandwidthPerPixelPhaseEncode * MatrixPhase)
 
     .. tip:: For Siemens 3T fMRI, dwell times should be in the range 0.4 - 0.6 ms.
 
@@ -185,7 +185,15 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
         $ dicom_hdr -slice_times SCANS/25/DICOM/NEWT002_s1.MR.head_Hershey.25.1.20161130.131330.adfigp.dcm
         -- Siemens timing (64 entries): 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0 0.0 530.0 1057.5 377.5 907.5 227.5 755.0 75.0 605.0 1135.0 452.5 982.5 302.5 832.5 150.0 680.0
 
-    Based on the timing output, we can see that there are 64 slices and a multiband factor of 4. This gives us 16 slices per band.
+    We can get the number of bands by counting how many times a slice time is repeated::
+
+        ..code-block::bash
+
+        # replace <first_slice_time> before use
+        $ dicom_hdr -slice_times study25/NEWT002_s1.MR.head_Hershey.25.1.20161130.131330.adfigp.dcm | grep -wo <first_slice_time> | wc -l
+        4
+
+    Based on these outputs, we can see that there are 64 slices and a multiband factor of 4. This gives us 16 slices per band.
     With this information, we can now calculate the slice order for a single band:
 
     .. code-block:: bash
@@ -231,7 +239,7 @@ nothing besides :code:`dcm_sort` has already been run on the data and we won't s
 
 .. TODO: add bit about TR_slc, dwell, ped, maybe target
 
-Since we've chosen to set up our instruction file to define study-level params, we'll store it in the project directory.
+Since we've chosen to set up our instructions file to define study-level params, we'll store it in the project directory.
 
 .. code-block:: bash
 

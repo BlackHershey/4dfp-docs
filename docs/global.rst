@@ -191,7 +191,7 @@
 .. |goto_UNWARP_desc| replace:: immediately go to unwarp step
 
 .. |inpath_vals| replace:: <str>
-.. |inpath_desc| replace:: starting directory (usually subject directory)
+.. |inpath_desc| replace:: top-level directory for raw DICOM data (i.e. directory containing study folders if $sorted)
 
 .. |interleave_vals| replace:: -S
 .. |interleave_default| replace:: interleave
