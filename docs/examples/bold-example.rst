@@ -139,6 +139,8 @@ Some variables don't match a specific tag in the DICOM header and need to be cal
 
 * :code:`dwell`
 
+    .. warning:: This formula was corrected on 3/26/19. If you used this section previously, you should double-check the value in your instructions file to verify it was calculated correctly.
+
     You will need to grab the 'BandwidthPerPixelPhaseEncode' (0019,1028) tag and nx (or ny) calculated above.
 
     .. code-block:: bash
