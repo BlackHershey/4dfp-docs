@@ -414,7 +414,7 @@ simply add in the fcMRI-specific ones::
     set CSF_svdt = .2
     set WM_lcube = 5
     set WM_svdt = .15
-    set bpss_params = ( -bh .1 -oh 2 )
+    set bpss_params = ( -bh0.1 -oh2 )
     set blur = .73542
 
 No changes are needed to the session params file, so now we can run the script::

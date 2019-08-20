@@ -104,7 +104,7 @@
 .. |blur_desc| replace:: f_half for spatial blur
 
 .. |bpss_params_vals| replace:: <array>
-.. |bpss_params_desc| replace:: additional options to use for bandpass filtering (-E,M,F already specified), e.g. ( -bh .1 -oh 2 )
+.. |bpss_params_desc| replace:: options for :ref:`bandpass_4dfp` (only -E,M,F specified by default; **no** default bands)
 
 .. |conc_vals| replace:: <str>
 .. |conc_desc| replace:: pre-existing conc file to use
