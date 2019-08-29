@@ -523,10 +523,10 @@ BigBrain305), but there are a few things to be aware of:
     set CSF_svdt = .2
     set WM_lcube = 5
     set WM_svdt = .15
-    set bpss_params = ( -bh .1 -oh 2 )
+    set bpss_params = ( -bh0.1 -oh2 )
     set blur = .73542
 
-    # seed_corrl ROIs
+    # seed_correl ROIs
     set ROIdir = ${REFDIR}/CanonicalROIsNP705
     set ROIlistfile = ${REFDIR}/CanonicalROIsNP705/CanonicalROIsNP705.lst
 
