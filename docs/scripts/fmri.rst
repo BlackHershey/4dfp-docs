@@ -550,6 +550,44 @@ Examples::
 
 	epi2t2w2mpr2atlv_4dfp stem9_anat_ave stem9_643-2 stem9_654-3 useold 711-2Y
 
+.. list-table::
+	:widths: 15 15 25 10
+	:class: wrap-rows
+	:header-rows: 1
+
+	*	- Step description
+		- Function
+		- Inputs
+		- Output
+	* 	- Compute MPR to atlas transform
+		- :ref:`mpr2atl_4dfp`
+		-
+		- ${mpr}_to_${target}_t4
+	* 	- Blur images
+		- :ref:`gauss_4dfp`
+		- t_half = 1.1
+		- ${mpr}_g11 |br| ${t2w}_g11 |br| ${epi}_g11
+	* 	- Compute MPR brain mask
+		- :ref:`msktgen_4dfp`
+		-
+		- ${mpr}_mskt
+	*	- Compute (iteratively) T2w to MPR transform
+		- :ref:`imgreg_4dfp`, using blurred (\*_g11) images as source/target
+		- **w/ unmasked mpr** (source_mask = none) |br| modes[1] = 1024 + 3 |br| **w/ masked mpr** (source_mask = ${mpr}_mskt) |br| modes[2] = 1024 + 3 |br| modes[3] = 2048 + 3 + 8 + 64 |br| modes[4] = 8192 + 2048 + 3 + 8 + 64
+		- ${t2w}_to_${mpr}_t4
+	* 	- Compute EPI brain mask
+		- :ref:`gauss_4dfp`, :ref:`imgmax_4dfp`, :ref:`img2msk_4dfp`, :ref:`maskimg_4dfp`
+		- f_half = .3 |br| threshold = .2 * max(blurred epi)
+		- ${epi}_msk
+	*	- Compute EPI (iteratively) to T2w transform
+		- :ref:`imgreg_4dfp`, using blurred (\*_g11) images as source/target
+		- **w/ original epi** (source_msk = none) |br| modes[1] = 1024 + 3 |br| **w/ masked epi** (source_msk=${epi}_msk) |br| modes[2] = 1024 + 3 |br| modes[3] = 3072 + 3 + 8 + 64 |br| modes[4] = 8192 + 2048 + 3 + 8 + 64
+		- ${epi}_to_${t2w}_t4
+	* 	- Combine transforms
+		- :ref:`t4_mul`
+		- ${t2w}_to_${mpr}_t4, ${mpr}_to_${target}_t4 |br| ${epi}_to_${t2w}_t4, ${t2w}_to_${target}_t4 |br| ${epi}_to_${t2w}_t4, ${t2w}_to_${mpr}_t4
+		- ${t2w}_to_${target}_t4 |br| ${epi}_to_${target}_t4 |br| ${epi}_to_${mpr}_t4
+
 N.B.:	Any argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
 
 N.B.:	All named images must be in either ANALYZE or 4dfp format. ANALYZE will be converted to 4dfp
@@ -571,6 +609,41 @@ Examples::
 	epi2t2w2mpr2atl1_4dfp stem9_anat_ave stem9_643-2 stem9_654-3 711-2B
 	epi2t2w2mpr2atl1_4dfp stem9_anat_ave stem9_654-3 useold -T/data/cninds01/atlas/NP765 -S711-2B
 
+.. list-table::
+	:widths: 15 15 25 10
+	:class: wrap-rows
+	:header-rows: 1
+
+	*	- Step description
+		- Function
+		- Inputs
+		- Output
+	* 	- Compute MPR to atlas transform
+		- :ref:`mpr2atl_4dfp`
+		-
+		- ${mpr}_to_${target}_t4
+	* 	- Compute MPR brain mask
+		- :ref:`msktgen_4dfp`
+		-
+		- ${mpr}_mskt
+	*	- Compute (iteratively) T2w to MPR transform
+		- :ref:`imgreg_4dfp`
+		- **w/ original mpr** (source_mask = none) |br| modes[1] = 1024 + 3 |br| **w/ masked mpr** (source_mask = ${mpr}_mskt) |br| modes[2] = 1024 + 3 |br| modes[3] = 2048 + 3 + 8 + 64 |br| modes[4] = 8192 + 2048 + 3 + 8
+		- ${t2w}_to_${mpr}_t4
+	* 	- Compute EPI brain mask
+		- :ref:`gauss_4dfp`, :ref:`imgmax_4dfp`, :ref:`img2msk_4dfp`, :ref:`maskimg_4dfp`
+		- f_half = .3 |br| threshold = .2 * max(blurred epi)
+		- ${epi}_msk
+	*	- Compute EPI (iteratively) to T2w transform
+		- :ref:`imgreg_4dfp`
+		- **w/ original epi** (source_msk = none) |br| modes[1] = 1024 + 3 |br| **w/ masked epi** (source_msk=${epi}_msk) |br| modes[2] = 1024 + 3 |br| modes[3] = 3072 + 3 + 8 |br| modes[4] = 8192 + 2048 + 3 + 8
+		- ${epi}_to_${t2w}_t4
+	* 	- Combine transforms
+		- :ref:`t4_mul`
+		- ${t2w}_to_${mpr}_t4, ${mpr}_to_${target}_t4 |br| ${epi}_to_${t2w}_t4, ${t2w}_to_${target}_t4 |br| ${epi}_to_${t2w}_t4, ${t2w}_to_${mpr}_t4
+		- ${t2w}_to_${target}_t4 |br| ${epi}_to_${target}_t4 |br| ${epi}_to_${mpr}_t4
+
+
 N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
 
 N.B.:	All named images must be in 4dfp format
@@ -589,6 +662,40 @@ Examples::
 
 	epi2t2w2mpr2atl2_4dfp stem9_anat_ave stem9_643-2 stem9_654-3 711-2B
 	epi2t2w2mpr2atl2_4dfp stem9_anat_ave stem9_654-3 useold -T/data/cninds01/atlas/NP765 -S711-2B
+
+
+**Processing steps**
+
+.. list-table::
+	:widths: 15 15 25 10
+	:class: wrap-rows
+	:header-rows: 1
+
+	*	- Step description
+		- Function
+		- Inputs
+		- Output
+	* 	- Compute MPR to atlas transform
+		- :ref:`mpr2atl_4dfp`
+		-
+		- ${mpr}_to_${target}_t4
+	*	- Compute T2w to MPR transform
+		- :ref:`imgreg_4dfp`
+		- modes[1] = 4096 + 3 |br| modes[2] = 1024 + 3 |br| modes[3] = 2048 + 3 |br| modes[4] = 2048 + 3 [+ 8 + 64 if thin t2w] |br| modes[5] = modes[4] + 8192
+		- ${t2w}_to_${mpr}_t4
+	* 	- Compute EPI brain mask
+		- :ref:`gauss_4dfp`, :ref:`imgmax_4dfp`, :ref:`img2msk_4dfp`, :ref:`maskimg_4dfp`
+		- f_half = .3 |br| threshold = .2 * max(blurred epi)
+		- ${epi}_msk
+	*	- Compute (iteratively) EPI to T2w transform
+		- :ref:`imgreg_4dfp`
+		- **w/ original epi** (source_msk = none) |br| modes[1] = 4096 + 3 |br| modes[2] = 1024 + 3 |br| **w/ masked epi** (source_msk = ${epi}_msk) |br| modes[3] = 1024 + 3 |br| modes[4] = 3072 + 3 |br| modes[5] = 8192 + 2048 + 3
+		- ${epi}_to_${t2w}_t4
+	* 	- Combine transforms
+		- :ref:`t4_mul`
+		- ${t2w}_to_${mpr}_t4, ${mpr}_to_${target}_t4 |br| ${epi}_to_${t2w}_t4, ${t2w}_to_${target}_t4 |br| ${epi}_to_${t2w}_t4, ${t2w}_to_${mpr}_t4
+		- ${t2w}_to_${target}_t4 |br| ${epi}_to_${target}_t4 |br| ${epi}_to_${mpr}_t4
+
 
 N.B.:	Any image argument may include a path, e.g., /data/petmr1/data7/stem/96_06_14_stem9/stem9_654-3
 
