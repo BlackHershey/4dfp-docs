@@ -5,6 +5,18 @@ fMRI oriented scripts
 
 .. include:: ../notes/params-file-tip.rst
 
+.. _ME_cross_bold_pp_2019:
+
+ME_cross_bold_pp_2019.csh
+------------------------
+Multi-echo EPI (BOLD) pre-processing
+
+Usage:	ME_cross_bold_pp_2019.csh <params file> [instructions_file]
+
+Examples::
+
+	ME_cross_bold_pp_2019.csh VB16168.params
+
 .. _cross_bold_pp_161012:
 
 cross_bold_pp_161012.csh
