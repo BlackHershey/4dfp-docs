@@ -65,8 +65,6 @@ Options
 -@<b|l>		output big or little endian (default CPU endian)
 ==========	===================================================
 
-N.B.: t4file intensity scale ingnored with option -n
-
 .. _t4img_4dfp:
 
 t4img_4dfp
